@@ -37,16 +37,20 @@ public final class DataImporter {
 
 	public static Map<LocalDate, ArrayList<Appointment>> ImportDateRange(LocalDate startDate, LocalDate endDate, String key) throws Exception {
 		Map<LocalDate, ArrayList<Appointment>> appointments = new HashMap<>();
-
+		// startDate will be normalized through importWeek
+		endDate = DateUtilities.Normalize(endDate);
+		
 		do {
 			appointments.put(startDate, ImportWeek(startDate, key));
-			startDate.plusDays(7);
+			startDate = startDate.plusDays(7);
 		} while (!startDate.isAfter(endDate));
 
 		return appointments;
 	}
 
 	public static ArrayList<Appointment> ImportWeek(LocalDate currDate, String key) throws SAXException, IOException, ParserConfigurationException {
+		currDate = DateUtilities.Normalize(currDate);
+		
 		ArrayList<Appointment> weekAppointments = new ArrayList<>();
 		StringBuilder pageContentBuilder = new StringBuilder();
 		String line, pageContent;
@@ -95,7 +99,7 @@ public final class DataImporter {
 				if (type.startsWith("week_block")) {
 					appointments.add(importAppointment(cell, currDate));
 				} else if (type.startsWith("week_separatorcell")) {
-					currDate.plusDays(1);
+					currDate = currDate.plusDays(1);
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 package wasdev.sample.data;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -8,6 +9,10 @@ import java.time.LocalDateTime;
  */
 public final class DateUtilities {
 	private DateUtilities() {}
+	
+	public static LocalDate Normalize(LocalDate src) {
+	 	return src.minusDays(src.getDayOfWeek().getValue() - DayOfWeek.MONDAY.getValue());
+	}
 	
 	public static LocalDate Clone(LocalDate src) {
 		return LocalDate.of(src.getYear(), src.getMonth(), src.getDayOfMonth());
@@ -28,7 +33,5 @@ public final class DateUtilities {
 		
 		return tResult;
 	}
-
-
 	
 }
