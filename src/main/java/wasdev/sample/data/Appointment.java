@@ -12,8 +12,8 @@ public class Appointment {
 	private String course, info;
 
 	public Appointment(LocalDateTime startDate, LocalDateTime endDate, String course, String info) {
-		this.startDate = startDate;
-		this.endDate = endDate;
+		this.startDate = DateUtilities.Clone(startDate);
+		this.endDate = DateUtilities.Clone(endDate);
 		this.course = course;
 		this.info = info;
 	}

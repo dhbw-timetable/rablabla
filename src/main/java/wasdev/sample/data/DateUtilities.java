@@ -13,6 +13,10 @@ public final class DateUtilities {
 		return LocalDate.of(src.getYear(), src.getMonth(), src.getDayOfMonth());
 	}
 	
+	public static LocalDateTime Clone(LocalDateTime src) {
+		return LocalDateTime.of(src.getYear(), src.getMonth(), src.getDayOfMonth(), src.getHour(), src.getMinute());
+	}
+	
 	public static LocalDateTime[] ConvertToTime(LocalDate date, String times) {
 		String[] timesArray = times.split("-");
 		String[] startTime = timesArray[0].split(":");
@@ -24,5 +28,7 @@ public final class DateUtilities {
 		
 		return tResult;
 	}
+
+
 	
 }
