@@ -5,7 +5,7 @@
 
 	<parent>
 		<groupId>net.wasdev.maven.parent</groupId>
-		<artifactId>java7-parent</artifactId>
+		<artifactId>java8-parent</artifactId>
 		<version>1.4</version>
 		<relativePath></relativePath>
 	</parent>

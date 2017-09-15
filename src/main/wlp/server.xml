@@ -1,5 +1,4 @@
 <server>
-
     <featureManager>
         <feature>servlet-3.1</feature>
     </featureManager>
@@ -11,5 +10,4 @@
     </httpEndpoint>
 
     <application name="Rablabla" context-root="/Rablabla" location="${appLocation}" type="war"/>
-
 </server>
