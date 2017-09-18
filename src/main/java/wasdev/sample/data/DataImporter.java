@@ -32,8 +32,7 @@ public final class DataImporter {
 
 	public final static String BASE_URL = "https://rapla.dhbw-stuttgart.de/rapla";
 
-	private DataImporter() {
-	}
+	private DataImporter() {}
 
 	public static Map<LocalDate, ArrayList<Appointment>> ImportDateRange(LocalDate startDate, LocalDate endDate, String key) throws Exception {
 		Map<LocalDate, ArrayList<Appointment>> appointments = new HashMap<>();

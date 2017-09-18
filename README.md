@@ -43,3 +43,9 @@ Use the following steps to run the application with Maven:
     $ cf push <appname> -p target/Rablabla.war
     ```
     where appname could be Rablabla.
+
+## Notice
+
+Malte Bartels, Dominik Lenz, Hendrik Ulbrich (C) 2017
+
+You can use this software under the given license. This product uses [mangstadt/biweekly](https://github.com/mangstadt/biweekly) library for it's .ics file output and several other librarys mentioned via pom.xml
