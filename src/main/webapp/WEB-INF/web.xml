@@ -5,26 +5,18 @@
 	<display-name>Rablabla</display-name>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
 	<display-name>Rablabla</display-name>
-	<security-role>
-		<role-name>All Role</role-name>
-	</security-role>
 	<security-constraint>
-		<display-name>UserConstraint</display-name>
+		<display-name>HTTPS Redirect Security Constraint</display-name>
 		<web-resource-collection>
-			<web-resource-name>UserCollection</web-resource-name>
-			<url-pattern>/*</url-pattern>
-			<http-method>GET</http-method>
-			<http-method>POST</http-method>
+			<web-resource-name>myapp</web-resource-name>
+			<description>HTTPS redirect</description>
+			<url-pattern>/foo</url-pattern>
+			<url-pattern>/bar</url-pattern>
 		</web-resource-collection>
-		<auth-constraint>
-			<role-name>All Role</role-name>
-		</auth-constraint>
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
 	</security-constraint>
 </web-app>

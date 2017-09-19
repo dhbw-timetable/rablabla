@@ -5,7 +5,12 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="js/jquery.min.js"></script>
-		<script src="js/forceSSL.js"></script>
+		<script type="text/javascript">
+			// https://stackoverflow.com/questions/4723213/detect-http-or-https-then-force-https-in-javascript
+			if (location.protocol != 'https:') {
+				location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+			}
+		</script>
 	</head>
 	<body>
 		<p>Use the JS methods for Rablabla API.</p>

@@ -53,7 +53,9 @@ public class Rablabla extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		assert forceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
+
 		// Get request parameters
 		int day = Integer.parseInt(request.getParameter("day"));
 		int month = Integer.parseInt(request.getParameter("month"));
@@ -83,6 +85,7 @@ public class Rablabla extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		assert forceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
 		// Get request parameters
 		int year = Integer.parseInt(request.getParameter("year"));
@@ -135,6 +138,7 @@ public class Rablabla extends HttpServlet {
 	 */
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		assert forceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().print("Not implemented yet.");
 	}
@@ -161,4 +165,15 @@ public class Rablabla extends HttpServlet {
 		return tempCal.getTime();
 	}
 	
+	private static boolean forceSSL(HttpServletRequest request, HttpServletResponse response) {
+		if (!(request.getScheme().equals("https") && request.getServerPort() == 443)) {
+			try {
+				response.sendRedirect("https://rablabla.mybluemix.net");
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}
 }
