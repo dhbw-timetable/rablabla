@@ -111,8 +111,8 @@ public class Rablabla extends HttpServlet {
 			}
 			// Generate ics content
 			String output = Biweekly.write(ical).go();
-			System.out.println("OUTPUT:");
-			System.out.println(output);
+			// System.out.println("OUTPUT:");
+			// System.out.println(output);
 			System.out.println("Creating .ics file for " + fileName);
 			File rootDir = new File("/home/vcap/app/wlp/usr/servers/defaultServer/apps/myapp.war");
 			File exportFile = new File(rootDir, "/" + fileName + ".ics");

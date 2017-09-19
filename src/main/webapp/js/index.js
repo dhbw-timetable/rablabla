@@ -1,13 +1,5 @@
 // = = Gets called on document loaded = =
 
-var paragraph = document.querySelector('p');
-var btn = document.querySelector('button');
-
-btn.addEventListener('click', (e) => {
-  var now = new Date();
-  requestAppointments('txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo', now.getDate(), now.getMonth()+1, now.getFullYear());
-});
-
 function requestAppointments(key, day, month, year) {
   $.ajax({
     url: 'Rablabla?key=' + key + '&day=' + day + '&month=' + month + '&year=' + year,
@@ -17,6 +9,16 @@ function requestAppointments(key, day, month, year) {
       console.log(data);
       paragraph.innerHTML = data;
     },
+    error: (error) => {
+      console.log(error);
+    }
+  });
+}
+
+function exportYearlyICS() {
+  $.ajax({
+    url: 'Rablabla?key=' + key + '&year=' + year,
+    type: 'POST',
     error: (error) => {
       console.log(error);
     }
