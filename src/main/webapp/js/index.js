@@ -7,7 +7,6 @@ function requestAppointments(key, day, month, year) {
     success: (answer) => {
       var data = JSON.parse(answer);
       console.log(data);
-      paragraph.innerHTML = data;
     },
     error: (error) => {
       console.log(error);
@@ -15,12 +14,16 @@ function requestAppointments(key, day, month, year) {
   });
 }
 
-function exportYearlyICS() {
+function exportYearlyICS(key, year) {
   $.ajax({
     url: 'Rablabla?key=' + key + '&year=' + year,
     type: 'POST',
+    success: (answer) => {
+    		console.log("Finished creating .ics file!");
+    },
     error: (error) => {
       console.log(error);
     }
   });
+  return "Generating .ics file...";
 }
