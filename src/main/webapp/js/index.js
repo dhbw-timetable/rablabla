@@ -12,6 +12,7 @@ function requestAppointments(key, day, month, year) {
       console.log(error);
     }
   });
+  return "Requested appointments...";
 }
 
 function exportYearlyICS(key, year) {
