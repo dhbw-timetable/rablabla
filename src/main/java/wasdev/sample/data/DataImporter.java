@@ -36,7 +36,7 @@ public final class DataImporter {
 
 	public static Map<LocalDate, ArrayList<Appointment>> ImportDateRange(LocalDate startDate, LocalDate endDate, String key) throws Exception {
 		Map<LocalDate, ArrayList<Appointment>> appointments = new HashMap<>();
-		// startDate will be normalized through importWeek
+		startDate = DateUtilities.Normalize(startDate);
 		endDate = DateUtilities.Normalize(endDate);
 		
 		do {

@@ -20,7 +20,7 @@ function exportYearlyICS(key, year) {
     url: 'Rablabla?key=' + key + '&year=' + year,
     type: 'POST',
     success: (answer) => {
-    		console.log("Finished creating .ics file!");
+    		console.log(answer);
     },
     error: (error) => {
       console.log(error);

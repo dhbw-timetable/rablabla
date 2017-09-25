@@ -5,13 +5,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
+ * An immutable struct concept based class for storing the appointment data of the lectures.s
+ * 
  * Created by Hendrik Ulbrich (C) 2017
  */
-public class Appointment {
+public final class Appointment {
 	private LocalDateTime startDate, endDate;
 	private String course, info;
 
-	public Appointment(LocalDateTime startDate, LocalDateTime endDate, String course, String info) {
+	Appointment(LocalDateTime startDate, LocalDateTime endDate, String course, String info) {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.course = course;

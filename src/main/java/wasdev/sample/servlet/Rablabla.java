@@ -2,15 +2,13 @@ package wasdev.sample.servlet;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -28,7 +26,9 @@ import biweekly.component.VEvent;
 import biweekly.property.Classification;
 import wasdev.sample.data.Appointment;
 import wasdev.sample.data.DataImporter;
+import wasdev.sample.data.DateUtilities;
 import wasdev.sample.data.JSONUtilities;
+import wasdev.sample.data.NetworkUtilities;
 
 import javax.servlet.annotation.MultipartConfig;
 
@@ -42,6 +42,7 @@ import javax.servlet.annotation.MultipartConfig;
 public class Rablabla extends HttpServlet {
 
 	private static final long serialVersionUID = -8874059585924245331L;
+	private static final String ONLINE_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/myapp.war";
 
 	/**
 	 * Gets appointments of a week in JSON format. The day param should be the monday of the week.
@@ -53,7 +54,7 @@ public class Rablabla extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		assert forceSSL(request, response) : "SSL/HTTPS Connection error";
+		assert NetworkUtilities.ForceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
 
 		// Get request parameters
@@ -85,7 +86,7 @@ public class Rablabla extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		assert forceSSL(request, response) : "SSL/HTTPS Connection error";
+		assert NetworkUtilities.ForceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
 		// Get request parameters
 		int year = Integer.parseInt(request.getParameter("year"));
@@ -104,10 +105,8 @@ public class Rablabla extends HttpServlet {
 					event = new VEvent();
 					event.setSummary(_a.getCourse());
 					event.setDescription(_a.getInfo());
-					
-					event.setDateStart(convertDate(_a.getStartDate()));
-					event.setDateEnd(convertDate(_a.getEndDate()));
-					
+					event.setDateStart(DateUtilities.ConvertToDate(_a.getStartDate()));
+					event.setDateEnd(DateUtilities.ConvertToDate(_a.getEndDate()));
 					event.setClassification(Classification.PRIVATE);
 					ical.addEvent(event);
 				}
@@ -117,7 +116,7 @@ public class Rablabla extends HttpServlet {
 			// System.out.println("OUTPUT:");
 			// System.out.println(output);
 			System.out.println("Creating .ics file for " + fileName);
-			File rootDir = new File("/home/vcap/app/wlp/usr/servers/defaultServer/apps/myapp.war");
+			File rootDir = new File(ONLINE_PATH);
 			File exportFile = new File(rootDir, "/" + fileName + ".ics");
 			if(exportFile.exists()) {
 				exportFile.delete();
@@ -128,52 +127,46 @@ public class Rablabla extends HttpServlet {
 			bf.write(output);
 			bf.close();
 			System.out.println("Done creating ICS file!");
+			response.getWriter().println("https://rablabla.mybluemix.net/" + fileName + ".ics");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
-	 * TODO Implement method
+	 * Deletes all .ics files from the web storage. Use for cleanup.
+	 * 
+	 * @param !none
 	 */
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		assert forceSSL(request, response) : "SSL/HTTPS Connection error";
+		assert NetworkUtilities.ForceSSL(request, response) : "SSL/HTTPS Connection error";
+		System.out.print("Cleaning up .ics files...");
 		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().print("Not implemented yet.");
+		File rootDir = new File(ONLINE_PATH);
+		File[] icsFiles = rootDir.listFiles(new FileFilter() {
+			@Override
+			public boolean accept(File pathname) {
+				return pathname.isFile() && pathname.getName().endsWith(".ics");
+			}
+		});
+		
+		for(File iFile  : icsFiles) {
+			iFile.delete();
+		}
+		
+		System.out.println("Done!");
 	}
 	
-	@Override
-	public void destroy() {
-		super.destroy();
-	}
-
 	@Override
 	public void init() throws ServletException {
 		super.init();
 	}
 
-	/**
-	 * Converts java.time.LocalDateTime objects to java.util.Date objects.
-	 * 
-	 * @param LocalDateTime src 
-	 * @return java.util.Date new instance
-	 */
-	private static Date convertDate(LocalDateTime src) {
-		Calendar tempCal = Calendar.getInstance(Locale.GERMANY);
-		tempCal.set(src.getYear(), src.getMonthValue(), src.getDayOfMonth(), src.getHour(), src.getMinute());
-		return tempCal.getTime();
+	@Override
+	public void destroy() {
+		super.destroy();
 	}
-	
-	private static boolean forceSSL(HttpServletRequest request, HttpServletResponse response) {
-		if (!(request.getScheme().equals("https") && request.getServerPort() == 443)) {
-			try {
-				response.sendRedirect("https://rablabla.mybluemix.net");
-			} catch (IOException e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-		return true;
-	}
+
+
 }
