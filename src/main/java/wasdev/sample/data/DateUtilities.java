@@ -3,6 +3,9 @@ package wasdev.sample.data;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Hendrik Ulbrich (C) 2017
@@ -32,6 +35,18 @@ public final class DateUtilities {
 		LocalDateTime[] tResult = { start, end };
 		
 		return tResult;
+	}
+
+	/**
+	 * Converts java.time.LocalDateTime objects to java.util.Date objects.
+	 * 
+	 * @param LocalDateTime src 
+	 * @return java.util.Date new instance
+	 */
+	public static Date ConvertToDate(LocalDateTime src) {
+		Calendar tempCal = Calendar.getInstance(Locale.GERMANY);
+		tempCal.set(src.getYear(), src.getMonthValue()-1, src.getDayOfMonth(), src.getHour(), src.getMinute());
+		return tempCal.getTime();
 	}
 	
 }
