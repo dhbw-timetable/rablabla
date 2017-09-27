@@ -15,7 +15,7 @@ function requestAppointments(key, day, month, year) {
   return "Requested appointments...";
 }
 
-function exportYearlyICS(key, year) {
+function exportYearlyCalendar(key, year) {
   $.ajax({
     url: 'Rablabla?key=' + key + '&year=' + year,
     type: 'POST',
@@ -26,5 +26,5 @@ function exportYearlyICS(key, year) {
       console.log(error);
     }
   });
-  return "Generating .ics file...";
+  return "Generating calendar file...";
 }

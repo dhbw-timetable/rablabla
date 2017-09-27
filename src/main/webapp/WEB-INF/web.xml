@@ -6,7 +6,6 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
-	<display-name>Rablabla</display-name>
 	<security-constraint>
 		<display-name>HTTPS Redirect Security Constraint</display-name>
 		<web-resource-collection>
