@@ -40,7 +40,7 @@ import javax.servlet.annotation.MultipartConfig;
 /**
  * Servlet implementation of a REST API with JSON string based communication. 
  * 
- * Created by Hendrik Ulbrich (C) 2017
+ * Created by Hendrik Ulbrich (c) 2017
  */
 @WebServlet("/Rablabla")
 @MultipartConfig
@@ -49,7 +49,7 @@ public class Rablabla extends HttpServlet {
 	private static final long serialVersionUID = -8874059585924245331L;
 	private static final String ROOT_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/myapp.war/";
 	private static final String ONLINE_PATH = "https://rablabla.mybluemix.net/";
-	private static final String ICS_FILENAME = "calendar.ics"; // GCal only accepts this one
+	private static final String ICS_FILENAME = "calendar.ics";
 
 	/**
 	 * Gets appointments of a week in JSON format. The day param should be the monday of the week.
@@ -65,13 +65,13 @@ public class Rablabla extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 
 		// Get request parameters
-		int day = Integer.parseInt(request.getParameter("day"));
-		int month = Integer.parseInt(request.getParameter("month"));
-		int year = Integer.parseInt(request.getParameter("year"));
-		String key = request.getParameter("key");
+		final int day = Integer.parseInt(request.getParameter("day"));
+		final int month = Integer.parseInt(request.getParameter("month"));
+		final int year = Integer.parseInt(request.getParameter("year"));
+		final String key = request.getParameter("key");
 		try {
 			// Load data
-			ArrayList<Appointment> data = DataImporter.ImportWeek(LocalDate.of(year, month, day), key);
+			final ArrayList<Appointment> data = DataImporter.ImportWeek(LocalDate.of(year, month, day), key);
 			// Push data into JSON
 			response.getWriter().print(JSONUtilities.ToJSONArray(data).toString());
 		} catch (SAXException | ParserConfigurationException e) {
@@ -96,17 +96,17 @@ public class Rablabla extends HttpServlet {
 		assert NetworkUtilities.ForceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
 		// Get request parameters
-		int year = Integer.parseInt(request.getParameter("year"));
-		String key = request.getParameter("key");
-		String fileLocation = "";
+		final int year = Integer.parseInt(request.getParameter("year"));
+		final String key = request.getParameter("key");
+		final String fileLocation = year + "/" + key + "/";
 		try {
 			// Load data
 			System.out.println("Fetching ICS data...");
-			Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31), key);
+			final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31), key);
 			System.out.println("Done fetching data!");
-			File containerFile = new File(ROOT_PATH + fileLocation);
+			final File containerFile = new File(ROOT_PATH + fileLocation);
 			containerFile.mkdirs();
-			File exportFile = new File(containerFile, ICS_FILENAME);
+			final File exportFile = new File(containerFile, ICS_FILENAME);
 			generateICSFile(exportFile, data);
 			System.out.println("Done creating ICS file!");
 
@@ -126,8 +126,8 @@ public class Rablabla extends HttpServlet {
 		assert NetworkUtilities.ForceSSL(request, response) : "SSL/HTTPS Connection error";
 		System.out.print("Cleaning up .ics files...");
 		response.setContentType("text/html; charset=UTF-8");
-		File rootDir = new File(ROOT_PATH);
-		File[] icsFiles = rootDir.listFiles(new FileFilter() {
+		final File rootDir = new File(ROOT_PATH);
+		final File[] icsFiles = rootDir.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
 				return pathname.isFile() && pathname.getName().endsWith(".ics");
@@ -152,7 +152,7 @@ public class Rablabla extends HttpServlet {
 	}
 
 	private void generateICSFile(File exportFile, Map<LocalDate, ArrayList<Appointment>> data) throws IOException {
-		ICalendar ical = new ICalendar();
+		final ICalendar ical = new ICalendar();
 		ical.setMethod(Method.publish());
 		VEvent event;
 		for (ArrayList<Appointment> week : data.values()) {
@@ -168,7 +168,7 @@ public class Rablabla extends HttpServlet {
 				ical.addEvent(event);
 			}
 		}
-		TimezoneInfo t = new TimezoneInfo();
+		final TimezoneInfo t = new TimezoneInfo();
 		t.setDefaultTimezone(TimezoneAssignment.download(TimeZone.getTimeZone("Europe/Berlin"), true));
 		ical.setTimezoneInfo(t);
 		// Generate ics output and create file
@@ -177,7 +177,7 @@ public class Rablabla extends HttpServlet {
 	
 	@SuppressWarnings("unused")
 	private void generateCSVFile(File containerDir, File exportFile, Map<LocalDate, ArrayList<Appointment>> data) throws IOException {
-		StringBuilder output = new StringBuilder();
+		final StringBuilder output = new StringBuilder();
 		final String escape = "\"";
 		final String seperateColumn = ",";
 		final String seperateRow = "\r\n";
