@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by Hendrik Ulbrich (C) 2017
@@ -38,14 +39,16 @@ public final class DateUtilities {
 	}
 
 	/**
-	 * Converts java.time.LocalDateTime objects to java.util.Date objects.
+	 * Converts java.time.LocalDateTime objects to java.util.Date objects 
+	 * using TimeZone Europe/Berlin and Locale.Germany. (ignores seconds)
 	 * 
 	 * @param LocalDateTime src 
 	 * @return java.util.Date new instance
 	 */
 	public static Date ConvertToDate(LocalDateTime src) {
 		Calendar tempCal = Calendar.getInstance(Locale.GERMANY);
-		tempCal.set(src.getYear(), src.getMonthValue()-1, src.getDayOfMonth(), src.getHour(), src.getMinute());
+		tempCal.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
+		tempCal.set(src.getYear(), src.getMonthValue()-1, src.getDayOfMonth(), src.getHour(), src.getMinute(), 0);
 		return tempCal.getTime();
 	}
 	
