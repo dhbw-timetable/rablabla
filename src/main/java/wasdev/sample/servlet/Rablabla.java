@@ -1,16 +1,21 @@
 package wasdev.sample.servlet;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,7 +55,12 @@ public class Rablabla extends HttpServlet {
 	private static final String ROOT_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/myapp.war/";
 	private static final String ONLINE_PATH = "https://rablabla.mybluemix.net/";
 	private static final String ICS_FILENAME = "calendar.ics";
+	private static final File TASKS_FILE = new File(ROOT_PATH, "tasks.txt");
+	private static final long WORKER_FREQUENCY = 6 * 60 * 60 * 1000; // 6h
+	private static final long MAX_TASK_CALLS = 3000; // Keys are deleted from list after 3000 generations
 
+	private Timer worker;
+	
 	/**
 	 * Gets appointments of a week in JSON format. The day param should be the monday of the week.
 	 * 
@@ -107,7 +117,24 @@ public class Rablabla extends HttpServlet {
 			final File containerFile = new File(ROOT_PATH + fileLocation);
 			containerFile.mkdirs();
 			final File exportFile = new File(containerFile, ICS_FILENAME);
-			generateICSFile(exportFile, data);
+
+			if (!isICSFilePresent(key, year)) {
+				System.out.println("Don't have requested ICS file - generating...");
+				// Put it on global list
+				if(!TASKS_FILE.exists()) {
+					TASKS_FILE.createNewFile();
+				}
+				
+				// Extended tasklist
+				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(TASKS_FILE, true), "UTF-8"));
+				bw.append(MAX_TASK_CALLS + "\t" + key + "\n");
+				bw.close();
+				
+				generateICSFile(exportFile, data);	
+			} else {
+				System.out.println("Already having this ICS file, wait for worker please!");
+			}
+			
 			System.out.println("Done creating ICS file!");
 
 			response.getWriter().println(ONLINE_PATH + fileLocation + ICS_FILENAME);
@@ -144,11 +171,40 @@ public class Rablabla extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
+		worker = new Timer(true);
+		worker.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				System.out.println("Executing worker task...");
+				try {
+					final int year = LocalDate.now().getYear();
+					// Read tasks from file
+					for (String key : readTaskList()) {
+						final String fileLocation = year + "/" + key + "/";
+						// Load data
+						System.out.println("Fetching ICS data...");
+						final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31), key);
+						System.out.println("Done fetching data!");
+						final File containerFile = new File(ROOT_PATH + fileLocation);
+						containerFile.mkdirs();
+						System.out.println("Done creating ICS file!");
+						generateICSFile(new File(containerFile, ICS_FILENAME), data);
+					}
+					System.out.println("Done updating calendars!");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}, 0, WORKER_FREQUENCY);
 	}
 
 	@Override
 	public void destroy() {
 		super.destroy();
+	}
+	
+	private boolean isICSFilePresent(String key, int year) {
+		return false;
 	}
 
 	private void generateICSFile(File exportFile, Map<LocalDate, ArrayList<Appointment>> data) throws IOException {
@@ -207,10 +263,45 @@ public class Rablabla extends HttpServlet {
 		}
 		exportFile.createNewFile();
 		
-		System.out.println(exportFile.getPath());
 		// Write content to file
 		BufferedWriter bf = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(exportFile), "UTF-8"));
 		bf.write(output.toString());
 		bf.close();
+	}
+	
+	private ArrayList<String> readTaskList() throws IOException {
+		final ArrayList<String> tasks = new ArrayList<>();
+		if(!TASKS_FILE.exists()) {
+			TASKS_FILE.createNewFile();
+		}
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(TASKS_FILE), "UTF-8"));
+		String line;
+		String[] splittedLine;
+		ArrayList<String> newTasksOutput = new ArrayList<>();
+		int remainingCalls;
+		
+		while ((line = br.readLine()) != null) {
+			splittedLine = line.split("\t");
+			remainingCalls = Integer.parseInt(splittedLine[0]);
+			if (--remainingCalls > 0) {
+				newTasksOutput.add(remainingCalls + "\t" + splittedLine[1] + "\n");
+				tasks.add(splittedLine[1]);
+			} 
+		}
+		br.close();
+		
+		// Clean file
+		TASKS_FILE.delete();
+		TASKS_FILE.createNewFile();
+		
+		// Rewrite tasklist
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(TASKS_FILE), "UTF-8"));
+		for (String out : newTasksOutput) {
+			bw.write(out);
+		}
+		bw.close();
+		
+		return tasks;
 	}
 }
