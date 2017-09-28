@@ -55,8 +55,8 @@ public class Rablabla extends HttpServlet {
 	private static final String ROOT_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/myapp.war/";
 	private static final String ONLINE_PATH = "https://rablabla.mybluemix.net/";
 	private static final String ICS_FILENAME = "calendar.ics";
-	private static final File TASKS_FILE = new File(ROOT_PATH, "tasks.txt");
-	private static final long WORKER_FREQUENCY = 6 * 60 * 60 * 1000; // 6h
+	private static final File TASKS_FILE = new File(ROOT_PATH, "tasks");
+	private static final long WORKER_FREQUENCY = 6 * 60 * 60 * 1000; // ms => 6h
 	private static final long MAX_TASK_CALLS = 3000; // Keys are deleted from list after 3000 generations
 
 	private Timer worker;
@@ -110,15 +110,15 @@ public class Rablabla extends HttpServlet {
 		final String key = request.getParameter("key");
 		final String fileLocation = year + "/" + key + "/";
 		try {
-			// Load data
-			System.out.println("Fetching ICS data...");
-			final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31), key);
-			System.out.println("Done fetching data!");
-			final File containerFile = new File(ROOT_PATH + fileLocation);
-			containerFile.mkdirs();
-			final File exportFile = new File(containerFile, ICS_FILENAME);
-
 			if (!isICSFilePresent(key, year)) {
+				// Load data
+				System.out.println("Fetching ICS data...");
+				final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31), key);
+				System.out.println("Done fetching data!");
+				final File containerFile = new File(ROOT_PATH + fileLocation);
+				containerFile.mkdirs();
+				final File exportFile = new File(containerFile, ICS_FILENAME);
+
 				System.out.println("Don't have requested ICS file - generating...");
 				// Put it on global list
 				if(!TASKS_FILE.exists()) {
@@ -204,7 +204,8 @@ public class Rablabla extends HttpServlet {
 	}
 	
 	private boolean isICSFilePresent(String key, int year) {
-		return false;
+		File f = new File(ROOT_PATH + year + "/" + key + "/" + ICS_FILENAME); 
+		return f.exists() && f.isFile();
 	}
 
 	private void generateICSFile(File exportFile, Map<LocalDate, ArrayList<Appointment>> data) throws IOException {
