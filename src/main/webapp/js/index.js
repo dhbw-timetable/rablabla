@@ -1,6 +1,6 @@
 // = = Gets called on document loaded = =
 
-function requestAppointments(key, day, month, year) {
+function getAppointments(key, day, month, year) {
   $.ajax({
     url: 'Rablabla?key=' + key + '&day=' + day + '&month=' + month + '&year=' + year,
     type: 'GET',
@@ -12,10 +12,10 @@ function requestAppointments(key, day, month, year) {
       console.log(error);
     }
   });
-  return "Requested appointments...";
+  return "Accessing appointments...";
 }
 
-function exportYearlyCalendar(key, year) {
+function getYearlyCalendar(key, year) {
   $.ajax({
     url: 'Rablabla?key=' + key + '&year=' + year,
     type: 'POST',
@@ -26,5 +26,5 @@ function exportYearlyCalendar(key, year) {
       console.log(error);
     }
   });
-  return "Generating calendar file...";
+  return "Accessing calendar file...";
 }
