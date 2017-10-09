@@ -91,14 +91,13 @@ public class Rablabla extends HttpServlet {
 
 	/**
 	 * Generates an .ics file in the web storage. 
-	 * Every calendar has one year range and contains
-	 * every appointment from the course.
+	 * Every calendar contains
+	 * every appointment from the course over one year.
 	 * 
 	 * Example:
 	 * 
-	 * 2017_abcdefghijklmnopqrstuvwxyz.ics
+	 * abcdefghijklmnopqrstuvwxyz/calendar.ics
 	 * 
-	 * @param int year
 	 * @param String key
 	 */
 	@Override
@@ -106,14 +105,13 @@ public class Rablabla extends HttpServlet {
 		assert NetworkUtilities.ForceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
 		// Get request parameters
-		final int year = Integer.parseInt(request.getParameter("year"));
 		final String key = request.getParameter("key");
-		final String fileLocation = year + "/" + key + "/";
+		final String fileLocation = key + "/";
 		try {
-			if (!isICSFilePresent(key, year)) {
+			if (!isICSFilePresent(key)) {
 				// Load data
 				System.out.println("Fetching ICS data...");
-				final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31), key);
+				final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(LocalDate.now().getYear(), 1, 1), LocalDate.of(LocalDate.now().getYear(), 12, 31), key);
 				System.out.println("Done fetching data!");
 				final File containerFile = new File(ROOT_PATH + fileLocation);
 				containerFile.mkdirs();
@@ -177,13 +175,12 @@ public class Rablabla extends HttpServlet {
 			public void run() {
 				System.out.println("Executing worker task...");
 				try {
-					final int year = LocalDate.now().getYear();
 					// Read tasks from file
 					for (String key : readTaskList()) {
-						final String fileLocation = year + "/" + key + "/";
+						final String fileLocation = key + "/";
 						// Load data
 						System.out.println("Fetching ICS data...");
-						final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31), key);
+						final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(LocalDate.now().getYear(), 1, 1), LocalDate.of(LocalDate.now().getYear(), 12, 31), key);
 						System.out.println("Done fetching data!");
 						final File containerFile = new File(ROOT_PATH + fileLocation);
 						containerFile.mkdirs();
@@ -203,8 +200,8 @@ public class Rablabla extends HttpServlet {
 		super.destroy();
 	}
 	
-	private boolean isICSFilePresent(String key, int year) {
-		File f = new File(ROOT_PATH + year + "/" + key + "/" + ICS_FILENAME); 
+	private boolean isICSFilePresent(String key) {
+		File f = new File(ROOT_PATH + key + "/" + ICS_FILENAME); 
 		return f.exists() && f.isFile();
 	}
 

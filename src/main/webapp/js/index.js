@@ -15,9 +15,9 @@ function getAppointments(key, day, month, year) {
   return "Accessing appointments...";
 }
 
-function getYearlyCalendar(key, year) {
+function getYearlyCalendar(key) {
   $.ajax({
-    url: 'Rablabla?key=' + key + '&year=' + year,
+    url: 'Rablabla?key=' + key,
     type: 'POST',
     success: (answer) => {
     		console.log(answer);
