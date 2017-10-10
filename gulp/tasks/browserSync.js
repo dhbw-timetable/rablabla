@@ -1,18 +1,13 @@
-const gulp = require('gulp');
 const browserSync = require('browser-sync').create();
+const gulp = require('gulp');
+const config = require('../config').browserSync;
 
-const reload = browserSync.reload;
-
-// Save a reference to the `reload` method
-
-// Watch scss AND html files, doing different things with each.
-gulp.task('browserSync', () => {
-  // Serve files from the root of this project
+gulp.task('browserSync', ['build'], () => {
   browserSync.init({
+    ...config,
+    codeSync: false,
     server: {
-      baseDir: './src/main/webapp',
+      baseDir: './src/main/webapp/',
     },
   });
-
-  gulp.watch('*.html').on('change', reload);
 });
