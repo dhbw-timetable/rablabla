@@ -1,15 +1,32 @@
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import React from 'react';
-import red from 'material-ui/colors/red';
 import yellow from 'material-ui/colors/yellow';
 import NavigationBar from './components/NavigationBar';
 
 export default function Main() {
+  const dhbwtimetablepalette = {
+    50: '#f7e7e7',
+    100: '#eac3c3',
+    200: '#dd9c9c',
+    300: '#cf7474',
+    400: '#c45656',
+    500: '#ba3838',
+    600: '#b33232',
+    700: '#ab2b2b',
+    800: '#a32424',
+    900: '#941717',
+    A100: '#ffc9c9',
+    A200: '#ff9696',
+    A400: '#ff6363',
+    A700: '#ff4a4a',
+    contrastDefaultColor: 'light',
+  };
+
   const theme = createMuiTheme({
     palette: {
-      primary: red,
+      primary: dhbwtimetablepalette,
       secondary: {
-        ...red,
+        ...dhbwtimetablepalette,
         A400: 'white', // Accent color
       },
       error: yellow,
