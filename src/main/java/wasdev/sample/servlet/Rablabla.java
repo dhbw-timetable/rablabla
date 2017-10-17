@@ -24,8 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.xml.sax.SAXException;
-
 import biweekly.Biweekly;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
@@ -34,11 +32,9 @@ import biweekly.io.TimezoneInfo;
 import biweekly.property.Classification;
 import biweekly.property.Method;
 import biweekly.property.Transparency;
-import wasdev.sample.data.Appointment;
-import wasdev.sample.data.DataImporter;
-import wasdev.sample.data.DateUtilities;
-import wasdev.sample.data.JSONUtilities;
-import wasdev.sample.data.NetworkUtilities;
+import dhbw.timetable.rablabla.data.Appointment;
+import dhbw.timetable.rablabla.data.DataImporter;
+import dhbw.timetable.rablabla.data.DateUtilities;
 
 import javax.servlet.annotation.MultipartConfig;
 
@@ -50,7 +46,6 @@ import javax.servlet.annotation.MultipartConfig;
 @WebServlet("/Rablabla")
 @MultipartConfig
 public class Rablabla extends HttpServlet {
-
 	private static final long serialVersionUID = -8874059585924245331L;
 	private static final String ROOT_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/myapp.war/";
 	private static final String ONLINE_PATH = "https://rablabla.mybluemix.net/";
@@ -71,7 +66,7 @@ public class Rablabla extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		assert NetworkUtilities.ForceSSL(request, response) : "SSL/HTTPS Connection error";
+		assert ForceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
 
 		// Get request parameters
@@ -84,7 +79,7 @@ public class Rablabla extends HttpServlet {
 			final ArrayList<Appointment> data = DataImporter.ImportWeek(LocalDate.of(year, month, day), key);
 			// Push data into JSON
 			response.getWriter().print(JSONUtilities.ToJSONArray(data).toString());
-		} catch (SAXException | ParserConfigurationException e) {
+		} catch (ParserConfigurationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
@@ -102,7 +97,7 @@ public class Rablabla extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		assert NetworkUtilities.ForceSSL(request, response) : "SSL/HTTPS Connection error";
+		assert ForceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
 		// Get request parameters
 		final String key = request.getParameter("key");
@@ -111,7 +106,7 @@ public class Rablabla extends HttpServlet {
 			if (!isICSFilePresent(key)) {
 				// Load data
 				System.out.println("Fetching ICS data...");
-				final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(LocalDate.now().getYear(), 1, 1), LocalDate.of(LocalDate.now().getYear(), 12, 31), key);
+				final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportWeekRange(LocalDate.of(LocalDate.now().getYear(), 1, 1), LocalDate.of(LocalDate.now().getYear(), 12, 31), key);
 				System.out.println("Done fetching data!");
 				final File containerFile = new File(ROOT_PATH + fileLocation);
 				containerFile.mkdirs();
@@ -148,7 +143,7 @@ public class Rablabla extends HttpServlet {
 	 */
 	@Override
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		assert NetworkUtilities.ForceSSL(request, response) : "SSL/HTTPS Connection error";
+		assert ForceSSL(request, response) : "SSL/HTTPS Connection error";
 		System.out.print("Cleaning up .ics files...");
 		response.setContentType("text/html; charset=UTF-8");
 		final File rootDir = new File(ROOT_PATH);
@@ -180,7 +175,7 @@ public class Rablabla extends HttpServlet {
 						final String fileLocation = key + "/";
 						// Load data
 						System.out.println("Fetching ICS data...");
-						final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportDateRange(LocalDate.of(LocalDate.now().getYear(), 1, 1), LocalDate.of(LocalDate.now().getYear(), 12, 31), key);
+						final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportWeekRange(LocalDate.of(LocalDate.now().getYear(), 1, 1), LocalDate.of(LocalDate.now().getYear(), 12, 31), key);
 						System.out.println("Done fetching data!");
 						final File containerFile = new File(ROOT_PATH + fileLocation);
 						containerFile.mkdirs();
@@ -301,5 +296,17 @@ public class Rablabla extends HttpServlet {
 		bw.close();
 		
 		return tasks;
+	}
+	
+	public static boolean ForceSSL(HttpServletRequest request, HttpServletResponse response) {
+		if (!(request.getScheme().equals("https") && request.getServerPort() == 443)) {
+			try {
+				response.sendRedirect("https://rablabla.mybluemix.net");
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
 	}
 }

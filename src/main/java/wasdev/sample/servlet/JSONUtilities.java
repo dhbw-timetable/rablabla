@@ -1,9 +1,11 @@
-package wasdev.sample.data;
+package wasdev.sample.servlet;
 
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import dhbw.timetable.rablabla.data.Appointment;
 
 public final class JSONUtilities {
 	
