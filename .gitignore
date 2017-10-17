@@ -1,2 +1,6 @@
 /target/
+/build/
 /node_modules/
+/src/main/webapp/
+/node_modules/
+package-lock.json
