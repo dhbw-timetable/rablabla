@@ -1,14 +1,14 @@
 import React from 'react';
 import Event from './Event';
 
-export default function DayView() {
+export default function DayView(props) {
   const events = [];
 
   return (
     <div>
-      <h2>{this.props.name}</h2>
+      <h2>{props.name}</h2>
         <ul>
-          {events}
+          <Event />
         </ul>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import DayView from './DayView';
 
-export default function Day() {
+export default function Day(props) {
   /* const rawEvents = this.props.daylyEvents;
   const processedEvents = [];
 
@@ -33,6 +33,6 @@ export default function Day() {
   }); */
 
   return (
-    <DayView />
+    <DayView name={props.name} />
   );
 }
