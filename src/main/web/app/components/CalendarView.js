@@ -2,8 +2,7 @@ import React from 'react';
 import TimeView from './TimeView';
 import Day from './Day';
 
-export default function CalendarView() {
-  const dayNodes = [];
+export default function CalendarView(props) {
   const dayNames = [
     'Montag',
     'Dienstag',
@@ -12,13 +11,14 @@ export default function CalendarView() {
     'Freitag',
     'Samstag',
   ];
+  const dailyEventData = props.dailyEventData;
+  const dayNodes = [];
 
-  var i = 0;
-  dayNames.forEach((el) => {
+  for (var i = 0; i < 6; i++) {
     dayNodes.push(
-      <Day key={el + i++} name={el} />
-    )
-  });
+      <Day key={i} eventData={dailyEventData[i]} name={dayNames[i]} />
+    );
+  }
 
   return (
     <div>

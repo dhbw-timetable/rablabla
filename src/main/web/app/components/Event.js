@@ -1,12 +1,7 @@
 import React from 'react';
 
-export default function Event() {
-  const data = {
-    time: '13:00',
-    title: 'Example Lecture',
-    name: 'Prof. X',
-    ressource: 'STGT-EXA',
-  };
+export default function Event(props) {
+  const data = props.data;
 
   return (
     <li>
