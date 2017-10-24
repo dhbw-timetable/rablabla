@@ -1,30 +1,49 @@
-// = = Gets called on document loaded = =
 
-function getAppointments(key, day, month, year) {
+function getAppointments(url, day, month, year) {
+  const pUrl = encodeURIComponent(url);
   $.ajax({
-    url: 'Rablabla?key=' + key + '&day=' + day + '&month=' + month + '&year=' + year,
+    url: `Rablabla?url=${pUrl}&day=${day}&month=${month}&year=${year}`,
     type: 'GET',
     success: (answer) => {
-      var data = JSON.parse(answer);
+      const data = JSON.parse(answer);
       console.log(data);
     },
     error: (error) => {
       console.log(error);
-    }
+    },
   });
-  return "Accessing appointments...";
+  return 'Accessing appointments...';
 }
 
-function getYearlyCalendar(key) {
-  $.ajax({
-    url: 'Rablabla?key=' + key,
-    type: 'POST',
-    success: (answer) => {
-    		console.log(answer);
-    },
-    error: (error) => {
-      console.log(error);
-    }
+function getParams(args) {
+  const params = {};
+  const pStrings = args.split('&');
+  Object.keys(pStrings).forEach((param) => {
+    const kvStrings = pStrings[param].split('=');
+    params[kvStrings[0]] = kvStrings[1];
   });
-  return "Accessing calendar file...";
+  return params;
+}
+
+function getYearlyCalendar(url) {
+  const deSuffix = '.de/rapla?';
+  const params = getParams(url.substring(url.indexOf(deSuffix) + deSuffix.length));
+
+  if (params.key) {
+    $.ajax({
+      url: `Rablabla?url=${url}`,
+      type: 'POST',
+      success: (answer) => {
+        console.log(answer);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+    return 'Accessing calendar file...';
+  } else if (params.user && params.file) {
+    console.log(`${url}&page=ical`);
+  }
+  console.error(`Yearly calendar not supported for url: ${url}`);
+  return undefined;
 }

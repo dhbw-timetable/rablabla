@@ -64,7 +64,7 @@
 		<dependency>
    			<groupId>com.github.dhbw-timetable</groupId>
    			<artifactId>rapla-parser</artifactId>
-   			<version>0.1</version>
+   			<version>0.3.0</version>
 		</dependency>
 	</dependencies>
 
