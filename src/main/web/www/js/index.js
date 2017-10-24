@@ -28,12 +28,13 @@ function getParams(args) {
 function getYearlyCalendar(url) {
   const deSuffix = '.de/rapla?';
   const params = getParams(url.substring(url.indexOf(deSuffix) + deSuffix.length));
-
+  console.log(params);
   if (params.key) {
     $.ajax({
       url: `Rablabla?url=${url}`,
       type: 'POST',
       success: (answer) => {
+        // TODO Display link to user
         console.log(answer);
       },
       error: (error) => {
@@ -42,8 +43,9 @@ function getYearlyCalendar(url) {
     });
     return 'Accessing calendar file...';
   } else if (params.user && params.file) {
+    // TODO Display link to user
     console.log(`${url}&page=ical`);
+  } else {
+    console.error(`Yearly calendar not supported for url: ${url}`);
   }
-  console.error(`Yearly calendar not supported for url: ${url}`);
-  return undefined;
 }
