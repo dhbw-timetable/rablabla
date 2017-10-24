@@ -1,8 +1,10 @@
+import Paper from 'material-ui/Paper';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import React from 'react';
 import yellow from 'material-ui/colors/yellow';
 import NavigationBar from './components/NavigationBar';
 import Calendar from './components/Calendar';
+
 
 export default function Main() {
   const dhbwtimetablepalette = {
@@ -65,7 +67,7 @@ export default function Main() {
               },
             ]}
           />
-            <Calendar title="It works" />
+        <Calendar />
         </div>
       </MuiThemeProvider>
     </div>

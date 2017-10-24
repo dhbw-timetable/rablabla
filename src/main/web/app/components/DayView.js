@@ -13,9 +13,9 @@ export default function DayView(props) {
   })
 
   return (
-    <div>
-      <h2>{props.name}</h2>
-        <ul>
+    <div className="day">
+      <h2 className="day--name">{props.name}</h2>
+        <ul className="schedule">
           {eventNodes}
         </ul>
     </div>

@@ -4,11 +4,11 @@ export default function Event(props) {
   const data = props.data;
 
   return (
-    <li>
-        <p>{data.time}</p>
-        <h3>{data.title}</h3>
-        <p>{data.name}</p>
-        <p>{data.ressource}</p>
+    <li className="event">
+        <p className="event--time">{data.time}</p>
+        <h3 className="event--header">{data.title}</h3>
+        <p className="event--body">{data.name}</p>
+        <p className="event--footer">{data.ressource}</p>
     </li>
   );
 }

@@ -28,5 +28,9 @@ module.exports = {
       outputName: 'app.js'
     }],
     extensions: ['.js'],
+  },
+  sass: {
+    src: src + "/app/scss/*.scss",
+    dest: dest + "/css/",
   }
 };

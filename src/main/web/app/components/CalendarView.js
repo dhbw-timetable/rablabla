@@ -21,9 +21,11 @@ export default function CalendarView(props) {
   }
 
   return (
-    <div>
-      <TimeView start={8} end={18} />
-      {dayNodes}
-    </div>
+    <container>
+      <div className="calendar">
+        <TimeView start={8} end={18} />
+        {dayNodes}
+      </div>
+    </container>
   );
 }

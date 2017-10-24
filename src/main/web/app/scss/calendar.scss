@@ -1,0 +1,193 @@
+$primarylight: #ba3838;
+$lightgray: #eaeaef;
+$font-stack: Roboto, Arial;
+
+body {
+  background: $lightgray;
+}
+
+container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow-y: hidden;
+  
+  font-family: $font-stack;
+}
+
+.calendar {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+
+.day {
+  position: relative;
+  box-sizing: border-box;
+  width: calc(16.66% - 3.33px);
+  min-width: 150px;
+  height: calc(100% - 2.3em);
+
+  background: white;
+
+  &.time {
+      width: 20px;
+      min-width: 20px;
+      background-color: white;
+  }
+
+  &--name {
+    box-sizing: border-box;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+    font-size: 1em;
+    margin-bottom: 15px;
+    background: $lightgray;
+    padding: 0.5em;
+    height: 2em;
+  }
+  .current &--name {
+    color: $primarylight;
+  }
+
+  & .schedule {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+      to bottom,
+      $lightgray,
+      $lightgray 3px,
+      #fff 0,
+      #fff
+    );
+  background-size: 100% calc(10% - (1em + 15px) / 10);
+
+    .time-name {
+      color: darkgray;
+      height: calc(10% - (1em + 15px) / 10);
+      text-align: right;
+      transform: translateY(-0.5em);
+      margin-right: 3px;
+    }
+  }
+
+  & .event {
+    box-sizing: border-box;
+    position: absolute;
+    width: 90%;
+    left: 5%;
+    padding: 5px;
+
+    color: white;
+    background-color: $primarylight;
+    border-radius: 5px;
+    box-shadow: 0 2px 2px 0 lightgray;
+    box-shadow: 0 4px 4px 0 gray;
+
+    word-wrap: break-word;
+    display: flex;
+    flex-flow: column wrap;
+    overflow: hidden;
+
+    &--time,
+    &--header,
+    &--body,
+    &--footer {
+      width: calc(100% + 10px); //Add the padding, as border-box must be sizing model for event
+    }
+
+    &--time {
+      font-size: 0.75em;
+    }
+
+    &--header {
+      font-size: 1.4em;
+      margin: 10px 0;
+    }
+
+    &--body {
+      opacity: 0.7;
+      font-size: 0.8em;
+      margin-bottom: calc(1em + 5px);
+    }
+
+    &--footer {
+      position: absolute;
+      bottom: 0;
+      margin-bottom: 5px;
+      opacity: 0.7;
+      font-size: 0.8em;
+    }
+
+    &.get-crazy {
+      animation: crazy 1s infinite;
+    }
+  }
+
+  @keyframes crazy {
+    25% {
+      transform: translateY(50px);
+    }
+     75% {
+      transform: translateY(-50px);
+    }
+  }
+
+  &.current .schedule .event {
+    box-shadow: 0 4px 4px 0 lightgray;
+    box-shadow: 0 8px 8px 0 gray;
+    transform: translateY(-5px);
+    transform: scale(1.05);
+  }
+}
+
+.day.time .schedule {
+    background: white;
+}
+
+@media screen and (max-width: 900px) {
+  .day.time {
+    position: fixed;
+    left: 0;
+    z-index: 2;
+    background: $lightgray;
+
+    .schedule {
+      background: $lightgray;
+
+    }
+
+    .time-name {
+      color: black;
+    }
+  }
+
+  .calendar {
+    padding-left: 20px;
+  }
+}
+
+@media screen and (max-height: 400px) {
+  .calendar .day .schedule .event {
+    &--body {
+      margin-bottom: none;
+    }
+
+    &--header {
+      margin: 5px 0;
+    }
+
+    &--footer {
+      display: none;
+    }
+  }
+}
