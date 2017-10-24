@@ -39,19 +39,20 @@ import dhbw.timetable.rablabla.data.DateUtilities;
 import javax.servlet.annotation.MultipartConfig;
 
 /**
- * Servlet implementation of a REST API with JSON string based communication. 
+ * Servlet implementation of a REST API with JSON string and plain text based communication. 
  * 
  * Created by Hendrik Ulbrich (c) 2017
  */
 @WebServlet("/Rablabla")
 @MultipartConfig
 public class Rablabla extends HttpServlet {
+
 	private static final long serialVersionUID = -8874059585924245331L;
-	private static final String ROOT_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/myapp.war/";
+	private static final String ROOT_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/myapp.war/"; // by Bluemix
 	private static final String ONLINE_PATH = "https://rablabla.mybluemix.net/";
-	private static final String ICS_FILENAME = "calendar.ics";
+	private static final String ICS_FILENAME = "calendar.ics"; // calendar.ics has highest compatibility
 	private static final File TASKS_FILE = new File(ROOT_PATH, "tasks");
-	private static final long WORKER_FREQUENCY = 6 * 60 * 60 * 1000; // ms => 6h
+	private static final long WORKER_FREQUENCY = 6 * 60 * 60 * 1000; // ms => toogle sync every 6h
 	private static final long MAX_TASK_CALLS = 3000; // Keys are deleted from list after 3000 generations
 
 	private Timer worker;
@@ -266,6 +267,7 @@ public class Rablabla extends HttpServlet {
 		final ArrayList<String> tasks = new ArrayList<>();
 		if(!TASKS_FILE.exists()) {
 			TASKS_FILE.createNewFile();
+			return tasks;
 		}
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(TASKS_FILE), "UTF-8"));
