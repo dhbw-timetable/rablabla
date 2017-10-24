@@ -11,13 +11,11 @@ export default function CalendarView(props) {
     'Freitag',
     'Samstag',
   ];
-  const dailyEventData = props.dailyEventData;
+  const dailyEvents = props.dailyEvents;
   const dayNodes = [];
 
   for (var i = 0; i < 6; i++) {
-    dayNodes.push(
-      <Day key={i} eventData={dailyEventData[i]} name={dayNames[i]} />
-    );
+    dayNodes.push(<Day key={i} eventData={dailyEvents[i]} name={dayNames[i]} />);
   }
 
   return (
