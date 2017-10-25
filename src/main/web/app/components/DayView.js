@@ -2,11 +2,11 @@ import React from 'react';
 import Event from './Event';
 
 export default function DayView(props) {
-  const eventData = props.eventData;
+  const events = props.events;
   const eventNodes = [];
 
   let i = 0;
-  eventData.forEach((el) => {
+  events.forEach((el) => {
     eventNodes.push(
       <Event key={i++} data={el} />
     );

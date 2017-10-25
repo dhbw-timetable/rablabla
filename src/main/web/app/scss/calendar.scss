@@ -11,7 +11,6 @@ container {
   height: 100%;
   width: 100%;
   overflow-y: hidden;
-  
   font-family: $font-stack;
 }
 
@@ -98,7 +97,6 @@ container {
     flex-flow: column wrap;
     overflow: hidden;
 
-    &--time,
     &--header,
     &--body,
     &--footer {
@@ -106,12 +104,14 @@ container {
     }
 
     &--time {
+      position: absolute;
       font-size: 0.75em;
+      border-radius: 5px;
     }
 
     &--header {
       font-size: 1.4em;
-      margin: 10px 0;
+      margin: 15px 0;
     }
 
     &--body {
@@ -183,7 +183,8 @@ container {
     }
 
     &--header {
-      margin: 5px 0;
+      font-size: 1.2em;
+      margin: 15px 0 5px 0;
     }
 
     &--footer {
