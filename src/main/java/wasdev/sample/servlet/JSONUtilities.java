@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import dhbw.timetable.rablabla.data.Appointment;
+import dhbw.timetable.rapla.data.event.Appointment;
+
 
 public final class JSONUtilities {
 	
@@ -24,8 +25,9 @@ public final class JSONUtilities {
 		jsonObject.put("date", a.getDate());
 		jsonObject.put("startTime", a.getStartTime());
 		jsonObject.put("endTime", a.getEndTime());
-		jsonObject.put("course", a.getCourse());
-		jsonObject.put("info", a.getInfo());
+		jsonObject.put("course", a.getTitle());
+		jsonObject.put("persons", a.getPersons());
+		jsonObject.put("resources", a.getResources());
 		return jsonObject;
 	}
 }
