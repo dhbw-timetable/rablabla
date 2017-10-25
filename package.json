@@ -27,6 +27,7 @@
     "eslint-plugin-react": "^7.4.0",
     "gulp": "^3.9.1",
     "gulp-notify": "^2.2.0",
+    "gulp-sass": "^3.1.0",
     "gulp-util": "^3.0.8",
     "pretty-hrtime": "^1.0.3",
     "require-dir": "^0.3.1",
@@ -36,7 +37,9 @@
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "classnames": "^2.2.5",
+    "jquery": "^3.2.1",
     "jss": "^8.1.0",
     "material-ui": "^1.0.0-beta.16",
     "material-ui-icons": "^1.0.0-beta.15",
