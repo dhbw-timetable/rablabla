@@ -8,18 +8,12 @@ const shiftWindow = () => { window.scrollBy(0, -64); };
 if (window.location.hash) shiftWindow();
 window.addEventListener('hashchange', shiftWindow);
 
-function getAppointments(url, day, month, year) {
-  const pUrl = encodeURIComponent(url);
+function getAppointments(url, day, month, year, success, error) {
   $.ajax({
-    url: `Rablabla?url=${pUrl}&day=${day}&month=${month}&year=${year}`,
+    url: `Rablabla?url=${encodeURIComponent(url)}&day=${day}&month=${month}&year=${year}`,
     type: 'GET',
-    success: (answer) => {
-      const data = JSON.parse(answer);
-      console.log(data);
-    },
-    error: (error) => {
-      console.log(error);
-    },
+    success,
+    error,
   });
   return 'Accessing appointments...';
 }

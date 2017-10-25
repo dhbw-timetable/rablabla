@@ -4,7 +4,6 @@ import yellow from 'material-ui/colors/yellow';
 import NavigationBar from './components/NavigationBar';
 import Calendar from './components/Calendar';
 
-
 export default function Main(props) {
   const dhbwtimetablepalette = {
     50: '#f7e7e7',
@@ -66,7 +65,7 @@ export default function Main(props) {
               },
             ]}
           />
-        <Calendar getAppointments={props.getAppointments} />
+          <Calendar getAppointments={props.getAppointments} />
         </div>
       </MuiThemeProvider>
     </div>

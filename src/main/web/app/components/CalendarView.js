@@ -11,18 +11,13 @@ export default function CalendarView(props) {
     'Freitag',
     'Samstag',
   ];
-  const dailyEvents = props.dailyEvents;
-  const dayNodes = [];
-
-  for (var i = 0; i < 6; i++) {
-    dayNodes.push(<Day key={i} eventData={dailyEvents[i]} name={dayNames[i]} />);
-  }
-
   return (
     <container>
       <div className="calendar">
         <TimeView start={8} end={18} />
-        {dayNodes}
+        {dayNames.map((name, i) => {
+          return <Day key={i} eventData={props.dailyEvents[i]} name={name} />;
+        })}
       </div>
     </container>
   );
