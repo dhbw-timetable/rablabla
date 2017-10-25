@@ -10,6 +10,7 @@ module.exports = {
   		"react/jsx-no-bind": 0,
   		"react/jsx-indent": 0,
       "react/no-array-index-key": 0,
+      "react/forbid-prop-types": 0,
   		"react/arrow-body-style": 0,
   		"react/sort-comp": 0,
   		"class-methods-use-this": 0,
