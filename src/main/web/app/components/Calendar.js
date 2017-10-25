@@ -29,6 +29,7 @@ export default class Calendar extends Component {
       const startTime = el.startTime.split(':');
       el.Date = new Date(curDate[2], curDate[1] - 1, curDate[0], startTime[0], startTime[1]);
     });
+    return events;
   }
 
   makeDays = (events) => {
