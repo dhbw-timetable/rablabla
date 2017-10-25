@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function TimeView(props) {
-  // TODO Kann we have a short cheat for this (e.g. with Coffee?)
+  // TODO Can we have a short cheat for this (e.g. with Coffee?)
   const numbers = [];
   for (let timeKey = props.start; timeKey <= props.end; timeKey++) {
     numbers.push(timeKey);
