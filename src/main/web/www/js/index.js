@@ -28,7 +28,6 @@ function getParams(args) {
 function getYearlyCalendar(url) {
   const deSuffix = '.de/rapla?';
   const params = getParams(url.substring(url.indexOf(deSuffix) + deSuffix.length));
-  console.log(params);
   if (params.key) {
     $.ajax({
       url: `Rablabla?url=${url}`,
