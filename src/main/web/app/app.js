@@ -8,9 +8,10 @@ const shiftWindow = () => { window.scrollBy(0, -64); };
 if (window.location.hash) shiftWindow();
 window.addEventListener('hashchange', shiftWindow);
 
-function getAppointments(key, day, month, year) {
+function getAppointments(url, day, month, year) {
+  const pUrl = encodeURIComponent(url);
   $.ajax({
-    url: `Rablabla?key=${key}&day=${day}&month=${month}&year=${year}`,
+    url: `Rablabla?url=${pUrl}&day=${day}&month=${month}&year=${year}`,
     type: 'GET',
     success: (answer) => {
       const data = JSON.parse(answer);
@@ -23,20 +24,6 @@ function getAppointments(key, day, month, year) {
   return 'Accessing appointments...';
 }
 
-function getYearlyCalendar(key) {
-  $.ajax({
-    url: `Rablabla?key=${key}`,
-    type: 'POST',
-    success: (answer) => {
-      console.log(answer);
-    },
-    error: (error) => {
-      console.log(error);
-    },
-  });
-  return 'Accessing calendar file...';
-}
-
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
@@ -44,5 +31,5 @@ injectTapEventPlugin();
 // Render the main app react component into the app div.
 // For more details see: https://facebook.github.io/react/docs/top-level-api.html#react.render
 render(
-  <Main getAppointments={getAppointments} getYearlyCalendar={getYearlyCalendar} />,
+  <Main getAppointments={getAppointments} />,
 document.getElementById('app'));
