@@ -65,7 +65,7 @@ export default function Main(props) {
               },
             ]}
           />
-          <Calendar getAppointments={props.getAppointments} />
+          <Calendar getAppointments={props.getAppointments} getICSLink={props.getICSLink} />
         </div>
       </MuiThemeProvider>
     </div>

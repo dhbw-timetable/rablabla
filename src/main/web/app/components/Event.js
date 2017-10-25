@@ -1,14 +1,13 @@
 import React from 'react';
 
 export default function Event(props) {
-  const data = props.data;
-
+  const { height, top, startTime, endTime, course, persons, resources } = props.data;
   return (
-    <li style={{ height: data.height, top: data.top }} className="event">
-      <p className="event--time">{data.startTime + ' : ' + data.endTime}</p>
-      <h3 className="event--header">{data.course}</h3>
-      <p className="event--body">{data.persons}</p>
-      <p className="event--footer">{data.resources}</p>
+    <li style={{ height, top }} className="event">
+      <p className="event--time">{`${startTime} : ${endTime}`}</p>
+      <h3 className="event--header">{course}</h3>
+      <p className="event--body">{persons}</p>
+      <p className="event--footer">{resources}</p>
     </li>
   );
 }

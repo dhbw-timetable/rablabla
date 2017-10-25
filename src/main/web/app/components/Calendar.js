@@ -8,10 +8,8 @@ export default class Calendar extends Component {
       'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo&day=6&month=3&year=2017&next=%3E%3E',
       25, 10, 2017, this.onAjaxSuccess, this.onAjaxError,
     ));
-    this.state = { dailyEvents: [] };
+    this.state = { dailyEvents: [[], [], [], [], [], []] };
   }
-
-  change = ev => this.setState({ text: ev.target.value });
 
   onAjaxSuccess = (response) => {
     const data = JSON.parse(response);
