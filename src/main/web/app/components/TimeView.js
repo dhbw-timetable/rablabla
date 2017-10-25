@@ -11,7 +11,7 @@ export default function TimeView(props) {
     <div className="day time">
       <h2 className="day--name"></h2>
       <ul className="schedule">
-        {numbers.map((el, i) => <li className="time-name" key={i}>{i}</li>)}
+        {numbers.map(k => <li className="time-name" key={k}>{k}</li>)}
       </ul>
     </div>
   );
