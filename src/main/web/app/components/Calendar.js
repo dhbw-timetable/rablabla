@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CalendarView from './CalendarView';
 
 export default class Calendar extends Component {
@@ -20,7 +21,7 @@ export default class Calendar extends Component {
 
   onAjaxError = (error) => {
   // TODO What should happen on error?
-    console.log(error);
+    console.error(error);
   }
 
   parseDates = (events) => {
@@ -47,3 +48,7 @@ export default class Calendar extends Component {
     );
   }
 }
+
+Calendar.propTypes = {
+  getAppointments: PropTypes.func.isRequired,
+};
