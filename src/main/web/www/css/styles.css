@@ -1,4 +1,15 @@
-.nav-icon-container {
+.nav-container-right {
   position: absolute;
   right: 0px;
+}
+
+.nav-container-center {
+  margin: 0 auto;
+  text-align: center;
+  width: 50%;
+}
+
+.nav-container-left {
+  position: absolute;
+  left: 15px;
 }

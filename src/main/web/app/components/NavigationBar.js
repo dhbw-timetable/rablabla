@@ -5,7 +5,7 @@ import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-import SvgIcon from 'material-ui/SvgIcon';
+import Icon from 'material-ui/Icon';
 
 const styles = theme => ({
   root: {
@@ -15,28 +15,35 @@ const styles = theme => ({
 });
 
 function NavigationBar(props) {
-  const { icons, iconColor, iconSize, title, classes } = props;
+  const { icons, title, classes, style, iconColor, iconStyle } = props;
   return (
       <div className={classes.root}>
         <AppBar
-          style={props.style}
+          style={style}
           position="fixed"
           color="primary"
         >
           <Toolbar>
-            <Typography type="title" color="accent">
-              {title}
-            </Typography>
-            <div className="nav-icon-container">
-              {icons && icons.map(icon => (
-                <a href={icon.href} key={icon.href} >
-                  <SvgIcon
-                    color={iconColor}
-                    viewBox={icon.viewBox}
-                    style={{ width: iconSize, height: iconSize }}
-                  >
-                    {icon.paths.map(p => <path key={p} className="cls-1" d={p} />)}
-                  </SvgIcon>
+            <div className="nav-container-left">
+              <Typography type="title" color="accent">
+                {title}
+              </Typography>
+            </div>
+            <div className="nav-container-center">
+            <a href="">
+              <Icon color={iconColor} style={iconStyle}>keyboard_arrow_left</Icon>
+            </a>
+            <a href="">
+              <Icon color={iconColor} style={iconStyle}>date_range</Icon>
+            </a>
+            <a href="">
+              <Icon color={iconColor} style={iconStyle}>keyboard_arrow_right</Icon>
+            </a>
+            </div>
+            <div className="nav-container-right">
+              {icons && icons.map((icon, i) => (
+                <a href={icon.href} key={i} >
+                  <Icon color={iconColor} style={iconStyle}>{icon.name}</Icon>
                 </a>
               ))}
             </div>
@@ -47,10 +54,11 @@ function NavigationBar(props) {
 }
 
 NavigationBar.propTypes = {
+  style: PropTypes.object,
   classes: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
-  iconSize: PropTypes.string,
   iconColor: PropTypes.string,
+  iconStyle: PropTypes.object,
   icons: PropTypes.arrayOf(PropTypes.object),
 };
 
@@ -58,6 +66,8 @@ NavigationBar.defaultProps = {
   iconSize: '48px',
   iconColor: '#ffffff',
   icons: [],
+  iconStyle: {},
+  style: {},
 };
 
 export default withStyles(styles)(NavigationBar);
