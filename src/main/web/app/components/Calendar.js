@@ -4,11 +4,11 @@ import CalendarView from './CalendarView';
 export default class Calendar extends Component {
   constructor(props) {
     super(props);
+    this.state = { dailyEvents: [[], [], [], [], [], []] };
     console.log(props.getAppointments(
       'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo&day=6&month=3&year=2017&next=%3E%3E',
       25, 10, 2017, this.onAjaxSuccess, this.onAjaxError,
     ));
-    this.state = { dailyEvents: [[], [], [], [], [], []] };
   }
 
   onAjaxSuccess = (response) => {
