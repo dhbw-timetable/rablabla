@@ -77,12 +77,14 @@ class NavigationBar extends Component {
                       padding: 0,
                     },
                   }}
+                  onRequestClose={this.handleCloseDatePicker}
+                  shouldCloseOnOverlayClick
                 >
                   <InfiniteCalendar
                     width={360}
                     height={350}
                     locale={{
-                      locale: require('date-fns/locale/de'),
+                      locale: require('date-fns/locale/de'),   // eslint-disable-line global-require
                       headerFormat: 'dddd, D MMM',
                       weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
                       blank: 'Datum wählen',
@@ -106,6 +108,7 @@ class NavigationBar extends Component {
                         chevron: '#FFA726',
                       },
                     }}
+                    onSelect={onDateChange}
                   />
                 </ReactModal>
                 {icons.map((el, i) => {

@@ -56,7 +56,6 @@ NavigationMenu.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   iconColor: PropTypes.string,
   iconStyle: PropTypes.object,
-  onDateChange: PropTypes.func.isRequired,
 };
 
 NavigationMenu.defaultProps = {
