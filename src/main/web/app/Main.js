@@ -5,20 +5,6 @@ import yellow from 'material-ui/colors/yellow';
 import NavigationBar from './components/NavigationBar';
 import Calendar from './components/Calendar';
 
-function getWeekNumber(d) {
-  // Copy date so don't modify original
-  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  // Set to nearest Thursday: current date + 4 - current day number
-  // Make Sunday's day number 7
-  d.setUTCDate((d.getUTCDate() + 4) - (d.getUTCDay() || 7));
-  // Get first day of year
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  // Calculate full weeks to nearest Thursday
-  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
-  // Return array of year and week number
-  return weekNo;
-}
-
 export default function Main(props) {
   const dhbwtimetablepalette = {
     50: '#f7e7e7',
@@ -48,14 +34,12 @@ export default function Main(props) {
     },
   });
   const { getAppointments, getICSLink } = props;
-  const title = `KW${getWeekNumber(new Date())}`;
   return (
     <MuiThemeProvider theme={theme}>
       <div>
         <NavigationBar
-          title={title}
+          title="Rablabla"
           icons={[
-            { icon: 'date_range', onClick: () => {} },
             { icon: 'question_answer', onClick: () => {} },
           ]}
           menuItems={[
@@ -63,6 +47,7 @@ export default function Main(props) {
             { text: 'Get external calendar', onClick: () => {} },
             { text: 'Switch timetable', onClick: () => {} },
           ]}
+          onDateChange={() => {}}
         />
         <Calendar getAppointments={getAppointments} getICSLink={getICSLink} />
       </div>
