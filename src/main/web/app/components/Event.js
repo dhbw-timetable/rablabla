@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function Event(props) {
   const { height, top, startTime, endTime, course, persons, resources } = props.data;
@@ -11,3 +12,7 @@ export default function Event(props) {
     </li>
   );
 }
+
+Event.propTypes = {
+  data: PropTypes.object.isRequired,
+};

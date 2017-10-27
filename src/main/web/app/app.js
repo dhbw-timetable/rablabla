@@ -5,7 +5,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import $ from 'jquery';
 import Main from './Main';
 
-// This is a fix for #section1 links. It scrolls
+// This is a fix for #section1 links. It shifts the scroll for navbar size
 const shiftWindow = () => { window.scrollBy(0, -64); };
 if (window.location.hash) shiftWindow();
 window.addEventListener('hashchange', shiftWindow);
