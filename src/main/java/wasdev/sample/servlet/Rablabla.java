@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,8 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import biweekly.Biweekly;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
-import biweekly.io.TimezoneAssignment;
-import biweekly.io.TimezoneInfo;
 import biweekly.property.Classification;
 import biweekly.property.Method;
 import biweekly.property.Transparency;
