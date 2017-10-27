@@ -5,7 +5,8 @@ import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-import Icon from 'material-ui/Icon';
+import IconButton from 'material-ui/IconButton';
+import NavigationMenu from './NavigationMenu';
 
 const styles = theme => ({
   root: {
@@ -15,7 +16,7 @@ const styles = theme => ({
 });
 
 function NavigationBar(props) {
-  const { icons, title, classes, style, iconColor, iconStyle } = props;
+  const { icons, title, classes, style, iconColor, iconStyle, menuItems } = props;
   return (
       <div className={classes.root}>
         <AppBar
@@ -29,23 +30,23 @@ function NavigationBar(props) {
                 {title}
               </Typography>
             </div>
-            <div className="nav-container-center">
-            <a href="">
-              <Icon color={iconColor} style={iconStyle}>keyboard_arrow_left</Icon>
-            </a>
-            <a href="">
-              <Icon color={iconColor} style={iconStyle}>date_range</Icon>
-            </a>
-            <a href="">
-              <Icon color={iconColor} style={iconStyle}>keyboard_arrow_right</Icon>
-            </a>
-            </div>
             <div className="nav-container-right">
-              {icons && icons.map((icon, i) => (
-                <a href={icon.href} key={i} >
-                  <Icon color={iconColor} style={iconStyle}>{icon.name}</Icon>
-                </a>
-              ))}
+              {icons.map((el, i) => {
+                return (
+                  <IconButton
+                    key={i}
+                    color={iconColor}
+                    style={iconStyle}
+                    onClick={el.onClick}
+                  >
+                    {el.icon}
+                  </IconButton>
+                );
+              })}
+              <NavigationMenu
+                iconColor={iconColor}
+                menuItems={menuItems}
+              />
             </div>
           </Toolbar>
         </AppBar>
@@ -56,18 +57,19 @@ function NavigationBar(props) {
 NavigationBar.propTypes = {
   style: PropTypes.object,
   classes: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   iconColor: PropTypes.string,
   iconStyle: PropTypes.object,
   icons: PropTypes.arrayOf(PropTypes.object),
 };
 
 NavigationBar.defaultProps = {
-  iconSize: '48px',
-  iconColor: '#ffffff',
   icons: [],
-  iconStyle: {},
+  iconColor: 'contrast',
+  iconStyle: { fontSize: 25 },
   style: {},
+  title: '',
 };
 
 export default withStyles(styles)(NavigationBar);
