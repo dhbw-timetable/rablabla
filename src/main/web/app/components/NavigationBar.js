@@ -8,6 +8,8 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Popover from 'material-ui/Popover';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/Input';
 import ReactModal from 'react-modal';
 import InfiniteCalendar from 'react-infinite-calendar';
 import NavigationMenu from './NavigationMenu';
@@ -39,18 +41,15 @@ class NavigationBar extends Component {
 
   handleOpenChat = () => {
     this.setState({ chatOpen: true, chatAnchorEl: findDOMNode(this.chatButton) });
-    console.log('Opening state...');
   }
 
   handleCloseChat = () => {
     this.setState({ chatOpen: false });
-    console.log('Closing state...');
   }
 
   chatButton = null;
 
   render() {
-    console.log(this.state);
     const { icons, title, classes, style, iconColor,
       iconStyle, menuItems, onDateChange } = this.props;
     return (
@@ -149,9 +148,32 @@ class NavigationBar extends Component {
                     horizontal: 'right',
                   }}
                 >
-                  <Typography>
-                    Hello Popover!
-                  </Typography>
+                  <Paper style={{ width: '400px', height: '300px', padding: 15 }}>
+                    <Typography type="body1" component="p" align="right">
+                      Hello there!
+                    </Typography>
+                    <Typography type="body1" component="p" color="primary" align="left">
+                      Watson: Hi, how can I help you?
+                    </Typography>
+                    <Typography type="body1" component="p" align="right">
+                      Whats the plan for tomorrow?
+                    </Typography>
+                    <Typography type="body1" color="primary" component="p" align="left">
+                      Watson: Nothing! Lets party!!!
+                    </Typography>
+                    <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', width: '100%', bottom: 0 }}>
+                      <TextField
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        placeholder="Enter a message..."
+                        fullWidth
+                        style={{ height: 30 }}
+                        margin="normal"
+                      />
+                      <IconButton style={{ marginRight: 15 }}>send</IconButton>
+                    </div>
+                  </Paper>
                 </Popover>
                 {icons.map((el, i) => {
                   return (
