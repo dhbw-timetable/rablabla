@@ -12,23 +12,26 @@ export default function Chatter(props) {
   const submitMessage = () => {
     if (messageInput.value.trim().length > 0) {
       props.onMessageSent(messageInput.value);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
     messageInput.value = '';
-    chatContainer.scrollTop = chatContainer.scrollHeight;
   };
 
   window.onkeyup = (e) => { // eslint-disable-line no-undef
     const key = e.keyCode ? e.keyCode : e.which;
     // Enter
-    if (key === 13) {
+    if (key === 13 && messageInput) {
       submitMessage();
     }
   };
   return (
     <Paper style={{ width: 400, height: 300, padding: 15 }}>
+      <Typography type="title" component="h3" align="left">
+      Watson Chat
+      </Typography>
       <div
         ref={el => chatContainer = el}
-        style={{ maxHeight: 270, overflowY: 'scroll' }}
+        style={{ maxHeight: 250, overflowY: 'scroll' }}
       >
         {props.chat.map((msg, i) => {
           return (
@@ -51,6 +54,7 @@ export default function Chatter(props) {
           fullWidth
           style={{ height: 30 }}
           margin="normal"
+          autoFocus
         />
         <IconButton
           style={{ marginRight: 15 }}
