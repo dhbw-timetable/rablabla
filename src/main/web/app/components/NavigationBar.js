@@ -1,14 +1,17 @@
 // @flow weak
 import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
+import Popover from 'material-ui/Popover';
 import ReactModal from 'react-modal';
 import InfiniteCalendar from 'react-infinite-calendar';
 import NavigationMenu from './NavigationMenu';
+import Chatter from './Chatter';
 
 const styles = theme => ({
   root: {
@@ -22,6 +25,8 @@ class NavigationBar extends Component {
     super();
     this.state = {
       showDatePicker: false,
+      chatAnchorEl: undefined,
+      chatOpen: false,
     };
   }
 
@@ -33,8 +38,18 @@ class NavigationBar extends Component {
     this.setState({ showDatePicker: false });
   }
 
+  handleOpenChat = () => {
+    this.setState({ chatOpen: true, chatAnchorEl: findDOMNode(this.chatButton) });
+  }
+
+  handleCloseChat = () => {
+    this.setState({ chatOpen: false });
+  }
+
+  chatButton = null;
+
   render() {
-    const { icons, title, classes, style, iconColor,
+    const { icons, chat, title, classes, onMessageSent, style, iconColor,
       iconStyle, menuItems, onDateChange } = this.props;
     return (
         <div className={classes.root}>
@@ -56,6 +71,14 @@ class NavigationBar extends Component {
                   onClick={this.handleOpenDatePicker}
                 >
                   date_range
+                </IconButton>
+                <IconButton
+                  color={iconColor}
+                  style={iconStyle}
+                  ref={el => this.chatButton = el}
+                  onClick={this.handleOpenChat}
+                >
+                  question_answer
                 </IconButton>
                 <ReactModal
                   isOpen={this.state.showDatePicker}
@@ -111,18 +134,36 @@ class NavigationBar extends Component {
                     onSelect={onDateChange}
                   />
                 </ReactModal>
-                {icons.map((el, i) => {
-                  return (
-                    <IconButton
-                      key={i}
-                      color={iconColor}
-                      style={iconStyle}
-                      onClick={el.onClick}
-                    >
-                      {el.icon}
-                    </IconButton>
-                  );
-                })}
+                <Popover
+                  open={this.state.chatOpen}
+                  anchorEl={this.state.chatAnchorEl}
+                  onRequestClose={this.handleCloseChat}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                >
+                  <Chatter
+                    chat={chat}
+                    onMessageSent={onMessageSent}
+                  />
+                </Popover>
+                  {icons.map((el, i) => {
+                    return (
+                      <IconButton
+                        key={i}
+                        color={iconColor}
+                        style={iconStyle}
+                        onClick={el.onClick}
+                      >
+                        {el.icon}
+                      </IconButton>
+                    );
+                  })}
                 <NavigationMenu
                   iconColor={iconColor}
                   menuItems={menuItems}
@@ -145,6 +186,8 @@ NavigationBar.propTypes = {
   iconStyle: PropTypes.object,
   icons: PropTypes.arrayOf(PropTypes.object),
   onDateChange: PropTypes.func.isRequired,
+  chat: PropTypes.arrayOf(PropTypes.object),
+  onMessageSent: PropTypes.func.isRequired,
 };
 
 NavigationBar.defaultProps = {
@@ -153,6 +196,7 @@ NavigationBar.defaultProps = {
   iconStyle: { fontSize: 25 },
   style: {},
   title: '',
+  chat: [],
 };
 
 export default withStyles(styles)(NavigationBar);

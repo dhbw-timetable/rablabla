@@ -6,6 +6,7 @@ module.exports = {
   		"no-console": ["error", { "allow": ["log", "warn", "error"] }],
       "linebreak-style": ["error", "unix"],
       "no-param-reassign": 0,
+      "no-alert": 0,
       "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
   		"react/jsx-no-bind": 0,
   		"react/jsx-indent": 0,
