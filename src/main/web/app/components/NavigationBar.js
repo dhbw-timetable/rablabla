@@ -10,7 +10,7 @@ import NavigationMenu from './NavigationMenu';
 
 const styles = theme => ({
   root: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit * 8,
     width: '100%',
   },
 });
