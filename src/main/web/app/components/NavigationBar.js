@@ -1,17 +1,14 @@
 // @flow weak
-import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import Popover from 'material-ui/Popover';
-import ReactModal from 'react-modal';
-import InfiniteCalendar from 'react-infinite-calendar';
 import NavigationMenu from './NavigationMenu';
 import Chatter from './Chatter';
+import DatePicker from './DatePicker';
 
 const styles = theme => ({
   root: {
@@ -20,161 +17,57 @@ const styles = theme => ({
   },
 });
 
-class NavigationBar extends Component {
-  constructor() {
-    super();
-    this.state = {
-      showDatePicker: false,
-      chatAnchorEl: undefined,
-      chatOpen: false,
-    };
-  }
-
-  handleOpenDatePicker = () => {
-    this.setState({ showDatePicker: true });
-  }
-
-  handleCloseDatePicker = () => {
-    this.setState({ showDatePicker: false });
-  }
-
-  handleOpenChat = () => {
-    this.setState({ chatOpen: true, chatAnchorEl: findDOMNode(this.chatButton) });
-  }
-
-  handleCloseChat = () => {
-    this.setState({ chatOpen: false });
-  }
-
-  chatButton = null;
-
-  render() {
-    const { icons, chat, title, classes, onMessageSent, style, iconColor,
-      iconStyle, menuItems, onDateChange } = this.props;
-    return (
-        <div className={classes.root}>
-          <AppBar
-            style={style}
-            position="fixed"
-            color="primary"
-          >
-            <Toolbar>
-              <div className="nav-container-left">
-                <Typography type="title" color="accent">
-                  {title}
-                </Typography>
-              </div>
-              <div className="nav-container-right">
+function NavigationBar(props) {
+  const { icons, chat, title, classes, onMessageSent,
+    style, iconColor, iconStyle, menuItems, onDateChange } = props;
+  return (
+    <div className={classes.root}>
+      <AppBar
+        style={style}
+        position="fixed"
+        color="primary"
+      >
+        <Toolbar>
+          <div className="nav-container-left">
+            <Typography type="title" color="accent">
+              {title}
+            </Typography>
+          </div>
+          <div className="nav-container-right">
+            <DatePicker
+              iconColor={iconColor}
+              iconStyle={iconStyle}
+              onSelect={onDateChange}
+            />
+            <Chatter
+              iconColor={iconColor}
+              iconStyle={iconStyle}
+              chat={chat}
+              onMessageSent={onMessageSent}
+            />
+            {icons.map((el, i) => {
+              return (
                 <IconButton
+                  key={i}
                   color={iconColor}
                   style={iconStyle}
-                  onClick={this.handleOpenDatePicker}
+                  onClick={el.onClick}
                 >
-                  date_range
+                  {el.icon}
                 </IconButton>
-                <IconButton
-                  color={iconColor}
-                  style={iconStyle}
-                  ref={el => this.chatButton = el}
-                  onClick={this.handleOpenChat}
-                >
-                  question_answer
-                </IconButton>
-                <ReactModal
-                  isOpen={this.state.showDatePicker}
-                  contentLabel="DatePicker"
-                  style={{
-                    overlay: {
-                      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                      zIndex: 2,
-                    },
-                    content: {
-                      width: 360,
-                      height: 350,
-                      top: 100,
-                      left: 0,
-                      right: 0,
-                      border: 0,
-                      display: 'inline-block',
-                      margin: 'auto',
-                      padding: 0,
-                    },
-                  }}
-                  onRequestClose={this.handleCloseDatePicker}
-                  shouldCloseOnOverlayClick
-                >
-                  <InfiniteCalendar
-                    width={360}
-                    height={350}
-                    locale={{
-                      locale: require('date-fns/locale/de'),   // eslint-disable-line global-require
-                      headerFormat: 'dddd, D MMM',
-                      weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
-                      blank: 'Datum wählen',
-                      todayLabel: {
-                        long: 'Heute',
-                        short: 'Heute',
-                      },
-                      weekStartsOn: 1,
-                    }}
-                    theme={{
-                      selectionColor: '#ba3838',
-                      textColor: {
-                        default: '#333',
-                        active: '#FFF',
-                      },
-                      weekdayColor: '#ba3838',
-                      headerColor: '#ba3838',
-                      floatingNav: {
-                        background: '#ba3838',
-                        color: '#FFF',
-                        chevron: '#FFA726',
-                      },
-                    }}
-                    onSelect={onDateChange}
-                  />
-                </ReactModal>
-                <Popover
-                  open={this.state.chatOpen}
-                  anchorEl={this.state.chatAnchorEl}
-                  onRequestClose={this.handleCloseChat}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                >
-                  <Chatter
-                    chat={chat}
-                    onMessageSent={onMessageSent}
-                  />
-                </Popover>
-                  {icons.map((el, i) => {
-                    return (
-                      <IconButton
-                        key={i}
-                        color={iconColor}
-                        style={iconStyle}
-                        onClick={el.onClick}
-                      >
-                        {el.icon}
-                      </IconButton>
-                    );
-                  })}
-                <NavigationMenu
-                  iconColor={iconColor}
-                  menuItems={menuItems}
-                  onDateChange={onDateChange}
-                />
-              </div>
-            </Toolbar>
-          </AppBar>
-        </div>
-    );
-  }
+              );
+            })}
+            <NavigationMenu
+              iconColor={iconColor}
+              menuItems={menuItems}
+              onDateChange={onDateChange}
+            />
+          </div>
+          {props.children}
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
 }
 
 NavigationBar.propTypes = {
@@ -188,6 +81,7 @@ NavigationBar.propTypes = {
   onDateChange: PropTypes.func.isRequired,
   chat: PropTypes.arrayOf(PropTypes.object),
   onMessageSent: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
 
 NavigationBar.defaultProps = {
@@ -197,6 +91,7 @@ NavigationBar.defaultProps = {
   style: {},
   title: '',
   chat: [],
+  children: '',
 };
 
 export default withStyles(styles)(NavigationBar);
