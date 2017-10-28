@@ -51,7 +51,7 @@ export default function Main(props) {
   const title = `KW${getWeekNumber(new Date())}`;
   return (
     <MuiThemeProvider theme={theme}>
-      <div>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <NavigationBar
           title={title}
           icons={[
