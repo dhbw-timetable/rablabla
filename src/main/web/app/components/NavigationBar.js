@@ -18,8 +18,8 @@ const styles = theme => ({
 });
 
 function NavigationBar(props) {
-  const { icons, chat, title, classes, onMessageSent, style, iconColor,
-    iconStyle, menuItems, onDateChange } = props;
+  const { icons, chat, title, classes, onMessageSent,
+    style, iconColor, iconStyle, menuItems, onDateChange } = props;
   return (
     <div className={classes.root}>
       <AppBar

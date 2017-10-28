@@ -123,7 +123,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { chat, date } = this.state;
+    const { chat, date, dailyEvents } = this.state;
     return (
     <MuiThemeProvider theme={theme}>
       <div>
@@ -161,6 +161,10 @@ export default class Main extends Component {
                 // TODO Implement
               },
             },
+            {
+              text: 'More',
+              href: 'https://dhbw-timetable.github.io/infopage/',
+            },
           ]}
           onDateChange={(d) => {
             this.setState({ d });
@@ -171,7 +175,7 @@ export default class Main extends Component {
               ));
           }}
         />
-        <Calendar dailyEvents={this.state.dailyEvents} />
+        <Calendar dailyEvents={dailyEvents} />
       </div>
     </MuiThemeProvider>
     );
