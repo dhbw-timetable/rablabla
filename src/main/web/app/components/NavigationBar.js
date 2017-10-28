@@ -1,11 +1,13 @@
 // @flow weak
 import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
+import Popover from 'material-ui/Popover';
 import ReactModal from 'react-modal';
 import InfiniteCalendar from 'react-infinite-calendar';
 import NavigationMenu from './NavigationMenu';
@@ -22,6 +24,8 @@ class NavigationBar extends Component {
     super();
     this.state = {
       showDatePicker: false,
+      chatAnchorEl: undefined,
+      chatOpen: false,
     };
   }
 
@@ -33,7 +37,20 @@ class NavigationBar extends Component {
     this.setState({ showDatePicker: false });
   }
 
+  handleOpenChat = () => {
+    this.setState({ chatOpen: true, chatAnchorEl: findDOMNode(this.chatButton) });
+    console.log('Opening state...');
+  }
+
+  handleCloseChat = () => {
+    this.setState({ chatOpen: false });
+    console.log('Closing state...');
+  }
+
+  chatButton = null;
+
   render() {
+    console.log(this.state);
     const { icons, title, classes, style, iconColor,
       iconStyle, menuItems, onDateChange } = this.props;
     return (
@@ -56,6 +73,14 @@ class NavigationBar extends Component {
                   onClick={this.handleOpenDatePicker}
                 >
                   date_range
+                </IconButton>
+                <IconButton
+                  color={iconColor}
+                  style={iconStyle}
+                  ref={el => this.chatButton = el}
+                  onClick={this.handleOpenChat}
+                >
+                  question_answer
                 </IconButton>
                 <ReactModal
                   isOpen={this.state.showDatePicker}
@@ -111,6 +136,23 @@ class NavigationBar extends Component {
                     onSelect={onDateChange}
                   />
                 </ReactModal>
+                <Popover
+                  open={this.state.chatOpen}
+                  anchorEl={this.state.chatAnchorEl}
+                  onRequestClose={this.handleCloseChat}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                >
+                  <Typography>
+                    Hello Popover!
+                  </Typography>
+                </Popover>
                 {icons.map((el, i) => {
                   return (
                     <IconButton

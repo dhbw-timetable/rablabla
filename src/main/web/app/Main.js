@@ -120,9 +120,6 @@ export default class Main extends Component {
       <div>
         <NavigationBar
           title="Rablabla"
-          icons={[
-            { icon: 'question_answer', onClick: () => {} },
-          ]}
           menuItems={[
             {
               text: 'Refresh',
@@ -143,7 +140,12 @@ export default class Main extends Component {
                 (response) => { alert(response); }, (err) => { console.error(err); });
               },
             },
-            { text: 'Switch timetable', onClick: () => {} },
+            {
+              text: 'Switch timetable',
+              onClick: () => {
+                // TODO Implement
+              },
+            },
           ]}
           onDateChange={(date) => {
             this.setState({ date });
