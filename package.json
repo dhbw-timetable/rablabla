@@ -39,13 +39,19 @@
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "classnames": "^2.2.5",
+    "date-fns": "^1.29.0",
     "jquery": "^3.2.1",
     "jss": "^8.1.0",
     "material-ui": "^1.0.0-beta.16",
     "material-ui-icons": "^1.0.0-beta.15",
     "prop-types": "^15.6.0",
-    "react": "15.4.2",
-    "react-dom": "15.4.2",
-    "react-tap-event-plugin": "^2.0.1"
+    "react": "15.6.2",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-dom": "15.6.2",
+    "react-infinite-calendar": "^2.3.1",
+    "react-modal": "^3.1.0",
+    "react-tap-event-plugin": "^2.0.1",
+    "react-tiny-virtual-list": "^2.1.4",
+    "recompose": "^0.26.0"
   }
 }
