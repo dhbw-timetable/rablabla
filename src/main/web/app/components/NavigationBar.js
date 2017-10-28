@@ -8,11 +8,10 @@ import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Popover from 'material-ui/Popover';
-import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/Input';
 import ReactModal from 'react-modal';
 import InfiniteCalendar from 'react-infinite-calendar';
 import NavigationMenu from './NavigationMenu';
+import Chatter from './Chatter';
 
 const styles = theme => ({
   root: {
@@ -50,7 +49,7 @@ class NavigationBar extends Component {
   chatButton = null;
 
   render() {
-    const { icons, title, classes, style, iconColor,
+    const { icons, chat, title, classes, onMessageSent, style, iconColor,
       iconStyle, menuItems, onDateChange } = this.props;
     return (
         <div className={classes.root}>
@@ -148,45 +147,23 @@ class NavigationBar extends Component {
                     horizontal: 'right',
                   }}
                 >
-                  <Paper style={{ width: '400px', height: '300px', padding: 15 }}>
-                    <Typography type="body1" component="p" align="right">
-                      Hello there!
-                    </Typography>
-                    <Typography type="body1" component="p" color="primary" align="left">
-                      Watson: Hi, how can I help you?
-                    </Typography>
-                    <Typography type="body1" component="p" align="right">
-                      Whats the plan for tomorrow?
-                    </Typography>
-                    <Typography type="body1" color="primary" component="p" align="left">
-                      Watson: Nothing! Lets party!!!
-                    </Typography>
-                    <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', width: '100%', bottom: 0 }}>
-                      <TextField
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        placeholder="Enter a message..."
-                        fullWidth
-                        style={{ height: 30 }}
-                        margin="normal"
-                      />
-                      <IconButton style={{ marginRight: 15 }}>send</IconButton>
-                    </div>
-                  </Paper>
+                  <Chatter
+                    chat={chat}
+                    onMessageSent={onMessageSent}
+                  />
                 </Popover>
-                {icons.map((el, i) => {
-                  return (
-                    <IconButton
-                      key={i}
-                      color={iconColor}
-                      style={iconStyle}
-                      onClick={el.onClick}
-                    >
-                      {el.icon}
-                    </IconButton>
-                  );
-                })}
+                  {icons.map((el, i) => {
+                    return (
+                      <IconButton
+                        key={i}
+                        color={iconColor}
+                        style={iconStyle}
+                        onClick={el.onClick}
+                      >
+                        {el.icon}
+                      </IconButton>
+                    );
+                  })}
                 <NavigationMenu
                   iconColor={iconColor}
                   menuItems={menuItems}
@@ -209,6 +186,8 @@ NavigationBar.propTypes = {
   iconStyle: PropTypes.object,
   icons: PropTypes.arrayOf(PropTypes.object),
   onDateChange: PropTypes.func.isRequired,
+  chat: PropTypes.arrayOf(PropTypes.object),
+  onMessageSent: PropTypes.func.isRequired,
 };
 
 NavigationBar.defaultProps = {
@@ -217,6 +196,7 @@ NavigationBar.defaultProps = {
   iconStyle: { fontSize: 25 },
   style: {},
   title: '',
+  chat: [],
 };
 
 export default withStyles(styles)(NavigationBar);

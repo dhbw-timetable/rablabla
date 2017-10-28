@@ -34,9 +34,9 @@ const getICSLink = (url, success, error) => {
   return 'Reqeust denied.';
 };
 
-const getAppointments = (url, day, month, year, success, error) => {
+const getAppointments = (url, date, success, error) => {
   $.ajax({
-    url: `Rablabla?url=${encodeURIComponent(url)}&day=${day}&month=${month}&year=${year}`,
+    url: `Rablabla?url=${encodeURIComponent(url)}&day=${date.getDate()}&month=${date.getMonth + 1}&year=${date.getFullYear()}`,
     type: 'GET',
     success,
     error,
@@ -76,11 +76,11 @@ const theme = createMuiTheme({
 export default class Main extends Component {
   constructor() {
     super();
-    this.state = { dailyEvents: [[], [], [], [], [], []], date: new Date() };
+    this.state = { dailyEvents: [[], [], [], [], [], []], date: new Date(), chat: [] };
     const date = this.state.date;
     console.log(getAppointments(
       'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
-      date.getDate(), date.getMonth() + 1, date.getFullYear(), this.onAjaxSuccess, this.onAjaxError,
+      date, this.onAjaxSuccess, this.onAjaxError,
     ));
   }
 
@@ -92,7 +92,7 @@ export default class Main extends Component {
   };
 
   onAjaxError = (error) => {
-  // TODO What should happen on error?
+    // TODO What should happen on error?
     console.error(error);
   }
 
@@ -114,30 +114,45 @@ export default class Main extends Component {
     return dailyEvents;
   }
 
+  sendMessage = (msg) => {
+    const { chat } = this.state;
+    chat.push({ text: msg, watson: false });
+    this.setState({ chat });
+    console.log(`Sending '${msg}' to backend...`);
+    // TODO Send to backend HERE
+  };
+
   render() {
+    const { chat, date } = this.state;
     return (
     <MuiThemeProvider theme={theme}>
       <div>
         <NavigationBar
           title="Rablabla"
+          chat={chat}
+          onMessageSent={this.sendMessage}
           menuItems={[
             {
               text: 'Refresh',
               onClick: () => {
-                const date = this.state.date;
                 console.log(getAppointments(
-                'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
-                date.getDate(), date.getMonth() + 1,
-                date.getFullYear(), this.onAjaxSuccess,
-                this.onAjaxError,
-                ));
+                  'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
+                  date,
+                  (resp) => {
+                    this.onAjaxSuccess(resp);
+                    // TODO Implement snackbar HERE
+                  },
+                  this.onAjaxError,
+                  ));
               },
             },
             {
               text: 'Get external calendar',
               onClick: () => {
                 getICSLink('https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
-                (response) => { alert(response); }, (err) => { console.error(err); });
+                (response) => {
+                  alert(response); // eslint-disable-line no-undef
+                }, (err) => { console.error(err); });
               },
             },
             {
@@ -147,14 +162,13 @@ export default class Main extends Component {
               },
             },
           ]}
-          onDateChange={(date) => {
-            this.setState({ date });
+          onDateChange={(d) => {
+            this.setState({ d });
             console.log(getAppointments(
-            'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
-            date.getDate(), date.getMonth() + 1,
-            date.getFullYear(), this.onAjaxSuccess,
-            this.onAjaxError,
-            ));
+              'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
+              d, this.onAjaxSuccess,
+              this.onAjaxError,
+              ));
           }}
         />
         <Calendar dailyEvents={this.state.dailyEvents} />
