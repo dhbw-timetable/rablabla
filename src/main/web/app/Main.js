@@ -2,6 +2,14 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import React, { Component } from 'react';
 import yellow from 'material-ui/colors/yellow';
 import $ from 'jquery';
+import Button from 'material-ui/Button';
+import TextField from 'material-ui/TextField';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogContentText,
+} from 'material-ui/Dialog';
 import NavigationBar from './components/NavigationBar';
 import Calendar from './components/Calendar';
 
@@ -36,7 +44,7 @@ const getICSLink = (url, success, error) => {
 
 const getAppointments = (url, date, success, error) => {
   $.ajax({
-    url: `Rablabla?url=${encodeURIComponent(url)}&day=${date.getDate()}&month=${date.getMonth + 1}&year=${date.getFullYear()}`,
+    url: `Rablabla?url=${encodeURIComponent(url)}&day=${date.getDate()}&month=${date.getMonth() + 1}&year=${date.getFullYear()}`,
     type: 'GET',
     success,
     error,
@@ -76,7 +84,12 @@ const theme = createMuiTheme({
 export default class Main extends Component {
   constructor() {
     super();
-    this.state = { dailyEvents: [[], [], [], [], [], []], date: new Date(), chat: [] };
+    this.state = {
+      dailyEvents: [[], [], [], [], [], []],
+      date: new Date(),
+      chat: [],
+      extCalendarOpen: false,
+    };
     const date = this.state.date;
     console.log(getAppointments(
       'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
@@ -95,6 +108,15 @@ export default class Main extends Component {
     // TODO What should happen on error?
     console.error(error);
   }
+
+  handleExtCalClose = () => {
+    this.setState({ extCalendarOpen: false });
+  };
+
+  handleExtCalOpen = (response) => {
+    this.icsLink = response;
+    this.setState({ extCalendarOpen: true });
+  };
 
   parseDates = (events) => {
     events.forEach((el) => {
@@ -122,8 +144,11 @@ export default class Main extends Component {
     // TODO Send to backend HERE
   };
 
+  icsLink = null;
+  icsInput = null;
+
   render() {
-    const { chat, date, dailyEvents } = this.state;
+    const { chat, date, dailyEvents, extCalendarOpen } = this.state;
     return (
     <MuiThemeProvider theme={theme}>
       <div>
@@ -150,9 +175,7 @@ export default class Main extends Component {
               text: 'Get external calendar',
               onClick: () => {
                 getICSLink('https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
-                (response) => {
-                  alert(response); // eslint-disable-line no-undef
-                }, (err) => { console.error(err); });
+                this.handleExtCalOpen, this.handleExtCalOpen);
               },
             },
             {
@@ -174,7 +197,38 @@ export default class Main extends Component {
               this.onAjaxError,
               ));
           }}
-        />
+        >
+        <Dialog open={extCalendarOpen} onRequestClose={this.handleExtCalClose} fullWidth>
+          <DialogTitle>Your calendar link</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Insert the link to your chosen calendar application and it will sync automatically.
+            </DialogContentText>
+            <TextField
+              autoFocus
+              inputRef={el => this.icsInput = el}
+              label="URL"
+              value={this.icsLink}
+              margin="normal"
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                $(this.icsInput).select();
+                document.execCommand('copy'); // eslint-disable-line no-undef
+              }}
+              color="primary"
+            >
+              Copy
+            </Button>
+            <Button onClick={this.handleExtCalClose} color="primary" autoFocus>
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+        </NavigationBar>
         <Calendar dailyEvents={dailyEvents} />
       </div>
     </MuiThemeProvider>

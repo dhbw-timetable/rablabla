@@ -63,6 +63,7 @@ function NavigationBar(props) {
               onDateChange={onDateChange}
             />
           </div>
+          {props.children}
         </Toolbar>
       </AppBar>
     </div>
@@ -80,6 +81,7 @@ NavigationBar.propTypes = {
   onDateChange: PropTypes.func.isRequired,
   chat: PropTypes.arrayOf(PropTypes.object),
   onMessageSent: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
 
 NavigationBar.defaultProps = {
@@ -89,6 +91,7 @@ NavigationBar.defaultProps = {
   style: {},
   title: '',
   chat: [],
+  children: '',
 };
 
 export default withStyles(styles)(NavigationBar);
