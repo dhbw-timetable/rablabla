@@ -291,6 +291,7 @@ export default class Main extends Component {
                 label="Enter your course title"
                 type="text"
                 style={{ width: '60%' }}
+                inputProps={{ maxLength: 10 }}
               />
               <TextField
                 required
