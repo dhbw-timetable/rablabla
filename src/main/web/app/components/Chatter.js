@@ -70,7 +70,7 @@ export default class Chatter extends Component {
             horizontal: 'right',
           }}
         >
-          <Paper style={{ width: 400, height: 300, padding: 15 }}>
+          <Paper style={{ width: '50vw', height: 300, padding: 15 }}>
             <Typography type="title" component="h3" align="left">
             Watson Chat
             </Typography>
