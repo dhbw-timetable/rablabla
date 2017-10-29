@@ -145,6 +145,7 @@ export default class Main extends Component {
   };
 
   handleOnboardingDone = () => {
+    this.raplaTitleValue = this.raplaTitleInput.value;
     this.raplaLinkValue = this.raplaLinkInput.value;
     // If seems valid
     if (this.raplaLinkValue.length > 10 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
@@ -169,13 +170,16 @@ export default class Main extends Component {
   raplaLinkInput = null;
   raplaLinkValue = null;
 
+  raplaTitleInput = null;
+  raplaTitleValue = null;
+
   render() {
     const { chat, date, dailyEvents, extCalendarOpen, onboardingOpen } = this.state;
     return (
     <MuiThemeProvider theme={theme}>
       <div>
         <NavigationBar
-          title="Rablabla"
+          title={this.raplaTitleValue}
           chat={chat}
           onMessageSent={this.sendMessage}
           menuItems={[
@@ -219,77 +223,85 @@ export default class Main extends Component {
               ));
           }}
         >
-        <Dialog
-          open={extCalendarOpen}
-          onRequestClose={this.handleExtCalClose}
-          fullWidth
-          transition={<Slide direction="up" />}
-        >
-          <DialogTitle>Your calendar link</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Insert the link to your chosen calendar application and it will sync automatically.
-            </DialogContentText>
-            <TextField
-              autoFocus
-              inputRef={el => this.icsInput = el}
-              label="URL"
-              value={this.icsLink}
-              margin="normal"
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => {
-                $(this.icsInput).select();
-                document.execCommand('copy'); // eslint-disable-line no-undef
-              }}
-              color="primary"
-            >
-              Copy
-            </Button>
-            <Button onClick={this.handleExtCalClose} color="primary" autoFocus>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog
-          open={onboardingOpen}
-          onRequestClose={() => {}}
-          fullScreen
-          transition={<Slide direction="up" />}
-        >
-          <AppBar style={{ position: 'relative' }}>
-            <Toolbar>
-              <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                Rablabla Onboarding
-              </Typography>
-              <Button color="contrast" onClick={this.handleOnboardingDone}>
-                done
+          <Dialog
+            open={extCalendarOpen}
+            onRequestClose={this.handleExtCalClose}
+            fullWidth
+            transition={<Slide direction="up" />}
+          >
+            <DialogTitle>Your calendar link</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Insert the link to your chosen calendar application and it will sync automatically.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                inputRef={el => this.icsInput = el}
+                label="URL"
+                value={this.icsLink}
+                margin="normal"
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  $(this.icsInput).select();
+                  document.execCommand('copy'); // eslint-disable-line no-undef
+                }}
+                color="primary"
+              >
+                Copy
               </Button>
-            </Toolbar>
-          </AppBar>
-          <DialogContent style={{ textAlign: 'center' }}>
-            <DialogTitle>
-              Enter your rapla link
-            </DialogTitle>
-            <DialogContentText>
-              To use this webapp, please enter your rapla link address here.
-              We will connect our services with it and store your link.
-            </DialogContentText>
-            <TextField
-              required
-              autoFocus
-              inputRef={el => this.raplaLinkInput = el}
-              margin="normal"
-              id="name"
-              label="Enter your link"
-              type="text"
-              style={{ width: '60%' }}
-            />
-          </DialogContent>
-        </Dialog>
+              <Button onClick={this.handleExtCalClose} color="primary" autoFocus>
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={onboardingOpen}
+            onRequestClose={() => {}}
+            fullScreen
+            transition={<Slide direction="up" />}
+          >
+            <AppBar style={{ position: 'relative' }}>
+              <Toolbar>
+                <Typography type="title" color="inherit" style={{ flex: 1 }}>
+                  Rablabla Onboarding
+                </Typography>
+                <Button color="contrast" onClick={this.handleOnboardingDone}>
+                  done
+                </Button>
+              </Toolbar>
+            </AppBar>
+            <DialogContent style={{ textAlign: 'center' }}>
+              <DialogTitle>
+                Enter your rapla link
+              </DialogTitle>
+              <DialogContentText>
+                To use this webapp, please enter your rapla link address here.
+                We will connect our services with it and store it.
+                You also have to specify a course title.
+              </DialogContentText>
+              <TextField
+                required
+                autoFocus
+                inputRef={el => this.raplaTitleInput = el}
+                margin="normal"
+                label="Enter your course title"
+                type="text"
+                style={{ width: '60%' }}
+              />
+              <TextField
+                required
+                inputRef={el => this.raplaLinkInput = el}
+                margin="normal"
+                label="Enter your link"
+                type="text"
+                style={{ width: '60%' }}
+              />
+            </DialogContent>
+          </Dialog>
         </NavigationBar>
         <Calendar dailyEvents={dailyEvents} />
       </div>
