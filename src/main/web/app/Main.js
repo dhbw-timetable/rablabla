@@ -4,12 +4,16 @@ import yellow from 'material-ui/colors/yellow';
 import $ from 'jquery';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
+import Typography from 'material-ui/Typography';
+import Toolbar from 'material-ui/Toolbar';
+import AppBar from 'material-ui/AppBar';
 import Dialog, {
   DialogActions,
   DialogContent,
   DialogTitle,
   DialogContentText,
 } from 'material-ui/Dialog';
+import Slide from 'material-ui/transitions/Slide';
 import NavigationBar from './components/NavigationBar';
 import Calendar from './components/Calendar';
 
@@ -89,22 +93,18 @@ export default class Main extends Component {
       date: new Date(),
       chat: [],
       extCalendarOpen: false,
+      onboardingOpen: true,
     };
-    const date = this.state.date;
-    console.log(getAppointments(
-      'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
-      date, this.onAjaxSuccess, this.onAjaxError,
-    ));
   }
 
   onAjaxSuccess = (response) => {
     const data = JSON.parse(response);
     this.setState({ dailyEvents: this.makeDays(this.parseDates(data)) });
-    // TODO What should happen when we receive new appointments?
     console.log(data);
   };
 
   onAjaxError = (error) => {
+    this.setState({ onboardingOpen: false });
     // TODO What should happen on error?
     console.error(error);
   }
@@ -141,19 +141,45 @@ export default class Main extends Component {
     chat.push({ text: msg, watson: false });
     this.setState({ chat });
     console.log(`Sending '${msg}' to backend...`);
-    // TODO Send to backend HERE
+    // TODO Send to backend and handle answer HERE
+  };
+
+  handleOnboardingDone = () => {
+    this.raplaTitleValue = this.raplaTitleInput.value;
+    this.raplaLinkValue = this.raplaLinkInput.value;
+    // If seems valid
+    if (this.raplaLinkValue.length > 10 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
+      console.log('Url was valid, onboarding succeeded');
+      const date = this.state.date;
+      console.log(getAppointments(
+        this.raplaLinkValue,
+        date, (response) => {
+          this.onAjaxSuccess(response);
+          this.setState({ onboardingOpen: false });
+        }, this.onAjaxError,
+      ));
+    } else {
+      alert(`The entered link '${this.raplaLinkValue}' was invalid. Please enter a correct rapla link.`);
+      console.error(`The link ${this.raplaLinkValue} is invalid! Onboarding denied.`);
+    }
   };
 
   icsLink = null;
   icsInput = null;
 
+  raplaLinkInput = null;
+  raplaLinkValue = null;
+
+  raplaTitleInput = null;
+  raplaTitleValue = null;
+
   render() {
-    const { chat, date, dailyEvents, extCalendarOpen } = this.state;
+    const { chat, date, dailyEvents, extCalendarOpen, onboardingOpen } = this.state;
     return (
     <MuiThemeProvider theme={theme}>
       <div>
         <NavigationBar
-          title="Rablabla"
+          title={this.raplaTitleValue}
           chat={chat}
           onMessageSent={this.sendMessage}
           menuItems={[
@@ -161,7 +187,7 @@ export default class Main extends Component {
               text: 'Refresh',
               onClick: () => {
                 console.log(getAppointments(
-                  'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
+                  this.raplaLinkValue,
                   date,
                   (resp) => {
                     this.onAjaxSuccess(resp);
@@ -174,14 +200,13 @@ export default class Main extends Component {
             {
               text: 'Get external calendar',
               onClick: () => {
-                getICSLink('https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
-                this.handleExtCalOpen, this.handleExtCalOpen);
+                getICSLink(this.raplaLinkValue, this.handleExtCalOpen, this.handleExtCalOpen);
               },
             },
             {
               text: 'Switch timetable',
               onClick: () => {
-                // TODO Implement
+                this.setState({ onboardingOpen: true });
               },
             },
             {
@@ -192,42 +217,91 @@ export default class Main extends Component {
           onDateChange={(d) => {
             this.setState({ d });
             console.log(getAppointments(
-              'https://rapla.dhbw-stuttgart.de/rapla?key=txB1FOi5xd1wUJBWuX8lJhGDUgtMSFmnKLgAG_NVMhA_bi91ugPaHvrpxD-lcejo',
+              this.raplaLinkValue,
               d, this.onAjaxSuccess,
               this.onAjaxError,
               ));
           }}
         >
-        <Dialog open={extCalendarOpen} onRequestClose={this.handleExtCalClose} fullWidth>
-          <DialogTitle>Your calendar link</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Insert the link to your chosen calendar application and it will sync automatically.
-            </DialogContentText>
-            <TextField
-              autoFocus
-              inputRef={el => this.icsInput = el}
-              label="URL"
-              value={this.icsLink}
-              margin="normal"
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => {
-                $(this.icsInput).select();
-                document.execCommand('copy'); // eslint-disable-line no-undef
-              }}
-              color="primary"
-            >
-              Copy
-            </Button>
-            <Button onClick={this.handleExtCalClose} color="primary" autoFocus>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
+          <Dialog
+            open={extCalendarOpen}
+            onRequestClose={this.handleExtCalClose}
+            fullWidth
+            transition={<Slide direction="up" />}
+          >
+            <DialogTitle>Your calendar link</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Insert the link to your chosen calendar application and it will sync automatically.
+              </DialogContentText>
+              <TextField
+                autoFocus
+                inputRef={el => this.icsInput = el}
+                label="URL"
+                value={this.icsLink}
+                margin="normal"
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  $(this.icsInput).select();
+                  document.execCommand('copy'); // eslint-disable-line no-undef
+                }}
+                color="primary"
+              >
+                Copy
+              </Button>
+              <Button onClick={this.handleExtCalClose} color="primary" autoFocus>
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={onboardingOpen}
+            onRequestClose={() => {}}
+            fullScreen
+            transition={<Slide direction="up" />}
+          >
+            <AppBar style={{ position: 'relative' }}>
+              <Toolbar>
+                <Typography type="title" color="inherit" style={{ flex: 1 }}>
+                  Rablabla Onboarding
+                </Typography>
+                <Button color="contrast" onClick={this.handleOnboardingDone}>
+                  done
+                </Button>
+              </Toolbar>
+            </AppBar>
+            <DialogContent style={{ textAlign: 'center' }}>
+              <DialogTitle>
+                Enter your rapla link
+              </DialogTitle>
+              <DialogContentText>
+                To use this webapp, please enter your rapla link address here.
+                We will connect our services with it and store it.
+                You also have to specify a course title.
+              </DialogContentText>
+              <TextField
+                required
+                autoFocus
+                inputRef={el => this.raplaTitleInput = el}
+                margin="normal"
+                label="Enter your course title"
+                type="text"
+                style={{ width: '60%' }}
+              />
+              <TextField
+                required
+                inputRef={el => this.raplaLinkInput = el}
+                margin="normal"
+                label="Enter your link"
+                type="text"
+                style={{ width: '60%' }}
+              />
+            </DialogContent>
+          </Dialog>
         </NavigationBar>
         <Calendar dailyEvents={dailyEvents} />
       </div>
