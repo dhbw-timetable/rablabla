@@ -94,6 +94,7 @@ export default class Chatter extends Component {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', width: '100%', bottom: 0 }}>
               <TextField
+                inputProps={{ maxLength: 70 }}
                 placeholder="Enter a message..."
                 inputRef={el => this.messageInput = el}
                 fullWidth
