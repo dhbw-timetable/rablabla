@@ -88,12 +88,15 @@ const theme = createMuiTheme({
 export default class Main extends Component {
   constructor() {
     super();
+    this.raplaTitleValue = localStorage.getItem('raplaTitle');
+    this.raplaLinkValue = localStorage.getItem('raplaLink');
+    let onBoardingNecessary = !localStorage.getItem('raplaLink');
     this.state = {
       dailyEvents: [[], [], [], [], [], []],
       date: new Date(),
       chat: [],
       extCalendarOpen: false,
-      onboardingOpen: true,
+      onboardingOpen: onBoardingNecessary,
     };
   }
 
@@ -147,6 +150,9 @@ export default class Main extends Component {
   handleOnboardingDone = () => {
     this.raplaTitleValue = this.raplaTitleInput.value;
     this.raplaLinkValue = this.raplaLinkInput.value;
+    localStorage.setItem('raplaTitle', this.raplaTitleValue);
+    localStorage.setItem('raplaLink', this.raplaLinkValue);
+
     // If seems valid
     if (this.raplaLinkValue.length > 10 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
       console.log('Url was valid, onboarding succeeded');
