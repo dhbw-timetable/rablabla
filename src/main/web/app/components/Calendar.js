@@ -16,7 +16,7 @@ export default function Calendar(props) {
   return (
     <container>
       <div className="calendar">
-        <TimeView start={8} end={18} />
+        <TimeView start={7} end={18} />
         {dayNames.map((name, i) => <Day key={i} eventData={props.dailyEvents[i]} name={name} />)}
       </div>
     </container>

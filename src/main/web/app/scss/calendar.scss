@@ -21,7 +21,7 @@ container {
 
 .calendar {
   width: inherit;
-  min-width: 1000px;
+  min-width: 900px;
   height: inherit;
   box-sizing: border-box;
 
@@ -72,11 +72,11 @@ container {
       #fff 0,
       #fff
     );
-  background-size: 100% calc(10% - (1em + 15px) / 10);
+  background-size: 100% calc(10% - 4em / 10);
 
     .time-name {
       color: darkgray;
-      height: calc(10% - (1em + 15px) / 10);
+      height: calc(10% - 4em / 10);
       text-align: right;
       transform: translateY(-0.5em);
       margin-right: 3px;
