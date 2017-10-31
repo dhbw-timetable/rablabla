@@ -41,11 +41,22 @@ export default class NavigationMenu extends Component {
           open={open}
           onRequestClose={this.handleRequestClose}
         >
-          {menuItems.map((el, i) => (
-            <MenuItem key={i} onClick={event => this.handleRequestClose(event, el)}>
-              {el.text}
-            </MenuItem>
-          ))}
+          {menuItems.map((el, i) => {
+            const opt = {};
+            // Decide if it is either link or button
+            if (el.href) {
+              opt.href = el.href;
+              opt.target = '_blank';
+              opt.component = 'a';
+            } else if (el.onClick) {
+              opt.onClick = event => this.handleRequestClose(event, el);
+            }
+            return (
+              <MenuItem key={i} {...opt}>
+                {el.text}
+              </MenuItem>
+            );
+          })}
         </Menu>
       </div>
     );
