@@ -1,0 +1,42 @@
+$lightgray: #eaeaef;
+$primarylight: #ba3838;
+
+// Based on a pen by Jon Adams: https://codepen.io/pointlessjon/pen/hCEHG?page=1&
+
+.message {
+  position: relative;
+  background-color: $lightgray;
+  border-radius: 5px;
+  margin: 10px 15px !important;
+  padding: 10px;
+
+  &--left {
+    margin-right: 40% !important;
+    background: $primarylight;
+    color: white !important;
+
+    &::after {
+      z-index: 1;
+      content: ' ';
+      position: absolute;
+      border-left: 1em solid transparent;
+      border-top: 1em solid $primarylight;
+      left: -.95em;
+      top: .65em;
+    }
+  }
+
+  &--right {
+    margin-left: 40% !important;
+
+    &::after {
+      z-index: 1;
+      content: ' ';
+      position: absolute;
+      border-right: 1em solid transparent;
+      border-top: 1em solid $lightgray;
+      right: -.95em;
+      top: .65em;
+    }
+  }
+}

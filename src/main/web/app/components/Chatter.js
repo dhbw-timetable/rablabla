@@ -85,6 +85,7 @@ export default class Chatter extends Component {
                     color={msg.watson ? 'primary' : 'default'}
                     component="p"
                     align={msg.watson ? 'left' : 'right'}
+                    classes={msg.watson ? { body1: 'message message--left' } : { body1: 'message message--right' }}
                     key={i}
                   >
                     {msg.text}
