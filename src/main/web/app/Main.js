@@ -90,14 +90,24 @@ export default class Main extends Component {
     super();
     this.raplaTitleValue = localStorage.getItem('raplaTitle');
     this.raplaLinkValue = localStorage.getItem('raplaLink');
-    const onBoardingNecessary = !localStorage.getItem('raplaLink');
+    const onboardingNecessary = !localStorage.getItem('raplaLink');
     this.state = {
       dailyEvents: [[], [], [], [], [], []],
       date: new Date(),
       chat: [],
       extCalendarOpen: false,
-      onboardingOpen: onBoardingNecessary,
+      onboardingOpen: onboardingNecessary,
     };
+
+    if (!onboardingNecessary) {
+      console.log(getAppointments(
+        this.raplaLinkValue,
+        this.state.date, (response) => {
+          this.onAjaxSuccess(response);
+          this.setState({ onboardingOpen: false });
+        }, this.onAjaxError,
+      ));
+    }
   }
 
   onAjaxSuccess = (response) => {
@@ -107,7 +117,6 @@ export default class Main extends Component {
   };
 
   onAjaxError = (error) => {
-    this.setState({ onboardingOpen: false });
     // TODO What should happen on error?
     console.error(error);
   }
