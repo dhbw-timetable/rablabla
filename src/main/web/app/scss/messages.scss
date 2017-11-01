@@ -40,3 +40,14 @@ $primarylight: #ba3838;
     }
   }
 }
+
+.chat-window {
+  width: 50vw;
+  min-width: 400px;
+  height: 400px;
+  padding: 15px;
+  @media screen and (max-width: 450px) {
+    width: 80vw;
+    min-width: 0px;
+  }
+}
