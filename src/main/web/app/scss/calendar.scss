@@ -88,7 +88,7 @@ container {
     position: absolute;
     width: 90%;
     left: 5%;
-    padding: 5px;
+    padding: 10px;
 
     color: white;
     background-color: $primarylight;
@@ -114,8 +114,17 @@ container {
     }
 
     &--header {
-      font-size: 1.1em;
-      margin: 15px 0;
+      font-size: 1.2em;
+      line-height: 1.15em;
+      margin: 20px 0 15px 0;
+
+      // Multiline ellipsis, based on https://codepen.io/martinwolf/pen/qlFdp by Martin Wolf
+      display: block; /* Fallback for non-webkit */
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     &--body {
