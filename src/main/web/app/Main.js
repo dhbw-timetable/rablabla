@@ -242,7 +242,7 @@ export default class Main extends Component {
             open={extCalendarOpen}
             onRequestClose={this.handleExtCalClose}
             fullWidth
-            transition={<Slide direction="up" />}
+            transition={props => <Slide direction="up" {...props} />}
           >
             <DialogTitle>Your calendar link</DialogTitle>
             <DialogContent>
@@ -277,7 +277,7 @@ export default class Main extends Component {
             open={onboardingOpen}
             onRequestClose={() => {}}
             fullScreen
-            transition={<Slide direction="up" />}
+            transition={props => <Slide direction="up" {...props} />}
           >
             <AppBar style={{ position: 'relative' }}>
               <Toolbar>
