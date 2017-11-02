@@ -7,7 +7,7 @@ export default function TimeView(props) {
       <h2 className="day--name" />
       <ul className="schedule">
         {Array((props.end - props.start) + 1).fill().map((_, i) => {
-          return (<li className="time-name" key={i}>{i + props.start}</li>);
+          return (<li className="time-name" style={{ height: `calc(100% / ${props.end - props.start + 0.5})` }} key={i}>{i + props.start}</li>);
         })}
       </ul>
     </div>

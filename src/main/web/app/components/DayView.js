@@ -6,7 +6,7 @@ export default function DayView(props) {
   return (
     <div className="day">
       <h2 className="day--name">{name}</h2>
-      <ul className="schedule">
+      <ul className="schedule" style={{ backgroundSize: `100% calc(100% / ${props.end - props.start + 0.5})` }}>
         {events.map((el, i) => <Event key={i} data={el} />)}
       </ul>
     </div>

@@ -72,11 +72,11 @@ container {
       #fff 0,
       #fff
     );
-  background-size: 100% calc(10% - 4em / 10);
+    // background-size set inline in DayView.js
 
     .time-name {
       color: darkgray;
-      height: calc(10% - 4em / 10);
+      // height set inline in TimeView.js
       text-align: right;
       transform: translateY(-0.5em);
       margin-right: 3px;
