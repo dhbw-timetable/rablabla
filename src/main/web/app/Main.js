@@ -154,6 +154,7 @@ export default class Main extends Component {
     const { chat } = this.state;
     chat.push({ text: msg, watson: false });
     this.setState({ chat });
+    document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
     // Send to backend and handle answer
     $.ajax({
       url: `ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
@@ -161,6 +162,7 @@ export default class Main extends Component {
       success: (response) => {
         chat.push({ text: response, watson: true });
         this.setState({ chat });
+        document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
       },
       error: (err) => { console.error(err); },
     });

@@ -40,13 +40,8 @@ export default class Chatter extends Component {
   };
 
   messageInput = null;
-  chatContainer = null;
   chatButton = null;
-
-  componentDidUpdate() {
-    const container = this.chatContainer;
-    if (container) container.scrollTop = container.scrollHeight;
-  }
+  messagesEnd = null;
 
   render() {
     const { iconColor, iconStyle, chat } = this.props;
@@ -79,7 +74,6 @@ export default class Chatter extends Component {
             Watson Chat
             </Typography>
             <div
-              ref={el => this.chatContainer = el}
               className="message-container"
             >
               {chat.map((msg, i) => {
@@ -96,6 +90,7 @@ export default class Chatter extends Component {
                   </Typography>
                 );
               })}
+              <div className="messages-bottom" style={{ float: 'left', clear: 'both' }} />
             </div>
             <div className="input-container">
               <TextField
