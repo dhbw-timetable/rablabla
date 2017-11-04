@@ -27,43 +27,45 @@ function NavigationBar(props) {
         position="fixed"
         color="primary"
       >
-        <Toolbar>
-          <div className="nav-container-left">
-            <Typography type="title" color="accent">
-              {title}
-            </Typography>
+        <Toolbar className="test">
+            <div className="nav-bar-content">
+              <div className="nav-container-left">
+                <Typography type="title" color="accent">
+                  {title}
+                </Typography>
+              </div>
+              <div className="nav-container-right">
+                <DatePicker
+                  iconColor={iconColor}
+                  iconStyle={iconStyle}
+                  onSelect={onDateChange}
+                />
+                <Chatter
+                  iconColor={iconColor}
+                  iconStyle={iconStyle}
+                  chat={chat}
+                  onMessageSent={onMessageSent}
+                />
+                {icons.map((el, i) => {
+                  return (
+                    <IconButton
+                      key={i}
+                      color={iconColor}
+                      style={iconStyle}
+                      onClick={el.onClick}
+                    >
+                      {el.icon}
+                    </IconButton>
+                  );
+                })}
+                <NavigationMenu
+                  iconColor={iconColor}
+                  menuItems={menuItems}
+                  onDateChange={onDateChange}
+                />
+              </div>
+              {props.children}
           </div>
-          <div className="nav-container-right">
-            <DatePicker
-              iconColor={iconColor}
-              iconStyle={iconStyle}
-              onSelect={onDateChange}
-            />
-            <Chatter
-              iconColor={iconColor}
-              iconStyle={iconStyle}
-              chat={chat}
-              onMessageSent={onMessageSent}
-            />
-            {icons.map((el, i) => {
-              return (
-                <IconButton
-                  key={i}
-                  color={iconColor}
-                  style={iconStyle}
-                  onClick={el.onClick}
-                >
-                  {el.icon}
-                </IconButton>
-              );
-            })}
-            <NavigationMenu
-              iconColor={iconColor}
-              menuItems={menuItems}
-              onDateChange={onDateChange}
-            />
-          </div>
-          {props.children}
         </Toolbar>
       </AppBar>
     </div>
