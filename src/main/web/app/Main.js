@@ -30,7 +30,6 @@ const getParams = (args) => {
 const getICSLink = (url, success, error) => {
   const deSuffix = '.de/rapla?';
   const baseURL = url.substring(0, url.indexOf(deSuffix) + deSuffix.length);
-  console.log(baseURL);
   const params = getParams(url.substring(url.indexOf(deSuffix) + deSuffix.length));
   if (params.key) {
     $.ajax({
@@ -155,8 +154,16 @@ export default class Main extends Component {
     const { chat } = this.state;
     chat.push({ text: msg, watson: false });
     this.setState({ chat });
-    console.log(`Sending '${msg}' to backend...`);
-    // TODO Send to backend and handle answer HERE
+    // Send to backend and handle answer
+    $.ajax({
+      url: `ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
+      type: 'POST',
+      success: (response) => {
+        chat.push({ text: response, watson: true });
+        this.setState({ chat });
+      },
+      error: (err) => { console.error(err); },
+    });
   };
 
   handleOnboardingDone = () => {
