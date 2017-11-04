@@ -5,37 +5,49 @@
    different sources, and to use Watchify when run from the default task.
    See browserify.bundleConfigs in gulp/config.js
 */
+const browserify = require('browserify');
+const watchify = require('watchify');
+const bundleLogger = require('../util/bundleLogger');
+const gulp = require('gulp');
+const handleErrors = require('../util/handleErrors');
+const source = require('vinyl-source-stream');
+const config = require('../config').browserify;
+const babelify = require('babelify');
 
-var browserify   = require('browserify');
-var watchify     = require('watchify');
-var bundleLogger = require('../util/bundleLogger');
-var gulp         = require('gulp');
-var handleErrors = require('../util/handleErrors');
-var source       = require('vinyl-source-stream');
-var config       = require('../config').browserify;
-var babelify     = require('babelify');
+gulp.task('browserify', (callback) => {
+  let bundleQueue = config.bundleConfigs.length;
 
-gulp.task('browserify', function(callback) {
-
-  var bundleQueue = config.bundleConfigs.length;
-
-  var browserifyThis = function(bundleConfig) {
-
-    var bundler = browserify({
+  const browserifyThis = (bundleConfig) => {
+    let bundler = browserify({
       // Required watchify args
-      cache: {}, packageCache: {}, fullPaths: false,
+      cache: {},
+      packageCache: {},
+      fullPaths: false,
       // Specify the entry point of your app
       entries: bundleConfig.entries,
       // Add file extensions to make optional in your requires
       extensions: config.extensions,
       // Enable source maps!
-      debug: config.debug
+      debug: config.debug,
     });
 
-    var bundle = function() {
+    const reportFinished = () => {
+      // Log when bundling completes
+      bundleLogger.end(bundleConfig.outputName);
+
+      if (bundleQueue) {
+        bundleQueue--;
+        if (bundleQueue === 0) {
+          // If queue is empty, tell gulp the task is complete.
+          // https://github.com/gulpjs/gulp/blob/master/docs/API.md#accept-a-callback
+          callback();
+        }
+      }
+    };
+
+    const bundle = () => {
       // Log when bundling starts
       bundleLogger.start(bundleConfig.outputName);
-
       return bundler
         .bundle()
         // Report compile errors
@@ -58,19 +70,6 @@ gulp.task('browserify', function(callback) {
       bundler.on('update', bundle);
     }
 
-    var reportFinished = function() {
-      // Log when bundling completes
-      bundleLogger.end(bundleConfig.outputName);
-
-      if (bundleQueue) {
-        bundleQueue--;
-        if (bundleQueue === 0) {
-          // If queue is empty, tell gulp the task is complete.
-          // https://github.com/gulpjs/gulp/blob/master/docs/API.md#accept-a-callback
-          callback();
-        }
-      }
-    };
 
     return bundle();
   };
