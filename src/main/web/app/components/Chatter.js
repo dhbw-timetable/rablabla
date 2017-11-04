@@ -32,10 +32,9 @@ export default class Chatter extends Component {
   }
 
   submitMessage = () => {
-    const { messageInput, chatContainer } = this;
+    const { messageInput } = this;
     if (messageInput.value.trim().length > 0) {
       this.props.onMessageSent(messageInput.value);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
     messageInput.value = '';
   };
@@ -43,6 +42,11 @@ export default class Chatter extends Component {
   messageInput = null;
   chatContainer = null;
   chatButton = null;
+
+  componentDidUpdate() {
+    const container = this.chatContainer;
+    if (container) container.scrollTop = container.scrollHeight;
+  }
 
   render() {
     const { iconColor, iconStyle, chat } = this.props;
