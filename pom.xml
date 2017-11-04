@@ -10,9 +10,9 @@
 		<relativePath></relativePath>
 	</parent>
 
-	<groupId>net.wasdev.wlp.sample</groupId>
+	<groupId>com.github.dhbw-timetable.rablabla</groupId>
 	<artifactId>Rablabla</artifactId>
-	<version>v0.1</version>
+	<version>0.1</version>
 	<packaging>war</packaging>
 
 	<name>Rablabla</name>
@@ -56,15 +56,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>net.sf.biweekly</groupId>
-			<artifactId>biweekly</artifactId>
-			<version>0.6.1</version>
+   			<groupId>net.sf.biweekly</groupId>
+   			<artifactId>biweekly</artifactId>
+   			<version>0.6.1</version>
 		</dependency>
-
+		
 		<dependency>
-			<groupId>com.ibm.watson.developer_cloud</groupId>
-			<artifactId>conversation</artifactId>
-			<version>4.0.0</version>
+   			<groupId>com.github.dhbw-timetable</groupId>
+   			<artifactId>rapla-parser</artifactId>
+   			<version>0.3.0</version>
 		</dependency>
 	</dependencies>
 
