@@ -76,7 +76,7 @@ export default class Chatter extends Component {
             </Typography>
             <div
               ref={el => this.chatContainer = el}
-              style={{ maxHeight: 250, overflowY: 'scroll' }}
+              className="message-container"
             >
               {chat.map((msg, i) => {
                 return (
@@ -93,7 +93,7 @@ export default class Chatter extends Component {
                 );
               })}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', width: '100%', bottom: 0 }}>
+            <div className="input-container">
               <TextField
                 inputProps={{ maxLength: 70 }}
                 placeholder="Enter a message..."
