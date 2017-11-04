@@ -308,7 +308,7 @@ export default class Main extends Component {
                 margin="normal"
                 label="Enter your course title"
                 type="text"
-                style={{ width: '60%' }}
+                style={{ width: '60%', minWidth: '250px' }}
                 inputProps={{ maxLength: 10 }}
               />
               <TextField
@@ -317,7 +317,7 @@ export default class Main extends Component {
                 margin="normal"
                 label="Enter your link"
                 type="text"
-                style={{ width: '60%' }}
+                style={{ width: '60%', minWidth: '250px' }}
               />
             </DialogContent>
           </Dialog>
