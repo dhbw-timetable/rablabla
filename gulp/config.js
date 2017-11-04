@@ -1,21 +1,20 @@
-var dest = './src/main/webapp',
-  src = './src/main/web',
-  mui = './node_modules/material-ui/src';
+const dest = './src/main/webapp';
+const src = './src/main/web';
 
 module.exports = {
   browserSync: {
     server: {
       // We're serving the src folder as well
       // for sass sourcemap linking
-      baseDir: [dest, src]
+      baseDir: [dest, src],
     },
     files: [
-      dest + '/**'
-    ]
+      `${dest}/**`,
+    ],
   },
   markup: {
-    src: src + "/www/**",
-    dest: dest
+    src: `${src}/www/**`,
+    dest,
   },
   browserify: {
     // Enable source maps
@@ -23,14 +22,14 @@ module.exports = {
     // A separate bundle will be generated for each
     // bundle config in the list below
     bundleConfigs: [{
-      entries: src + '/app/app.js',
-      dest: dest,
-      outputName: 'app.js'
+      entries: `${src}/app/app.js`,
+      dest,
+      outputName: 'app.js',
     }],
     extensions: ['.js'],
   },
   sass: {
-    src: src + "/app/scss/*.scss",
-    dest: dest + "/css/",
-  }
+    src: `${src}/app/scss/*.scss`,
+    dest: `${dest}/css/`,
+  },
 };

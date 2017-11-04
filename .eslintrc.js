@@ -10,7 +10,7 @@ module.exports = {
       "linebreak-style": ["error", "unix"],
       "no-param-reassign": 0,
       "no-alert": 0,
-      "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+      "no-plusplus": 0,
   		"react/jsx-no-bind": 0,
   		"react/jsx-indent": 0,
       "react/no-array-index-key": 0,
