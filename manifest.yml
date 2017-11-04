@@ -1,10 +1,8 @@
 applications:
 - path: target/Rablabla.war
-  memory: 1024M
+  memory: 512M
   instances: 1
-  domain: mybluemix.net
-  name: rablabla
-  host: rablabla
-  disk_quota: 1024M
-services:
-  - rablabla-cloudantNoSQLDB
+  domain: eu-de.mybluemix.net
+  name: Staging Chatbot Rablabla
+  host: chat-rablabla
+  disk_quota: 512M
