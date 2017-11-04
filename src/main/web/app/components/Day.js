@@ -16,6 +16,7 @@ export default function Day(props) {
 
     el.height = height;
     el.top = top;
+    el.duration = duration;
   });
   return (
     <DayView
