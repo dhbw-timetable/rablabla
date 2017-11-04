@@ -8,7 +8,7 @@ export default class Event extends Component {
   }
 
   calculateSmall = (duration) => {
-    return duration < (-0.15 * window.innerHeight) + 100;
+    return duration < (-0.1 * window.innerHeight) + 80;
   };
 
   update = () => {
