@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "gulp",
-    "production": "browserify ./src/main/webapp/app.js -g [ envify --NODE_ENV production ] -g uglifyify | uglifyjs --compress --mangle > ./src/main/webapp/app.js"
+    "production": "browserify ./src/main/webapp/app.js -g [ envify --NODE_ENV production ] -g uglifyify | uglifyjs --compress --mangle > ./src/main/webapp/app-production.js"
   },
   "private": true,
   "devDependencies": {
