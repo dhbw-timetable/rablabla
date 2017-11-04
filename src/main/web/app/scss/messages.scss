@@ -19,13 +19,14 @@ $primarylight: #ba3838;
     position: relative;
     background-color: $lightgray;
     border-radius: 5px;
-    margin: 10px 15px !important;
+    margin: 10px 15px;
     padding: 10px;
+    word-wrap: break-word;
 
     &--left {
-      margin-right: 40% !important;
+      margin-right: 40%;
       background: $primarylight;
-      color: white !important;
+      color: white;
 
       &::after {
         z-index: 1;
@@ -39,7 +40,7 @@ $primarylight: #ba3838;
     }
 
     &--right {
-      margin-left: 40% !important;
+      margin-left: 40%;
 
       &::after {
         z-index: 1;
