@@ -29,6 +29,8 @@ const getParams = (args) => {
 
 const getICSLink = (url, success, error) => {
   const deSuffix = '.de/rapla?';
+  const baseURL = url.substring(0, url.indexOf(deSuffix) + deSuffix.length);
+  console.log(baseURL);
   const params = getParams(url.substring(url.indexOf(deSuffix) + deSuffix.length));
   if (params.key) {
     $.ajax({
@@ -39,7 +41,8 @@ const getICSLink = (url, success, error) => {
     });
     return 'Accessing calendar file...';
   } else if (params.user && params.file) {
-    success(`${url}&page=ical`);
+    console.log(baseURL);
+    success(`${baseURL}page=ical&user=${params.user}&file=${params.file}`);
   } else {
     console.error(`Yearly calendar not supported for url: ${url}`);
   }
