@@ -14,7 +14,7 @@ const styles = theme => ({
   root: {
     marginTop: 0,
     width: '100%',
-  },
+    },
 });
 
 function NavigationBar(props) {
@@ -24,6 +24,7 @@ function NavigationBar(props) {
     <div className={classes.root}>
       <AppBar
         style={style}
+        className="nav-bar"
         position="fixed"
         color="primary"
       >
