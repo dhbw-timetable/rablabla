@@ -20,8 +20,15 @@ export default function Calendar(props) {
     <container>
       <div className="calendar">
         <TimeView start={start} end={end} />
-        {dayNames.map((name, i) =>
-          <Day key={i} eventData={props.dailyEvents[i]} name={name} start={start} end={end} isCurrent={i === currentDay}/>)}
+        {dayNames.map((name, i) => (
+          <Day
+            key={i}
+            eventData={props.dailyEvents[i]}
+            name={name}
+            start={start}
+            end={end}
+            isCurrent={i === currentDay}
+          />))}
       </div>
     </container>
   );

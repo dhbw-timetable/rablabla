@@ -193,6 +193,11 @@ export default class Main extends Component {
     }
   };
 
+  componentDidMount() {
+    const currDay = document.querySelector('.is-current');
+    if (currDay) currDay.scrollIntoView({ behavior: 'smooth' });
+  }
+
   icsLink = null;
   icsInput = null;
 
