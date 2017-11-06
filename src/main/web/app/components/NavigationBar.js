@@ -10,11 +10,11 @@ import NavigationMenu from './NavigationMenu';
 import Chatter from './Chatter';
 import DatePicker from './DatePicker';
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     marginTop: 0,
     width: '100%',
-    },
+  },
 });
 
 function NavigationBar(props) {

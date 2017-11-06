@@ -87,6 +87,8 @@ const theme = createMuiTheme({
   },
 });
 
+const slidingTransition = props => <Slide direction="up" {...props} />;
+
 export default class Main extends Component {
   constructor() {
     super();
@@ -191,6 +193,11 @@ export default class Main extends Component {
     }
   };
 
+  componentDidMount() {
+    const currDay = document.querySelector('.is-current');
+    if (currDay) currDay.scrollIntoView({ behavior: 'smooth' });
+  }
+
   icsLink = null;
   icsInput = null;
 
@@ -254,7 +261,7 @@ export default class Main extends Component {
             open={extCalendarOpen}
             onRequestClose={this.handleExtCalClose}
             fullWidth
-            transition={props => <Slide direction="up" {...props} />}
+            transition={slidingTransition}
           >
             <DialogTitle>Your calendar link</DialogTitle>
             <DialogContent>
@@ -289,7 +296,7 @@ export default class Main extends Component {
             open={onboardingOpen}
             onRequestClose={() => {}}
             fullScreen
-            transition={props => <Slide direction="up" {...props} />}
+            transition={slidingTransition}
           >
             <AppBar style={{ position: 'relative' }}>
               <Toolbar>

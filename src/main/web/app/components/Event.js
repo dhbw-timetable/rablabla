@@ -20,7 +20,7 @@ export default class Event extends Component {
   }
 
   render() {
-    const { height, top, duration, startTime, endTime, course, persons, resources }
+    const { height, top, startTime, endTime, course, persons, resources }
       = this.props.data;
     return (
       <li style={{ height, top }} className={`event ${this.state.isSmall ? 'is-small' : ''}`}>
