@@ -24,6 +24,7 @@ export default function Day(props) {
       events={events}
       start={props.start}
       end={props.end}
+      isCurrent={props.isCurrent}
     />
   );
 }

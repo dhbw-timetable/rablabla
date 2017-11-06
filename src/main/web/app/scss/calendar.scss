@@ -52,7 +52,7 @@ container {
     padding: 0.5em;
     height: 2em;
   }
-  .current &--name {
+  .is-current &--name {
     color: $primarylight;
   }
 
@@ -181,11 +181,11 @@ container {
     }
   }
 
-  &.current .schedule .event {
+  &.is-current .schedule .event {
     box-shadow: 0 4px 4px 0 lightgray;
     box-shadow: 0 8px 8px 0 gray;
     transform: translateY(-5px);
-    transform: scale(1.05);
+    transform: scale(1.025);
   }
 }
 
