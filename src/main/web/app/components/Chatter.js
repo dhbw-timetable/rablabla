@@ -32,17 +32,16 @@ export default class Chatter extends Component {
   }
 
   submitMessage = () => {
-    const { messageInput, chatContainer } = this;
+    const { messageInput } = this;
     if (messageInput.value.trim().length > 0) {
       this.props.onMessageSent(messageInput.value);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
     messageInput.value = '';
   };
 
   messageInput = null;
-  chatContainer = null;
   chatButton = null;
+  messagesEnd = null;
 
   render() {
     const { iconColor, iconStyle, chat } = this.props;
@@ -70,13 +69,12 @@ export default class Chatter extends Component {
             horizontal: 'right',
           }}
         >
-          <Paper style={{ width: '50vw', height: 300, padding: 15 }}>
+          <Paper classes={{ root: 'chat-window' }}>
             <Typography type="title" component="h3" align="left">
             Watson Chat
             </Typography>
             <div
-              ref={el => this.chatContainer = el}
-              style={{ maxHeight: 250, overflowY: 'scroll' }}
+              className="message-container"
             >
               {chat.map((msg, i) => {
                 return (
@@ -85,14 +83,16 @@ export default class Chatter extends Component {
                     color={msg.watson ? 'primary' : 'default'}
                     component="p"
                     align={msg.watson ? 'left' : 'right'}
+                    classes={msg.watson ? { body1: 'message message--left' } : { body1: 'message message--right' }}
                     key={i}
                   >
                     {msg.text}
                   </Typography>
                 );
               })}
+              <div className="messages-bottom" style={{ float: 'left', clear: 'both' }} />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', position: 'absolute', width: '100%', bottom: 0 }}>
+            <div className="input-container">
               <TextField
                 inputProps={{ maxLength: 70 }}
                 placeholder="Enter a message..."

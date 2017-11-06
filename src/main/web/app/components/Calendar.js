@@ -13,11 +13,15 @@ const dayNames = [
 ];
 
 export default function Calendar(props) {
+  const start = 8;
+  const end = 18;
+  const currentDay = (new Date()).getDay() - 1;
   return (
     <container>
       <div className="calendar">
-        <TimeView start={8} end={18} />
-        {dayNames.map((name, i) => <Day key={i} eventData={props.dailyEvents[i]} name={name} />)}
+        <TimeView start={start} end={end} />
+        {dayNames.map((name, i) =>
+          <Day key={i} eventData={props.dailyEvents[i]} name={name} start={start} end={end} isCurrent={i === currentDay}/>)}
       </div>
     </container>
   );

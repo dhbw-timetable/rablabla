@@ -53,7 +53,6 @@ MessageOptions newMessageOptions = new MessageOptions.Builder()
 .input(new InputData.Builder("First message").build())
 .context(context)
 .build();
-
 MessageResponse response = service.message(newMessageOptions).execute();
 
 //second message
