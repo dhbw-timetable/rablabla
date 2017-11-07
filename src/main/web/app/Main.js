@@ -116,12 +116,14 @@ export default class Main extends Component {
 
   onAjaxSuccess = (response) => {
     const data = JSON.parse(response);
+    localStorage.setItem('data', { data });
     this.setState({ dailyEvents: this.makeDays(this.parseDates(data)) });
     console.log(data);
   };
 
   onAjaxError = (error) => {
-    // TODO What should happen on error?
+    const dataObject = localStorage.getItem('data');
+    if (dataObject) this.setState({ onboardingOpen: false, dailyEvents: this.makeDays(this.parseDates(dataObject.data)) });
     console.error(error);
   }
 
@@ -225,7 +227,6 @@ export default class Main extends Component {
                   date,
                   (resp) => {
                     this.onAjaxSuccess(resp);
-                    // TODO Implement snackbar HERE
                   },
                   this.onAjaxError,
                   ));
@@ -281,7 +282,7 @@ export default class Main extends Component {
               <Button
                 onClick={() => {
                   $(this.icsInput).select();
-                  document.execCommand('copy'); // eslint-disable-line no-undef
+                  document.execCommand('copy');
                 }}
                 color="primary"
               >

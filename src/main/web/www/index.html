@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html class="no-js" lang="">
+<html class="no-js" lang="" manifest="manifest.appcache">
 	<head>
 		<title>Rablabla</title>
 		<meta charset="utf-8">
   	<meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- Use minimum-scale=1 to enable GPU rasterization -->
 	  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1">
+		<meta name="referrer" content="no-referrer">
 
 		<!-- .favicon -->
 		<link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
@@ -29,14 +30,8 @@
 		<link rel="stylesheet" href="css/calendar.css">
 		<link rel="stylesheet" href="css/messages.css">
 		<link rel="stylesheet" href="css/navbar.css">
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="css/materialicons.css" rel="stylesheet">
 		<link rel="stylesheet" href="css/date-picker/styles.css">
-		<script type="text/javascript">
-			/* https://stackoverflow.com/questions/4723213/detect-http-or-https-then-force-https-in-javascript
-			if (location.protocol != 'https:') {
-				location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-			}*/
-		</script>
 	</head>
 	<body>
 		<div id="app"></div>
