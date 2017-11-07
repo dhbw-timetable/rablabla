@@ -63,7 +63,7 @@ public class ChatBot extends HttpServlet {
 					if (a.getStartDate().toLocalDate().equals(searchedDate)
 							&& (first == null || a.getStartDate().isBefore(first.getStartDate())))
 						first = a;
-				answer = answer.replace("locicPart", first.getStartTime());
+				answer = answer.replace("logicPart", first.getStartTime());
 			} catch (IllegalAccessException | NoConnectionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -82,7 +82,7 @@ public class ChatBot extends HttpServlet {
 				for (Appointment a : data.get(week))
 					if (a.getStartDate().toLocalDate().equals(searchedDate))
 						lessons = lessons + " " + a.getTitle();
-				answer = answer.replace("locicPart", lessons.trim());
+				answer = answer.replace("logicPart", lessons.trim());
 			} catch (IllegalAccessException | NoConnectionException e) {
 				e.printStackTrace();
 			}
