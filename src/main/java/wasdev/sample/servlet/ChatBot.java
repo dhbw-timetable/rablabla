@@ -48,7 +48,9 @@ public class ChatBot extends HttpServlet {
 		}
 		response = service.message(options).execute();
 		String answer = response.getOutput().getText().get(0);
+		answer = answer + response.getIntents().get(0).getIntent();
 		if (response.getIntents().get(0).getIntent().equals("#startingTime")) {
+			answer = answer + "startTime erkannt";
 			String date = response.getEntities().get(0).getValue();
 			final String url = URLDecoder.decode(req.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B",
 					"+");
@@ -64,6 +66,7 @@ public class ChatBot extends HttpServlet {
 							&& (first == null || a.getStartDate().isBefore(first.getStartDate())))
 						first = a;
 				answer = answer.replace("logicPart", first.getStartTime());
+				answer = answer + first.getStartTime();
 			} catch (IllegalAccessException | NoConnectionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
