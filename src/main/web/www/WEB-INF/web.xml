@@ -26,4 +26,12 @@
         <extension>appcache</extension>
         <mime-type>text/cache-manifest</mime-type>
   </mime-mapping>
+	<filter>
+	  <filter-name>ResponseHeaderFilter</filter-name>
+	  <filter-class>com.avlesh.web.filter.responseheaderfilter.ResponseHeaderFilter</filter-class>
+	</filter>
+	<filter-mapping>
+	  <filter-name>ResponseHeaderFilter</filter-name>
+	  <url-pattern>*</url-pattern>
+	</filter-mapping>
 </web-app>
