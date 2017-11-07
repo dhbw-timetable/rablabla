@@ -84,34 +84,20 @@ public class ChatBot extends HttpServlet {
 						lessons = lessons + " " + a.getTitle();
 				answer = answer.replace("locicPart", lessons.trim());
 			} catch (IllegalAccessException | NoConnectionException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (response.getIntents().get(0).getIntent().equals("#throwCoin")) {
 			SecureRandom sr = new SecureRandom();
 			int i = sr.nextInt(100);
 			if(i<50) {
-				answer.replace("locicPart", "shows heads.");
+				answer.replace("logicPart", "shows heads.");
 			} else if(i>50) {
-				answer.replace("locicPart", "shows tails.");
+				answer.replace("logicPart", "shows tails.");
 			} else {
-				answer.replace("locicPart", "stands on the edge!");
+				answer.replace("logicPart", "stands on the edge!");
 			}
 		}
 		resp.getWriter().println(answer);
 	}
 
 }
-/*
- * MessageOptions newMessageOptions = new MessageOptions.Builder()
- * .workspaceId("<workspace-id>") .input(new
- * InputData.Builder("First message").build()) .context(context) .build();
- * MessageResponse response = service.message(newMessageOptions).execute();
- * 
- * //second message newMessageOptions = new MessageOptions.Builder()
- * .workspaceId("<workspace-id>") .input(new
- * InputData.Builder("Second message").build()) .context(response.getContext())
- * // output context from the first message .build();
- * 
- * response = service.message(newMessageOptions).execute();
- */
