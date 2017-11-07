@@ -94,7 +94,7 @@ export default class Main extends Component {
     super();
     this.raplaTitleValue = localStorage.getItem('raplaTitle');
     this.raplaLinkValue = localStorage.getItem('raplaLink');
-    const onBoardingNecessary = !localStorage.getItem('raplaLink');
+    const onboardingNecessary = !localStorage.getItem('raplaLink');
     this.state = {
       dailyEvents: [[], [], [], [], [], []],
       date: new Date(),
