@@ -121,7 +121,6 @@ export default class Main extends Component {
   };
 
   onAjaxError = (error) => {
-    // TODO What should happen on error?
     console.error(error);
   }
 
@@ -225,7 +224,6 @@ export default class Main extends Component {
                   date,
                   (resp) => {
                     this.onAjaxSuccess(resp);
-                    // TODO Implement snackbar HERE
                   },
                   this.onAjaxError,
                   ));
@@ -281,7 +279,7 @@ export default class Main extends Component {
               <Button
                 onClick={() => {
                   $(this.icsInput).select();
-                  document.execCommand('copy'); // eslint-disable-line no-undef
+                  document.execCommand('copy');
                 }}
                 color="primary"
               >
