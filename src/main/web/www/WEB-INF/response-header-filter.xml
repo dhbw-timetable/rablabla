@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<response-header-mapper>
+  <!-- generic rule for all requests -->
+  <mapping url="(.*)">
+    <default>
+      <response-headers>
+        <header key="X-Frame-Options" value="SAMEORIGIN"/>
+      </response-headers>
+    </default>
+</response-header-mapper>

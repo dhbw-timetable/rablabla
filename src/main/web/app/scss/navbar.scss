@@ -1,5 +1,9 @@
+header.nav-bar {
+  position: relative;
+}
+
 .nav-container-right {
-  position: absolute;
+  margin: auto 0;
   right: 0px;
   display: flex;
   align-items: center;
@@ -12,6 +16,13 @@
 }
 
 .nav-container-left {
-  position: absolute;
+  margin: auto 0;
   left: 15px;
+}
+
+.nav-bar-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

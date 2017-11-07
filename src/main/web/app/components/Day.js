@@ -2,25 +2,31 @@ import React from 'react';
 import DayView from './DayView';
 
 export default function Day(props) {
-  const events = props.eventData;
-  events.forEach((el) => {
+  const { eventData, start, end, name, isCurrent } = props;
+  eventData.forEach((el) => {
     // Calculate dimensions
     const startTime = el.startTime.split(':');
     const endTime = el.endTime.split(':');
-    const startY = ((startTime[0] - 8) + (startTime[1] / 60)) * 10;
-    const endY = ((endTime[0] - 8) + (endTime[1] / 60)) * 10;
+    const startY = ((startTime[0] - start) + (startTime[1] / 60))
+      * (100 / (end - start + 0.5));
+    const endY = ((endTime[0] - start) + (endTime[1] / 60))
+      * (100 / (end - start + 0.5));
     const duration = endY - startY;
 
-    const height = `calc(${duration}% - ${((duration / 10) * 0.2).toFixed(2)}em)`;
-    const top = `calc(${startY}% - ${((0.2 * startY) / 10).toFixed(2)}em)`;
+    const height = `${duration}%`;
+    const top = `${startY}%`;
 
     el.height = height;
     el.top = top;
+    el.duration = duration;
   });
   return (
     <DayView
-      name={props.name}
-      events={events}
+      name={name}
+      events={eventData}
+      start={start}
+      end={end}
+      isCurrent={isCurrent}
     />
   );
 }

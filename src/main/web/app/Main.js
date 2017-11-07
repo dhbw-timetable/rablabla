@@ -29,6 +29,7 @@ const getParams = (args) => {
 
 const getICSLink = (url, success, error) => {
   const deSuffix = '.de/rapla?';
+  const baseURL = url.substring(0, url.indexOf(deSuffix) + deSuffix.length);
   const params = getParams(url.substring(url.indexOf(deSuffix) + deSuffix.length));
   if (params.key) {
     $.ajax({
@@ -39,7 +40,8 @@ const getICSLink = (url, success, error) => {
     });
     return 'Accessing calendar file...';
   } else if (params.user && params.file) {
-    success(`${url}&page=ical`);
+    console.log(baseURL);
+    success(`${baseURL}page=ical&user=${params.user}&file=${params.file}`);
   } else {
     console.error(`Yearly calendar not supported for url: ${url}`);
   }
@@ -85,6 +87,8 @@ const theme = createMuiTheme({
   },
 });
 
+const slidingTransition = props => <Slide direction="up" {...props} />;
+
 export default class Main extends Component {
   constructor() {
     super();
@@ -96,8 +100,18 @@ export default class Main extends Component {
       date: new Date(),
       chat: [],
       extCalendarOpen: false,
-      onboardingOpen: onBoardingNecessary,
+      onboardingOpen: onboardingNecessary,
     };
+
+    if (!onboardingNecessary) {
+      console.log(getAppointments(
+        this.raplaLinkValue,
+        this.state.date, (response) => {
+          this.onAjaxSuccess(response);
+          this.setState({ onboardingOpen: false });
+        }, this.onAjaxError,
+      ));
+    }
   }
 
   onAjaxSuccess = (response) => {
@@ -144,8 +158,18 @@ export default class Main extends Component {
     const { chat } = this.state;
     chat.push({ text: msg, watson: false });
     this.setState({ chat });
-    console.log(`Sending '${msg}' to backend...`);
-    // TODO Send to backend and handle answer HERE
+    document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+    // Send to backend and handle answer
+    $.ajax({
+      url: `ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
+      type: 'POST',
+      success: (response) => {
+        chat.push({ text: response, watson: true });
+        this.setState({ chat });
+        document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+      },
+      error: (err) => { console.error(err); },
+    });
   };
 
   handleOnboardingDone = () => {
@@ -171,6 +195,11 @@ export default class Main extends Component {
     }
   };
 
+  componentDidMount() {
+    const currDay = document.querySelector('.is-current');
+    if (currDay) currDay.scrollIntoView({ behavior: 'smooth' });
+  }
+
   icsLink = null;
   icsInput = null;
 
@@ -184,7 +213,7 @@ export default class Main extends Component {
     const { chat, date, dailyEvents, extCalendarOpen, onboardingOpen } = this.state;
     return (
     <MuiThemeProvider theme={theme}>
-      <div>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <NavigationBar
           title={this.raplaTitleValue}
           chat={chat}
@@ -198,7 +227,6 @@ export default class Main extends Component {
                   date,
                   (resp) => {
                     this.onAjaxSuccess(resp);
-                    // TODO Implement snackbar HERE
                   },
                   this.onAjaxError,
                   ));
@@ -234,7 +262,7 @@ export default class Main extends Component {
             open={extCalendarOpen}
             onRequestClose={this.handleExtCalClose}
             fullWidth
-            transition={<Slide direction="up" />}
+            transition={slidingTransition}
           >
             <DialogTitle>Your calendar link</DialogTitle>
             <DialogContent>
@@ -254,7 +282,7 @@ export default class Main extends Component {
               <Button
                 onClick={() => {
                   $(this.icsInput).select();
-                  document.execCommand('copy'); // eslint-disable-line no-undef
+                  document.execCommand('copy');
                 }}
                 color="primary"
               >
@@ -269,7 +297,7 @@ export default class Main extends Component {
             open={onboardingOpen}
             onRequestClose={() => {}}
             fullScreen
-            transition={<Slide direction="up" />}
+            transition={slidingTransition}
           >
             <AppBar style={{ position: 'relative' }}>
               <Toolbar>
@@ -297,7 +325,8 @@ export default class Main extends Component {
                 margin="normal"
                 label="Enter your course title"
                 type="text"
-                style={{ width: '60%' }}
+                style={{ width: '60%', minWidth: '250px' }}
+                inputProps={{ maxLength: 10 }}
               />
               <TextField
                 required
@@ -305,7 +334,7 @@ export default class Main extends Component {
                 margin="normal"
                 label="Enter your link"
                 type="text"
-                style={{ width: '60%' }}
+                style={{ width: '60%', minWidth: '250px' }}
               />
             </DialogContent>
           </Dialog>
