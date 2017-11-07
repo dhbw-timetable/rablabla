@@ -123,7 +123,7 @@ export default class Main extends Component {
 
   onAjaxError = (error) => {
     const data = localStorage.getItem('data');
-    this.setState({ onboardingOpen: false, dailyEvents: this.makeDays(this.parseDates(data)) });
+    if (data) this.setState({ onboardingOpen: false, dailyEvents: this.makeDays(this.parseDates(data)) });
     console.error(error);
   }
 
