@@ -19,12 +19,12 @@
 		</user-data-constraint>
 	</security-constraint>
 	<mime-mapping>
-        <extension>ics</extension>
-        <mime-type>text/calendar</mime-type>
+    <extension>ics</extension>
+    <mime-type>text/calendar</mime-type>
   </mime-mapping>
 	<mime-mapping>
-        <extension>appcache</extension>
-        <mime-type>text/cache-manifest</mime-type>
+    <extension>appcache</extension>
+    <mime-type>text/cache-manifest</mime-type>
   </mime-mapping>
 	<filter>
 	  <filter-name>ResponseHeaderFilter</filter-name>
