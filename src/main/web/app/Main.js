@@ -102,13 +102,14 @@ export default class Main extends Component {
 
   onAjaxSuccess = (response) => {
     const data = JSON.parse(response);
+    localStorage.setItem('data', data);
     this.setState({ dailyEvents: this.makeDays(this.parseDates(data)) });
     console.log(data);
   };
 
   onAjaxError = (error) => {
-    this.setState({ onboardingOpen: false });
-    // TODO What should happen on error?
+    const data = localStorage.getItem('data');
+    this.setState({ onboardingOpen: false, dailyEvents: this.makeDays(this.parseDates(data)) });
     console.error(error);
   }
 
