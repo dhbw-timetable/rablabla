@@ -80,15 +80,26 @@ public class ChatBot extends HttpServlet {
 			try {
 				data = DataImporter.ImportWeekRange(week, week, url);
 				String lessons = "";
+				Boolean foundalesson = false;
 				for (Appointment a : data.get(week))
-					if (a.getStartDate().toLocalDate().equals(searchedDate))
-						lessons = lessons + " " + a.getTitle();
-				answer = answer.replace("logicPart", lessons.trim());
+					if (a.getStartDate().toLocalDate().equals(searchedDate)) {
+						lessons = lessons + a.getTitle() + ", ";
+						foundalesson = true;
+					}
+						
+				lessons = lessons.trim();
+				if(lessons.endsWith(",")) {
+					lessons = lessons.substring(0, lessons.length()-2);
+				}
+				answer = answer.replace("logicPart", lessons);
 				answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+				if(!foundalesson) {
+					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + ".";
+				}
 			} catch (IllegalAccessException | NoConnectionException e) {
 				e.printStackTrace();
 			}
-		} else if (response.getIntents().get(0).getIntent().equals("#throwCoin")) {
+		} else if (response.getIntents().get(0).getIntent().equals("throwCoin")) {
 			SecureRandom sr = new SecureRandom();
 			int i = sr.nextInt(100);
 			if(i<50) {
