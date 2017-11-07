@@ -84,7 +84,7 @@ container {
     position: absolute;
     width: 90%;
     left: 5%;
-    padding: 10px;
+    padding: 10px 10px 1.5em 10px; // prevent body from glitching under course info
 
     color: white;
     background-color: $primarylight;
@@ -126,12 +126,13 @@ container {
       text-overflow: ellipsis;
     }
 
-    &.is-small .event--header {
-      margin-top: 15px;
-      margin-bottom: 5px;
-
+    &.medium .event--header,
+    &.small .event--header,
+    &.tiny .event--header {
       max-height: 2.5em;
       -webkit-line-clamp: 2;
+      margin-top: 15px;
+      margin-bottom: 5px;
     }
 
     &--body,
@@ -150,7 +151,9 @@ container {
       text-overflow: ellipsis;
     }
 
-    &.is-small .event--body {
+    &.small .event--body,
+    &.tiny .event--body {
+      margin-top: 5px;
       margin-bottom: 0;
     }
 
@@ -163,12 +166,30 @@ container {
       font-size: 0.8em;
     }
 
-    &.is-small .event--footer {
-      display: none;
+    &.small, &.tiny {
+      padding-bottom: 5px; // no more footer, no more need to prevent glitching
+      .event--footer {
+        display: none;
+      }
     }
 
     &.get-crazy {
       animation: crazy 1s infinite;
+    }
+  }
+
+  .schedule .event.tiny {
+    padding: 3px 10px;
+
+    .event--time {
+      display: none;
+    }
+    .event--body {
+      display: none;
+    }
+    .event--header {
+      margin-top: 3px;
+      margin-bottom: 3px;
     }
   }
 
@@ -231,18 +252,6 @@ container {
         font-size: 1.1em;
         margin-top: 15px;
         margin-bottom: 5px;
-      }
-    }
-    .schedule .event.is-small {
-      .event--time {
-        display: none;
-      }
-      .event--body {
-        display: none;
-      }
-      .event--header {
-        margin-top: 3px;
-        margin-bottom: 3px;
       }
     }
   }
