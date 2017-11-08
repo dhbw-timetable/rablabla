@@ -63,9 +63,13 @@ public class ChatBot extends HttpServlet {
 					if (a.getStartDate().toLocalDate().equals(searchedDate)
 							&& (first == null || a.getStartDate().isBefore(first.getStartDate())))
 						first = a;
-				answer = answer.replace("logicPart", first.getStartTime());
-				answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-			} catch (IllegalAccessException | NoConnectionException e) {
+				if (first==null) {
+					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + ".";
+				} else {
+					answer = answer.replace("logicPart", first.getStartTime());
+					answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));		
+				}
+				} catch (IllegalAccessException | NoConnectionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

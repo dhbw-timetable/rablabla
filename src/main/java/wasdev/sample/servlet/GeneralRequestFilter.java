@@ -25,7 +25,7 @@ public class GeneralRequestFilter implements Filter {
 			resp.setHeader("X-Frame-Options", "SAMEORIGIN");
 			resp.setHeader("X-XSS-Protection", "1; mode=block");
 			resp.setHeader("X-Content-Type-Options", "nosniff");
-			resp.setHeader("Content-Security-Policy", " default-src https:");
+			resp.setHeader("Content-Security-Policy", " default-src https:; style-src 'unsafe-inline' 'self'");
 			resp.setHeader("Referrer-Policy", "no-referrer");
 		}
 		chain.doFilter(new AddParamsToHeader((HttpServletRequest) request), response);
