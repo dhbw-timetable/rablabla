@@ -1,4 +1,5 @@
 CACHE MANIFEST
+#v0.1.0
 index.html
 apple-icon-57x57.png
 apple-icon-60x60.png
@@ -19,8 +20,8 @@ css/calendar.css
 css/messages.css
 css/navbar.css
 css/date-picker/styles.css
-app.js
 css/materialicons.css
+app.js
 icons/MaterialIcons-Regular.woff2
 icons/MaterialIcons-Regular.woff
 icons/MaterialIcons-Regular.ttf

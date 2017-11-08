@@ -116,14 +116,14 @@ export default class Main extends Component {
 
   onAjaxSuccess = (response) => {
     const data = JSON.parse(response);
-    localStorage.setItem('data', { data });
+    localStorage.setItem('data', response);
     this.setState({ dailyEvents: this.makeDays(this.parseDates(data)) });
     console.log(data);
   };
 
   onAjaxError = (error) => {
-    const dataObject = localStorage.getItem('data');
-    if (dataObject) this.setState({ onboardingOpen: false, dailyEvents: this.makeDays(this.parseDates(dataObject.data)) });
+    const data = JSON.parse(localStorage.getItem('data'));
+    if (data) this.setState({ onboardingOpen: false, dailyEvents: this.makeDays(this.parseDates(data)) });
     console.error(error);
   }
 
