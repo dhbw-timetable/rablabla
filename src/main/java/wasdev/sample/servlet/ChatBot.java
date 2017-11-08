@@ -94,7 +94,7 @@ public class ChatBot extends HttpServlet {
 
 				lessons = lessons.trim();
 				if (lessons.endsWith(",")) {
-					lessons = lessons.substring(0, lessons.length() - 2);
+					lessons = lessons.substring(0, lessons.length() - 1);
 				}
 				answer = answer.replace("logicPart", lessons);
 				answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
