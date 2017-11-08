@@ -48,7 +48,7 @@ public class ChatBot extends HttpServlet {
 		}
 		response = service.message(options).execute();
 		String answer = response.getOutput().getText().get(0);
-		if (response.getIntents() != null && !response.getIntents().isEmpty() && response.getIntents().get(0).getIntent().equals("startingTime")) {
+		if (answer.contains("At datePart uni starts at logicPart for you.")) {
 			String date = response.getEntities().get(0).getValue();
 			final String url = URLDecoder.decode(req.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B",
 					"+");
@@ -73,7 +73,7 @@ public class ChatBot extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if (response.getIntents() != null && !response.getIntents().isEmpty() && response.getIntents().get(0).getIntent().equals("timetable")) {
+		} else if (answer.contains("At datePart you have the following lessons: logicPart")) {
 			String date = response.getEntities().get(0).getValue();
 			final String url = URLDecoder.decode(req.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B",
 					"+");
