@@ -16,6 +16,7 @@ import Dialog, {
 import Slide from 'material-ui/transitions/Slide';
 import NavigationBar from './components/NavigationBar';
 import Calendar from './components/Calendar';
+import dateFormat from 'dateformat';
 
 const getParams = (args) => {
   const params = {};
@@ -215,7 +216,7 @@ export default class Main extends Component {
     <MuiThemeProvider theme={theme}>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <NavigationBar
-          title={this.raplaTitleValue}
+          title={`${this.raplaTitleValue} | ${dateFormat(date, 'dd.mm.yyyy')}`}
           chat={chat}
           onMessageSent={this.sendMessage}
           menuItems={[
@@ -250,7 +251,7 @@ export default class Main extends Component {
             },
           ]}
           onDateChange={(d) => {
-            this.setState({ d });
+            this.setState({ date: d });
             console.log(getAppointments(
               this.raplaLinkValue,
               d, this.onAjaxSuccess,
