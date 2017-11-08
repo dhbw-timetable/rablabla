@@ -105,6 +105,32 @@ public class ChatBot extends HttpServlet {
 			} catch (IllegalAccessException | NoConnectionException e) {
 				e.printStackTrace();
 			}
+		}  else if (answer.contains("todayFlagAt datePart uni ends at logicPart for you.")) {
+			final String url = URLDecoder.decode(req.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B",
+					"+");
+			LocalDate searchedDate = LocalDate.now();
+			LocalDate week = DateUtilities.Normalize(searchedDate);
+			// Load data
+			Map<LocalDate, ArrayList<Appointment>> data;
+			try {
+				data = DataImporter.ImportWeekRange(week, week, url);
+				Appointment last = null;
+				for (Appointment a : data.get(week))
+					if (a.getStartDate().toLocalDate().equals(searchedDate)
+							&& (last == null || a.getStartDate().isAfter(last.getStartDate())))
+						last = a;
+				if (last == null) {
+					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+							+ ".";
+				} else {
+					answer = answer.replace("logicPart", last.getEndTime());
+					answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+					answer = answer.substring(9);
+				}
+			} catch (IllegalAccessException | NoConnectionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (answer.contains("At datePart uni ends at logicPart for you.")) {
 			String date = response.getEntities().get(0).getValue();
 			final String url = URLDecoder.decode(req.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B",
@@ -131,34 +157,7 @@ public class ChatBot extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if (answer.contains("todayFlagAt datePart uni ends at logicPart for you.")) {
-			final String url = URLDecoder.decode(req.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B",
-					"+");
-			LocalDate searchedDate = LocalDate.now();
-			LocalDate week = DateUtilities.Normalize(searchedDate);
-			// Load data
-			Map<LocalDate, ArrayList<Appointment>> data;
-			try {
-				data = DataImporter.ImportWeekRange(week, week, url);
-				Appointment last = null;
-				for (Appointment a : data.get(week))
-					if (a.getStartDate().toLocalDate().equals(searchedDate)
-							&& (last == null || a.getStartDate().isAfter(last.getStartDate())))
-						last = a;
-				if (last == null) {
-					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-							+ ".";
-				} else {
-					answer = answer.replace("logicPart", last.getEndTime());
-					answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-					answer = answer.substring(9);
-				}
-			} catch (IllegalAccessException | NoConnectionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-			else if (answer.contains("The coin logicPart Throw again?")) {
+		} else if (answer.contains("The coin logicPart Throw again?")) {
 			SecureRandom sr = new SecureRandom();
 			int i = sr.nextInt(100);
 			if (i < 50) {
