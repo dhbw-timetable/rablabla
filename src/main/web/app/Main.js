@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
 import Toolbar from 'material-ui/Toolbar';
 import AppBar from 'material-ui/AppBar';
+import dateFormat from 'dateformat';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -16,7 +17,6 @@ import Dialog, {
 import Slide from 'material-ui/transitions/Slide';
 import NavigationBar from './components/NavigationBar';
 import Calendar from './components/Calendar';
-import dateFormat from 'dateformat';
 
 const getParams = (args) => {
   const params = {};
@@ -196,6 +196,10 @@ export default class Main extends Component {
     }
   };
 
+  handleOnboardingAbort = () => {
+    this.setState({ onboardingOpen: false });
+  };
+
   componentDidMount() {
     const currDay = document.querySelector('.is-current');
     if (currDay) currDay.scrollIntoView({ behavior: 'smooth' });
@@ -305,6 +309,13 @@ export default class Main extends Component {
                 <Typography type="title" color="inherit" style={{ flex: 1 }}>
                   Rablabla Onboarding
                 </Typography>
+                <Button
+                  color="contrast"
+                  onClick={this.handleOnboardingAbort}
+                  style={localStorage.getItem('raplaLink') ? {} : { display: 'none' }}
+                >
+                  abort
+                </Button>
                 <Button color="contrast" onClick={this.handleOnboardingDone}>
                   done
                 </Button>
