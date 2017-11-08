@@ -63,13 +63,14 @@ public class ChatBot extends HttpServlet {
 					if (a.getStartDate().toLocalDate().equals(searchedDate)
 							&& (first == null || a.getStartDate().isBefore(first.getStartDate())))
 						first = a;
-				if (first==null) {
-					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + ".";
+				if (first == null) {
+					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+							+ ".";
 				} else {
 					answer = answer.replace("logicPart", first.getStartTime());
-					answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));		
+					answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 				}
-				} catch (IllegalAccessException | NoConnectionException e) {
+			} catch (IllegalAccessException | NoConnectionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -90,25 +91,52 @@ public class ChatBot extends HttpServlet {
 						lessons = lessons + a.getTitle() + ", ";
 						foundalesson = true;
 					}
-						
+
 				lessons = lessons.trim();
-				if(lessons.endsWith(",")) {
-					lessons = lessons.substring(0, lessons.length()-2);
+				if (lessons.endsWith(",")) {
+					lessons = lessons.substring(0, lessons.length() - 2);
 				}
 				answer = answer.replace("logicPart", lessons);
 				answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-				if(!foundalesson) {
-					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + ".";
+				if (!foundalesson) {
+					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+							+ ".";
 				}
 			} catch (IllegalAccessException | NoConnectionException e) {
+				e.printStackTrace();
+			}
+		} else if (answer.contains("At datePart uni ends at logicPart for you.")) {
+			String date = response.getEntities().get(0).getValue();
+			final String url = URLDecoder.decode(req.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B",
+					"+");
+			LocalDate searchedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			LocalDate week = DateUtilities.Normalize(searchedDate);
+			// Load data
+			Map<LocalDate, ArrayList<Appointment>> data;
+			try {
+				data = DataImporter.ImportWeekRange(week, week, url);
+				Appointment last = null;
+				for (Appointment a : data.get(week))
+					if (a.getStartDate().toLocalDate().equals(searchedDate)
+							&& (last == null || a.getStartDate().isAfter(last.getStartDate())))
+						last = a;
+				if (last == null) {
+					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+							+ ".";
+				} else {
+					answer = answer.replace("logicPart", last.getEndTime());
+					answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+				}
+			} catch (IllegalAccessException | NoConnectionException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (answer.contains("The coin logicPart Throw again?")) {
 			SecureRandom sr = new SecureRandom();
 			int i = sr.nextInt(100);
-			if(i<50) {
+			if (i < 50) {
 				answer = answer.replace("logicPart", "shows heads.");
-			} else if(i>50) {
+			} else if (i > 50) {
 				answer = answer.replace("logicPart", "shows tails.");
 			} else {
 				answer = answer.replace("logicPart", "stands on the edge!");
