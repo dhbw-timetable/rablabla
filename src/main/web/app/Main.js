@@ -160,17 +160,26 @@ export default class Main extends Component {
     chat.push({ text: msg, watson: false });
     this.setState({ chat });
     document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
-    // Send to backend and handle answer
-    $.ajax({
-      url: `ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
-      type: 'POST',
-      success: (response) => {
-        chat.push({ text: response, watson: true });
-        this.setState({ chat });
-        document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
-      },
-      error: (err) => { console.error(err); },
-    });
+
+    // ;)
+    if (msg.toLowerCase().indexOf('give me pizza') !== -1) {
+      chat.push({ text: 'Enjoy!', watson: true });
+      this.setState({ chat });
+      document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+      document.querySelectorAll('.event').forEach((el) => { el.classList.add('pizza'); });
+    } else {
+      // Send to backend and handle answer
+      $.ajax({
+        url: `ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
+        type: 'POST',
+        success: (response) => {
+          chat.push({ text: response, watson: true });
+          this.setState({ chat });
+          document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+        },
+        error: (err) => { console.error(err); },
+      });
+    }
   };
 
   handleOnboardingDone = () => {
