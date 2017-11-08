@@ -1,6 +1,6 @@
 {
   "name": "Rablabla",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An implementation of a web client providing DHBW rapla information.",
   "repository": {
     "type": "git",
@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "gulp",
-    "production": "browserify ./src/main/webapp/app.js -g [ envify --NODE_ENV production ] -g uglifyify | uglifyjs --compress --mangle > ./src/main/webapp/app-production.js"
+    "minify": "browserify ./src/main/webapp/app.js -g [ envify --NODE_ENV production ] -g uglifyify | uglifyjs --compress --mangle > ./src/main/webapp/app-production.js",
+    "deploy": "clear\ngulp build\nnpm run minify\nrm -f src/main/webapp/app.js\nmv src/main/webapp/app-production.js src/main/webapp/app.js\nmvn clean install\ncp target/Rablabla.war defaultServer/apps/\nbx cf push Rablabla -p defaultServer"
   },
   "private": true,
   "devDependencies": {

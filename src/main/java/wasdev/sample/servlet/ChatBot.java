@@ -48,7 +48,7 @@ public class ChatBot extends HttpServlet {
 		}
 		response = service.message(options).execute();
 		String answer = response.getOutput().getText().get(0);
-		if (response.getIntents().get(0).getIntent().equals("startingTime")) {
+		if (response.getIntents() != null && !response.getIntents().isEmpty() && response.getIntents().get(0).getIntent().equals("startingTime")) {
 			String date = response.getEntities().get(0).getValue();
 			final String url = URLDecoder.decode(req.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B",
 					"+");
@@ -63,13 +63,17 @@ public class ChatBot extends HttpServlet {
 					if (a.getStartDate().toLocalDate().equals(searchedDate)
 							&& (first == null || a.getStartDate().isBefore(first.getStartDate())))
 						first = a;
-				answer = answer.replace("logicPart", first.getStartTime());
-				answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-			} catch (IllegalAccessException | NoConnectionException e) {
+				if (first==null) {
+					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + ".";
+				} else {
+					answer = answer.replace("logicPart", first.getStartTime());
+					answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));		
+				}
+				} catch (IllegalAccessException | NoConnectionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if (response.getIntents().get(0).getIntent().equals("timetable")) {
+		} else if (response.getIntents() != null && !response.getIntents().isEmpty() && response.getIntents().get(0).getIntent().equals("timetable")) {
 			String date = response.getEntities().get(0).getValue();
 			final String url = URLDecoder.decode(req.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B",
 					"+");
@@ -99,15 +103,15 @@ public class ChatBot extends HttpServlet {
 			} catch (IllegalAccessException | NoConnectionException e) {
 				e.printStackTrace();
 			}
-		} else if (response.getIntents().get(0).getIntent().equals("throwCoin")) {
+		} else if (answer.contains("The coin logicPart Throw again?")) {
 			SecureRandom sr = new SecureRandom();
 			int i = sr.nextInt(100);
 			if(i<50) {
-				answer.replace("logicPart", "shows heads.");
+				answer = answer.replace("logicPart", "shows heads.");
 			} else if(i>50) {
-				answer.replace("logicPart", "shows tails.");
+				answer = answer.replace("logicPart", "shows tails.");
 			} else {
-				answer.replace("logicPart", "stands on the edge!");
+				answer = answer.replace("logicPart", "stands on the edge!");
 			}
 		}
 		resp.getWriter().println(answer);
