@@ -34,6 +34,7 @@ public class ChatBot extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("text/html; charset=UTF-8");
 		String messageToWatson = req.getParameter("text");
 		Conversation service = new Conversation(Conversation.VERSION_DATE_2017_05_26);
 		service.setUsernameAndPassword("f1e1a1c3-da01-4592-a92c-d63003148de2", "c1yTAF028iUH");
@@ -94,7 +95,7 @@ public class ChatBot extends HttpServlet {
 
 				lessons = lessons.trim();
 				if (lessons.endsWith(",")) {
-					lessons = lessons.substring(0, lessons.length() - 2);
+					lessons = lessons.substring(0, lessons.length() - 1);
 				}
 				answer = answer.replace("logicPart", lessons);
 				answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
