@@ -99,7 +99,7 @@ public class ChatBot extends HttpServlet {
 			} catch (IllegalAccessException | NoConnectionException e) {
 				e.printStackTrace();
 			}
-		} else if (response.getIntents() != null && response.getIntents().get(0).getIntent().equals("throwCoin")) {
+		} else if (answer.contains("The coin logicPart Throw again?")) {
 			SecureRandom sr = new SecureRandom();
 			int i = sr.nextInt(100);
 			if(i<50) {
