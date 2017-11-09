@@ -13,8 +13,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpServletRespons
 import com.ibm.watson.developer_cloud.conversation.v1.Conversation;
 import com.ibm.watson.developer_cloud.conversation.v1.model.InputData;
 import com.ibm.watson.developer_cloud.conversation.v1.model.MessageOptions;
@@ -60,10 +59,11 @@ public class ChatBot extends HttpServlet {
 			try {
 				data = DataImporter.ImportWeekRange(week, week, url);
 				Appointment first = null;
-				for (Appointment a : data.get(week))
-					if (a.getStartDate().toLocalDate().equals(searchedDate)
-							&& (first == null || a.getStartDate().isBefore(first.getStartDate())))
+				for (Appointment a : data.get(week)) {
+					if (a.getStartDate().toLocalDate().equals(searchedDate) && (first == null || a.getStartDate().isBefore(first.getStartDate()))) {
 						first = a;
+          }
+        }
 				if (first == null) {
 					answer = "You have no lessons on " + searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
 							+ ".";
@@ -92,7 +92,6 @@ public class ChatBot extends HttpServlet {
 						lessons = lessons + a.getTitle() + ", ";
 						foundalesson = true;
 					}
-
 				lessons = lessons.trim();
 				if (lessons.endsWith(",")) {
 					lessons = lessons.substring(0, lessons.length() - 1);

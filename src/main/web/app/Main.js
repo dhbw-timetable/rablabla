@@ -117,11 +117,14 @@ export default class Main extends Component {
 
   onAjaxSuccess = (response) => {
     const data = JSON.parse(response);
+    localStorage.setItem('data', response);
     this.setState({ dailyEvents: this.makeDays(this.parseDates(data)) });
     console.log(data);
   };
 
   onAjaxError = (error) => {
+    const data = JSON.parse(localStorage.getItem('data'));
+    if (data) this.setState({ onboardingOpen: false, dailyEvents: this.makeDays(this.parseDates(data)) });
     console.error(error);
   }
 
@@ -157,17 +160,26 @@ export default class Main extends Component {
     chat.push({ text: msg, watson: false });
     this.setState({ chat });
     document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
-    // Send to backend and handle answer
-    $.ajax({
-      url: `ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
-      type: 'POST',
-      success: (response) => {
-        chat.push({ text: response, watson: true });
-        this.setState({ chat });
-        document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
-      },
-      error: (err) => { console.error(err); },
-    });
+
+    // ;)
+    if (msg.toLowerCase().indexOf('give me pizza') !== -1) {
+      chat.push({ text: 'Enjoy!', watson: true });
+      this.setState({ chat });
+      document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+      document.querySelectorAll('.event').forEach((el) => { el.classList.add('pizza'); });
+    } else {
+      // Send to backend and handle answer
+      $.ajax({
+        url: `ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
+        type: 'POST',
+        success: (response) => {
+          chat.push({ text: response, watson: true });
+          this.setState({ chat });
+          document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+        },
+        error: (err) => { console.error(err); },
+      });
+    }
   };
 
   handleOnboardingDone = () => {
@@ -217,7 +229,7 @@ export default class Main extends Component {
     <MuiThemeProvider theme={theme}>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <NavigationBar
-          title={`${this.raplaTitleValue} | ${dateFormat(date, 'dd.mm.yyyy')}`}
+          title={`${this.raplaTitleValue} ${dateFormat(date, 'dd.mm.yyyy')}`}
           chat={chat}
           onMessageSent={this.sendMessage}
           menuItems={[
@@ -329,7 +341,6 @@ export default class Main extends Component {
               </DialogContentText>
               <TextField
                 required
-                autoFocus
                 inputRef={el => this.raplaTitleInput = el}
                 margin="normal"
                 label="Enter your course title"
