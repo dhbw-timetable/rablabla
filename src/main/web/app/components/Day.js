@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import DayView from './DayView';
 
 export default function Day(props) {
@@ -30,3 +31,13 @@ export default function Day(props) {
     />
   );
 }
+
+Day.propTypes = {
+  eventData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  start: PropTypes.number.isRequired,
+  end: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  isCurrent: PropTypes.bool,
+};
+
+Day.defaultProps = { isCurrent: false };

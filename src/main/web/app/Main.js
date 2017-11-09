@@ -124,7 +124,12 @@ export default class Main extends Component {
 
   onAjaxError = (error) => {
     const data = JSON.parse(localStorage.getItem('data'));
-    if (data) this.setState({ onboardingOpen: false, dailyEvents: this.makeDays(this.parseDates(data)) });
+    if (data) {
+      this.setState({
+        onboardingOpen: false,
+        dailyEvents: this.makeDays(this.parseDates(data)),
+      });
+    }
     console.error(error);
   }
 

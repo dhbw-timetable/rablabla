@@ -9,7 +9,7 @@ export default class Event extends Component {
 
   update = () => {
     const height = this.liElement.clientHeight;
-    var size = '';
+    let size = '';
     if (height < 70) {
       size = 'tiny';
     } else if (height < 160) {
