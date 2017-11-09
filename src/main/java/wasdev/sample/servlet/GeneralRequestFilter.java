@@ -21,11 +21,11 @@ public class GeneralRequestFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
 		HttpServletResponse resp = (HttpServletResponse) response;
 		if (request.isSecure()) {
-			resp.setHeader("Strict-Transport-Security", "max-age=31622400; includeSubDomains");
+			resp.setHeader("Strict-Transport-Security", "max-age=31622400; includeSubDomains; preload");
 			resp.setHeader("X-Frame-Options", "SAMEORIGIN");
 			resp.setHeader("X-XSS-Protection", "1; mode=block");
 			resp.setHeader("X-Content-Type-Options", "nosniff");
-			resp.setHeader("Content-Security-Policy", " default-src https:");
+			resp.setHeader("Content-Security-Policy", " default-src https:; style-src 'unsafe-inline' 'self'; img-src 'self' http://lorempizza.com/100/500");
 			resp.setHeader("Referrer-Policy", "no-referrer");
 		}
 		chain.doFilter(new AddParamsToHeader((HttpServletRequest) request), response);

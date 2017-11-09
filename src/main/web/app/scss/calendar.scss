@@ -176,6 +176,26 @@ container {
     &.get-crazy {
       animation: crazy 1s infinite;
     }
+
+    &.pizza {
+      background-image: url('http://lorempizza.com/100/500');
+      background-size: cover;
+    }
+  }
+
+  .schedule .event.tiny {
+    padding: 3px 10px;
+
+    .event--time {
+      display: none;
+    }
+    .event--body {
+      display: none;
+    }
+    .event--header {
+      margin-top: 3px;
+      margin-bottom: 3px;
+    }
   }
 
   .schedule .event.tiny {

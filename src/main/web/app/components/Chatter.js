@@ -100,7 +100,6 @@ export default class Chatter extends Component {
                 fullWidth
                 style={{ height: 30 }}
                 margin="normal"
-                autoFocus
               />
               <IconButton
                 style={{ marginRight: 15 }}

@@ -48,7 +48,7 @@ import javax.servlet.annotation.MultipartConfig;
 public class Rablabla extends HttpServlet {
 
 	private static final long serialVersionUID = -8874059585924245331L;
-	private static final String ROOT_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/myapp.war/"; // by Bluemix
+	private static final String ROOT_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/Rablabla.war/"; // by Bluemix
 	private static final String ONLINE_PATH = "https://rablabla.mybluemix.net/";
 	private static final String ICS_FILENAME = "calendar.ics"; // calendar.ics has highest compatibility
 	private static final File TASKS_FILE = new File(ROOT_PATH, "tasks");
