@@ -198,6 +198,21 @@ container {
     }
   }
 
+  .schedule .event.tiny {
+    padding: 3px 10px;
+
+    .event--time {
+      display: none;
+    }
+    .event--body {
+      display: none;
+    }
+    .event--header {
+      margin-top: 3px;
+      margin-bottom: 3px;
+    }
+  }
+
   @keyframes crazy {
     25% {
       transform: translateY(50px);
