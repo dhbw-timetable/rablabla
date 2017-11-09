@@ -341,7 +341,6 @@ export default class Main extends Component {
               </DialogContentText>
               <TextField
                 required
-                autoFocus
                 inputRef={el => this.raplaTitleInput = el}
                 margin="normal"
                 label="Enter your course title"
