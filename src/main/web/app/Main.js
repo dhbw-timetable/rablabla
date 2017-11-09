@@ -364,7 +364,7 @@ export default class Main extends Component {
             </DialogContent>
           </Dialog>
         </NavigationBar>
-        <Calendar dailyEvents={dailyEvents} />
+        <Calendar dailyEvents={dailyEvents} date={date} />
       </div>
     </MuiThemeProvider>
     );
