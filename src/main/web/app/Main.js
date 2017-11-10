@@ -166,7 +166,7 @@ export default class Main extends Component {
       chat.push({ text: 'Enjoy!', watson: true });
       this.setState({ chat });
       document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
-      document.querySelectorAll('.event').forEach((el) => { el.classList.add('pizza'); });
+      document.querySelectorAll('.calendar').forEach((el) => { el.classList.add('pizza'); });
     } else {
       // Send to backend and handle answer
       $.ajax({

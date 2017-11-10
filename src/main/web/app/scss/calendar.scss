@@ -176,11 +176,6 @@ container {
     &.get-crazy {
       animation: crazy 1s infinite;
     }
-
-    &.pizza {
-      background-image: url('http://lorempizza.com/100/500');
-      background-size: cover;
-    }
   }
 
   .schedule .event.tiny {
@@ -217,6 +212,12 @@ container {
 
 .day.time .schedule {
     background: white;
+}
+
+.pizza.calendar .event {
+  background-image: url('http://lorempizza.com/100/500');
+  background-size: cover;
+  background-position: center;
 }
 
 @media screen and (max-width: 900px) {
