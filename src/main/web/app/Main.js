@@ -96,8 +96,15 @@ export default class Main extends Component {
     this.raplaTitleValue = localStorage.getItem('raplaTitle');
     this.raplaLinkValue = localStorage.getItem('raplaLink');
     const onboardingNecessary = !localStorage.getItem('raplaLink');
+    const data = JSON.parse(localStorage.getItem('data'));
+    if (data) {
+      this.setState({
+        onboardingOpen: false,
+        dailyEvents: this.makeDays(this.parseDates(data)),
+      });
+    }
     this.state = {
-      dailyEvents: [[], [], [], [], [], []],
+      dailyEvents: data ? this.makeDays(this.parseDates(data)) : [[], [], [], [], [], []],
       date: new Date(),
       chat: [],
       extCalendarOpen: false,
@@ -123,13 +130,7 @@ export default class Main extends Component {
   };
 
   onAjaxError = (error) => {
-    const data = JSON.parse(localStorage.getItem('data'));
-    if (data) {
-      this.setState({
-        onboardingOpen: false,
-        dailyEvents: this.makeDays(this.parseDates(data)),
-      });
-    }
+    this.setState({ onboardingOpen: false });
     console.error(error);
   }
 
