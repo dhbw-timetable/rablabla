@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 public class GeneralRequestFilter implements Filter {
-	
+
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
 		HttpServletResponse resp = (HttpServletResponse) response;
@@ -25,7 +25,7 @@ public class GeneralRequestFilter implements Filter {
 			resp.setHeader("X-Frame-Options", "SAMEORIGIN");
 			resp.setHeader("X-XSS-Protection", "1; mode=block");
 			resp.setHeader("X-Content-Type-Options", "nosniff");
-			resp.setHeader("Content-Security-Policy", " default-src https:; style-src 'unsafe-inline' 'self'; img-src 'self' http://lorempizza.com/100/500");
+			resp.setHeader("Content-Security-Policy", " default-src https:; style-src 'unsafe-inline' 'self'; img-src 'self' http://lorempizza.com/100/500; script-src 'unsafe-eval' 'self'");
 			resp.setHeader("Referrer-Policy", "no-referrer");
 		}
 		chain.doFilter(new AddParamsToHeader((HttpServletRequest) request), response);

@@ -16,7 +16,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Slide from 'material-ui/transitions/Slide';
 import NavigationBar from './components/NavigationBar';
-import Calendar from './components/Calendar';
+import Calendar, { getWeekNumber } from './components/Calendar';
 
 const getParams = (args) => {
   const params = {};
@@ -49,7 +49,8 @@ const getICSLink = (url, success, error) => {
   return 'Reqeust denied.';
 };
 
-const getAppointments = (url, date, success, error) => {
+const getAppointments = (url, date, success, error, pre) => {
+  pre(date);
   $.ajax({
     url: `Rablabla?url=${encodeURIComponent(url)}&day=${date.getDate()}&month=${date.getMonth() + 1}&year=${date.getFullYear()}`,
     type: 'GET',
@@ -95,37 +96,53 @@ export default class Main extends Component {
     super();
     this.raplaTitleValue = localStorage.getItem('raplaTitle');
     this.raplaLinkValue = localStorage.getItem('raplaLink');
-    const onboardingNecessary = !localStorage.getItem('raplaLink');
-    const data = JSON.parse(localStorage.getItem('data'));
+    const today = new Date();
+    const data = localStorage.getItem(`${today.getFullYear()} ${getWeekNumber(today)}`);
     this.state = {
-      dailyEvents: data ? this.makeDays(this.parseDates(data)) : [[], [], [], [], [], []],
-      date: new Date(),
+      dailyEvents: data ? this.makeDays(this.parseDates(JSON.parse(data)))
+        : [[], [], [], [], [], []],
+      date: today,
       chat: [],
       extCalendarOpen: false,
-      onboardingOpen: onboardingNecessary,
+      onboardingOpen: !this.raplaLinkValue,
     };
 
-    if (!onboardingNecessary) {
+    if (this.raplaLinkValue) {
       console.log(getAppointments(
         this.raplaLinkValue,
-        this.state.date, (response) => {
-          this.onAjaxSuccess(response);
+        today, (response) => {
+          this.onAjaxSuccess(response, today);
           this.setState({ onboardingOpen: false });
-        }, this.onAjaxError,
+        }, this.onAjaxError, this.onAjaxPre,
       ));
     }
   }
 
-  onAjaxSuccess = (response) => {
+  /* Preload event data before ajax */
+  onAjaxPre = (date) => {
+    const localData = localStorage.getItem(`${date.getFullYear()} ${getWeekNumber(date)}`);
+    this.setState({
+      dailyEvents: localData ? this.makeDays(this.parseDates(JSON.parse(localData)))
+        : [[], [], [], [], [], []],
+      date,
+    });
+  }
+
+  /* Received new data from rapla */
+  onAjaxSuccess = (response, reqDate) => {
     const data = JSON.parse(response);
-    localStorage.setItem('data', response);
-    this.setState({ dailyEvents: this.makeDays(this.parseDates(data)) });
+    // TODO Implement also other weeks with proper GC
+    // Currently: Only if it's the current week (keeping storage clean)
+    if (getWeekNumber(reqDate) === getWeekNumber(new Date())) {
+      localStorage.setItem(`${reqDate.getFullYear()} ${getWeekNumber(reqDate)}`, response);
+      console.log('Saved received data in cache.');
+    }
+    this.setState({ dailyEvents: this.makeDays(this.parseDates(data)), date: reqDate });
     console.log(data);
   };
 
-  onAjaxError = (error) => {
+  onAjaxError = () => {
     this.setState({ onboardingOpen: false });
-    console.error(error);
   }
 
   handleExtCalClose = () => {
@@ -149,8 +166,7 @@ export default class Main extends Component {
   makeDays = (events) => {
     const dailyEvents = [[], [], [], [], [], []];
     events.forEach((el) => {
-      const index = el.Date.getDay() - 1;
-      dailyEvents[index].push(el);
+      dailyEvents[el.Date.getDay() - 1].push(el);
     });
     return dailyEvents;
   }
@@ -160,7 +176,6 @@ export default class Main extends Component {
     chat.push({ text: msg, watson: false });
     this.setState({ chat });
     document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
-
     // ;)
     if (msg.toLowerCase().indexOf('give me pizza') !== -1) {
       chat.push({ text: 'Enjoy!', watson: true });
@@ -185,19 +200,20 @@ export default class Main extends Component {
   handleOnboardingDone = () => {
     this.raplaTitleValue = this.raplaTitleInput.value;
     this.raplaLinkValue = this.raplaLinkInput.value;
-    localStorage.setItem('raplaTitle', this.raplaTitleValue);
-    localStorage.setItem('raplaLink', this.raplaLinkValue);
-
     // If seems valid
     if (this.raplaLinkValue.length > 10 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
       console.log('Url was valid, onboarding succeeded');
       const date = this.state.date;
+      localStorage.setItem('raplaTitle', this.raplaTitleValue);
+      localStorage.setItem('raplaLink', this.raplaLinkValue);
+      // Old data is invalid
+      localStorage.setItem(`${date.getFullYear()} ${getWeekNumber(date)}`, '');
       console.log(getAppointments(
         this.raplaLinkValue,
         date, (response) => {
-          this.onAjaxSuccess(response);
+          this.onAjaxSuccess(response, date);
           this.setState({ onboardingOpen: false });
-        }, this.onAjaxError,
+        }, this.onAjaxError, this.onAjaxPre,
       ));
     } else {
       alert(`The entered link '${this.raplaLinkValue}' was invalid. Please enter a correct rapla link.`);
@@ -240,9 +256,9 @@ export default class Main extends Component {
                   this.raplaLinkValue,
                   date,
                   (resp) => {
-                    this.onAjaxSuccess(resp);
+                    this.onAjaxSuccess(resp, date);
                   },
-                  this.onAjaxError,
+                  this.onAjaxError, this.onAjaxPre,
                   ));
               },
             },
@@ -264,11 +280,12 @@ export default class Main extends Component {
             },
           ]}
           onDateChange={(d) => {
-            this.setState({ date: d });
             console.log(getAppointments(
               this.raplaLinkValue,
-              d, this.onAjaxSuccess,
-              this.onAjaxError,
+              d, (resp) => {
+                this.onAjaxSuccess(resp, d);
+              },
+              this.onAjaxError, this.onAjaxPre,
               ));
           }}
         >
