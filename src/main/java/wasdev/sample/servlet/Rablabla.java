@@ -39,9 +39,9 @@ import dhbw.timetable.rapla.parser.DataImporter;
 import javax.servlet.annotation.MultipartConfig;
 
 /**
- * Servlet implementation of a REST API with JSON string and plain text based communication. 
- * 
- * Created by Hendrik Ulbrich (c) 2017
+ * Servlet implementation of a REST API with JSON string and plain text based communication.
+ *
+ * Created by Hendrik Ulbrich © 2017
  */
 @WebServlet("/Rablabla")
 @MultipartConfig
@@ -56,10 +56,10 @@ public class Rablabla extends HttpServlet {
 	private static final long MAX_TASK_CALLS = 3000; // Tasks are deleted from list after 3000 generations
 
 	private Timer worker;
-	
+
 	/**
 	 * Gets appointments of a week in JSON format. The day param should be the monday of the week.
-	 * 
+	 *
 	 * @param int day
 	 * @param int month
 	 * @param int year
@@ -77,7 +77,7 @@ public class Rablabla extends HttpServlet {
 		final String url = URLDecoder.decode(request.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B", "+");
 		try {
 			LocalDate week = DateUtilities.Normalize(LocalDate.of(year, month, day));
-			
+
 			// Load data
 			Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportWeekRange(week, week, url);
 
@@ -89,14 +89,14 @@ public class Rablabla extends HttpServlet {
 	}
 
 	/**
-	 * Generates an .ics file in the web storage. 
+	 * Generates an .ics file in the web storage.
 	 * Every calendar contains
 	 * every appointment from the course over one year.
-	 * 
+	 *
 	 * Example:
-	 * 
+	 *
 	 * abcdefghijklmnopqrstuvwxyz/calendar.ics
-	 * 
+	 *
 	 * @param String url
 	 */
 	@Override
@@ -111,15 +111,15 @@ public class Rablabla extends HttpServlet {
         final String regularPrefix = url.substring(0, url.indexOf(cityPrefix));
 		String baseURL = url.substring(regularPrefix.length() + cityPrefix.length(), urlSplit).toUpperCase(),
 				args = url.substring(urlSplit + deSuffix.length());
-		
+
 		String key = getParams(args).get("key");
-		
+
 		final String fileLocation = baseURL + "/" + key + "/";
 		try {
 			if (!isICSFilePresent(new String[]{ key, baseURL })) {
 				// Load data
 				System.out.println("Fetching ICS data...");
-				
+
 				final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportWeekRange(LocalDate.of(LocalDate.now().getYear(), 1, 1), LocalDate.of(LocalDate.now().getYear(), 12, 31), BaseURL.valueOf(baseURL), args);
 				System.out.println("Done fetching data!");
 				final File containerFile = new File(ROOT_PATH + fileLocation);
@@ -131,17 +131,17 @@ public class Rablabla extends HttpServlet {
 				if (!TASKS_FILE.exists()) {
 					TASKS_FILE.createNewFile();
 				}
-				
+
 				// Extended tasklist
 				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(TASKS_FILE, true), "UTF-8"));
 				bw.append(MAX_TASK_CALLS + "\t" + key + "\t" + baseURL + "\n");
 				bw.close();
-				
-				generateICSFile(exportFile, data);	
+
+				generateICSFile(exportFile, data);
 			} else {
 				System.out.println("Already having this ICS file, wait for worker please!");
 			}
-			
+
 			System.out.println("Done creating ICS file!");
 
 			response.getWriter().println(ONLINE_PATH + fileLocation + ICS_FILENAME);
@@ -149,7 +149,7 @@ public class Rablabla extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
+
     private static HashMap<String, String> getParams(String args) {
         HashMap<String, String> params = new HashMap<>();
         String[] paramsStrings = args.split("&");
@@ -159,10 +159,10 @@ public class Rablabla extends HttpServlet {
         }
         return params;
     }
-	
+
 	/**
 	 * Deletes all .ics files from the web storage. Use for cleanup.
-	 * 
+	 *
 	 * @param !none
 	 */
 	@Override
@@ -177,14 +177,14 @@ public class Rablabla extends HttpServlet {
 				return pathname.isFile() && pathname.getName().endsWith(".ics");
 			}
 		});
-		
+
 		for(File iFile  : icsFiles) {
 			iFile.delete();
 		}
-		
+
 		System.out.println("Done!");
 	}
-	
+
 	@Override
 	public void init() throws ServletException {
 		super.init();
@@ -196,7 +196,7 @@ public class Rablabla extends HttpServlet {
 				try {
 					// Read tasks from file
 					for (String[] taskInfo : readTaskList()) {
-						String key = taskInfo[0], baseURL = taskInfo[1]; 
+						String key = taskInfo[0], baseURL = taskInfo[1];
 						final String fileLocation = baseURL + "/" + key + "/";
 						// Load data
 						System.out.println("Fetching ICS data...");
@@ -222,9 +222,9 @@ public class Rablabla extends HttpServlet {
 	public void destroy() {
 		super.destroy();
 	}
-	
+
 	private boolean isICSFilePresent(String[] taskInfo) {
-		File f = new File(ROOT_PATH + taskInfo[1] + "/" + taskInfo[0] + "/" + ICS_FILENAME); 
+		File f = new File(ROOT_PATH + taskInfo[1] + "/" + taskInfo[0] + "/" + ICS_FILENAME);
 		return f.exists() && f.isFile();
 	}
 
@@ -251,7 +251,7 @@ public class Rablabla extends HttpServlet {
 		// Generate ics output and create file
 		writeOutputToFile(exportFile, Biweekly.write(ical).go());
 	}
-	
+
 	@SuppressWarnings("unused")
 	private void generateCSVFile(File containerDir, File exportFile, Map<LocalDate, ArrayList<Appointment>> data) throws IOException {
 		final StringBuilder output = new StringBuilder();
@@ -260,49 +260,49 @@ public class Rablabla extends HttpServlet {
 		final String seperateRow = "\r\n";
 		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 		final DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm");
-		
+
 		output.append("Subject,Start date,Start time,End date,End time,Description,Private\n");
 		for (ArrayList<Appointment> week : data.values()) {
 			// Add each event
 			for (Appointment _a : week) {
 				output.append(escape).append(_a.getTitle()).append(escape).append(seperateColumn); // "Subject"
 				output.append(dtf.format(_a.getStartDate())).append(seperateColumn); // Start date
-				output.append(tf.format(_a.getStartDate())).append(seperateColumn); // Start time				
+				output.append(tf.format(_a.getStartDate())).append(seperateColumn); // Start time
 				output.append(dtf.format(_a.getEndDate())).append(seperateColumn); // End date
 				output.append(tf.format(_a.getEndDate())).append(seperateColumn); // End time
 				output.append(escape).append(_a.getInfo()).append(escape).append(seperateColumn); // "Description"
 				output.append("TRUE").append(seperateRow); // Private
 			}
 		}
-		
+
 		writeOutputToFile(exportFile, output.toString());
 	}
-	
+
 	private void writeOutputToFile(File exportFile, String output) throws IOException {
 		if(exportFile.exists()) {
 			exportFile.delete();
 		}
 		exportFile.createNewFile();
-		
+
 		// Write content to file
 		BufferedWriter bf = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(exportFile), "UTF-8"));
 		bf.write(output.toString());
 		bf.close();
 	}
-	
+
 	private ArrayList<String[]> readTaskList() throws IOException {
 		final ArrayList<String[]> tasks = new ArrayList<>();
 		if (!TASKS_FILE.exists()) {
 			TASKS_FILE.createNewFile();
 			return tasks;
 		}
-		
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(TASKS_FILE), "UTF-8"));
 		String line;
 		String[] splittedLine;
 		ArrayList<String> newTasksOutput = new ArrayList<>();
 		int remainingCalls;
-		
+
 		while ((line = br.readLine()) != null) {
 			splittedLine = line.split("\t");
 			remainingCalls = Integer.parseInt(splittedLine[0]);
@@ -310,24 +310,24 @@ public class Rablabla extends HttpServlet {
 				String key = splittedLine[1], baseURL = splittedLine[2];
 				newTasksOutput.add(remainingCalls + "\t" + key + "\t" + baseURL + "\n" );
 				tasks.add(new String[] { key, baseURL });
-			} 
+			}
 		}
 		br.close();
-		
+
 		// Clean file
 		TASKS_FILE.delete();
 		TASKS_FILE.createNewFile();
-		
+
 		// Rewrite tasklist
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(TASKS_FILE), "UTF-8"));
 		for (String out : newTasksOutput) {
 			bw.write(out);
 		}
 		bw.close();
-		
+
 		return tasks;
 	}
-	
+
 	public static boolean ForceSSL(HttpServletRequest request, HttpServletResponse response) {
 		if (!(request.getScheme().equals("https") && request.getServerPort() == 443)) {
 			try {
