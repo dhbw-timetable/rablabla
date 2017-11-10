@@ -97,12 +97,6 @@ export default class Main extends Component {
     this.raplaLinkValue = localStorage.getItem('raplaLink');
     const onboardingNecessary = !localStorage.getItem('raplaLink');
     const data = JSON.parse(localStorage.getItem('data'));
-    if (data) {
-      this.setState({
-        onboardingOpen: false,
-        dailyEvents: this.makeDays(this.parseDates(data)),
-      });
-    }
     this.state = {
       dailyEvents: data ? this.makeDays(this.parseDates(data)) : [[], [], [], [], [], []],
       date: new Date(),
