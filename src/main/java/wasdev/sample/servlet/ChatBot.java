@@ -128,7 +128,6 @@ public class ChatBot extends HttpServlet {
 					answer = answer.substring(9);
 				}
 			} catch (IllegalAccessException | NoConnectionException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (answer.contains("At datePart uni ends at logicPart for you.")) {
@@ -154,7 +153,6 @@ public class ChatBot extends HttpServlet {
 					answer = answer.replace("datePart", searchedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 				}
 			} catch (IllegalAccessException | NoConnectionException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else if (answer.contains("The coin logicPart Throw again?")) {

@@ -98,6 +98,7 @@ export default class Chatter extends Component {
                 placeholder="Enter a message..."
                 inputRef={el => this.messageInput = el}
                 fullWidth
+                autoFocus
                 style={{ height: 30 }}
                 margin="normal"
               />

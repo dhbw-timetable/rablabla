@@ -7,11 +7,10 @@ import org.json.JSONObject;
 
 import dhbw.timetable.rapla.data.event.Appointment;
 
-
 public final class JSONUtilities {
-	
+
 	private JSONUtilities () {}
-	
+
 	public static JSONArray ToJSONArray(ArrayList<Appointment> appointments) {
 		JSONArray jsonArray = new JSONArray();
 		for (Appointment a : appointments) {
@@ -19,7 +18,7 @@ public final class JSONUtilities {
 		}
 		return jsonArray;
 	}
-	
+
 	public static JSONObject ToJSONObject(Appointment a) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("date", a.getDate());

@@ -7,7 +7,7 @@ A web application for the web based rapla timetable. It scans the DHBW timetable
 
 We use npm and gulp to build our frontend with ReactJS and SCSS.
 
-Install all dependencies: 
+Install all dependencies:
 ```bash
 $ npm i
 ```
@@ -31,7 +31,7 @@ Run the backend after you've build the frontend.
 
 This project can be build with [Apache Maven](http://maven.apache.org/). The project uses Liberty Maven Plug-in to automatically download and install Liberty profile runtime from the [Liberty repository](https://developer.ibm.com/wasdev/downloads/). Liberty Maven Plug-in is also used to create, configure, and run the application on the Liberty server.
 
-Execute full maven build. This will cause Liberty Mmven plug-in to download and install liberty profile server.
+Execute full maven build. This will cause Liberty Maven plug-in to download and install liberty profile server.
 ```bash
 $ mvn clean install
 ```
@@ -39,7 +39,7 @@ $ mvn clean install
 ## Pushing
 
 1. Build the app using maven. Don't run the app.
-2. Ensure you have Bluemix CLI (recommended) or CloudFounrdy CLI installed.
+2. Ensure you have Bluemix CLI (recommended) or CloudFoundry CLI installed.
 3. To push the application to Bluemix using Bluemix CLI:
    ```bash
    $ bx cf push <appname> -p target/Rablabla.war
@@ -48,6 +48,6 @@ $ mvn clean install
 
 ## Notice
 
-Malte Bartels, Dominik Lenz, Hendrik Ulbrich (C) 2017
+Malte Bartels, Dominik Lenz, Hendrik Ulbrich © 2017
 
 You can use and modify this software under the given license. This product uses [mangstadt/biweekly](https://github.com/mangstadt/biweekly) library for it's .ics file output, [callemall/material-ui](https://github.com/callemall/material-ui) and several other librarys mentioned via pom.xml and package.json.
