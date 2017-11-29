@@ -8,8 +8,10 @@
   },
   "scripts": {
     "start": "gulp",
-    "minify": "browserify ./src/main/webapp/app.js -g [ envify --NODE_ENV production ] -g uglifyify | uglifyjs --compress --mangle > ./src/main/webapp/app-production.js",
-    "deploy": "clear\ngulp build\nnpm run minify\nrm -f src/main/webapp/app.js\nmv src/main/webapp/app-production.js src/main/webapp/app.js\nmvn clean install\ncp target/Rablabla.war defaultServer/apps/\nbx cf push Rablabla -p defaultServer"
+    "minify": "browserify ./src/main/webapp/app.js -g [ envify --NODE_ENV production ] -g uglifyify | uglifyjs --compress --mangle > ./src/main/webapp/app-production.js\n",
+    "pack": "clear\ngulp build\nnpm run minify\nrm -f src/main/webapp/app.js\nmv src/main/webapp/app-production.js src/main/webapp/app.js\nmvn clean install\ncp target/Rablabla.war defaultServer/apps/\n",
+    "deploy-release": "npm run pack\nbx cf push Rablabla -p defaultServer\n",
+    "deploy-staging": "npm run pack\nbx cf push Rablabla-Staging -n rablabla-staging -p defaultServer\n"
   },
   "private": true,
   "devDependencies": {

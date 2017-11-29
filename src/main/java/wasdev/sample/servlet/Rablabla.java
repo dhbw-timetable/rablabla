@@ -49,7 +49,6 @@ public class Rablabla extends HttpServlet {
 
 	private static final long serialVersionUID = -8874059585924245331L;
 	private static final String ROOT_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/Rablabla.war/"; // by Bluemix
-	private static final String ONLINE_PATH = "https://rablabla.mybluemix.net/";
 	private static final String ICS_FILENAME = "calendar.ics"; // calendar.ics has highest compatibility
 	private static final File TASKS_FILE = new File(ROOT_PATH, "tasks");
 	private static final long WORKER_FREQUENCY = 6 * 60 * 60 * 1000; // ms => toogle sync every 6h
@@ -144,7 +143,7 @@ public class Rablabla extends HttpServlet {
 
 			System.out.println("Done creating ICS file!");
 
-			response.getWriter().println(ONLINE_PATH + fileLocation + ICS_FILENAME);
+			response.getWriter().println(request.getRequestURL().toString() + "/" + fileLocation + ICS_FILENAME);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
