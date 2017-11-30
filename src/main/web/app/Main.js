@@ -245,7 +245,7 @@ export default class Main extends Component {
     <MuiThemeProvider theme={theme}>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <NavigationBar
-          title={`${this.raplaTitleValue} ${dateFormat(date, 'dd.mm.yyyy')}`}
+          title={`${dateFormat(date, 'mmmm yyyy')}`}
           chat={chat}
           onMessageSent={this.sendMessage}
           menuItems={[
