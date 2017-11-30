@@ -46,7 +46,7 @@ const getICSLink = (url, success, error) => {
   } else {
     console.error(`Yearly calendar not supported for url: ${url}`);
   }
-  return 'Reqeust denied.';
+  return 'Request denied.';
 };
 
 const getAppointments = (url, date, success, error, pre) => {
@@ -376,7 +376,7 @@ export default class Main extends Component {
             </DialogContent>
           </Dialog>
         </NavigationBar>
-        <Calendar dailyEvents={dailyEvents} date={date} />
+        <Calendar weekEvents={dailyEvents} date={date} />
       </div>
     </MuiThemeProvider>
     );
