@@ -143,7 +143,7 @@ public class Rablabla extends HttpServlet {
 
 			System.out.println("Done creating ICS file!");
 
-			response.getWriter().println(request.getRequestURL().toString() + "/" + fileLocation + ICS_FILENAME);
+			response.getWriter().println(ONLINE_PATH + fileLocation + ICS_FILENAME);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
