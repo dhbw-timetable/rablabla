@@ -8,7 +8,7 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import NavigationMenu from './NavigationMenu';
 import Chatter from './Chatter';
-import MUIDatePicker from './MUIDatePicker';
+import DatePicker from './DatePicker';
 
 const styles = () => ({
   root: {
@@ -36,8 +36,10 @@ function NavigationBar(props) {
                 </Typography>
               </div>
               <div className="nav-container-right">
-                <MUIDatePicker
-                  onDateSelected={onDateChange}
+                <DatePicker
+                  iconColor={iconColor}
+                  iconStyle={iconStyle}
+                  onSelect={onDateChange}
                 />
                 <Chatter
                   iconColor={iconColor}

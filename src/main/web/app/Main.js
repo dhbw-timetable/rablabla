@@ -46,7 +46,7 @@ const getICSLink = (url, success, error) => {
   } else {
     console.error(`Yearly calendar not supported for url: ${url}`);
   }
-  return 'Request denied.';
+  return 'Reqeust denied.';
 };
 
 const getAppointments = (url, date, success, error, pre) => {
@@ -245,7 +245,7 @@ export default class Main extends Component {
     <MuiThemeProvider theme={theme}>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <NavigationBar
-          title={`${dateFormat(date, 'mmmm yyyy')}`}
+          title={`${this.raplaTitleValue} ${dateFormat(date, 'dd.mm.yyyy')}`}
           chat={chat}
           onMessageSent={this.sendMessage}
           menuItems={[
@@ -376,7 +376,7 @@ export default class Main extends Component {
             </DialogContent>
           </Dialog>
         </NavigationBar>
-        <Calendar weekEvents={dailyEvents} date={date} />
+        <Calendar dailyEvents={dailyEvents} date={date} />
       </div>
     </MuiThemeProvider>
     );
