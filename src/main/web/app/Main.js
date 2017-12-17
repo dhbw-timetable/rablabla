@@ -94,20 +94,23 @@ const slidingTransition = props => <Slide direction="up" {...props} />;
 export default class Main extends Component {
   constructor() {
     super();
-    this.raplaTitleValue = localStorage.getItem('raplaTitle');
     this.raplaLinkValue = localStorage.getItem('raplaLink');
     const today = new Date();
     const data = localStorage.getItem(`${today.getFullYear()} ${getWeekNumber(today)}`);
+    const onboardingNeeded = !this.raplaLinkValue;
     this.state = {
       dailyEvents: data ? this.makeDays(this.parseDates(JSON.parse(data)))
         : [[], [], [], [], [], []],
       date: today,
       chat: [],
       extCalendarOpen: false,
-      onboardingOpen: !this.raplaLinkValue,
+      onboardingOpen: onboardingNeeded,
+      onboardingMsg: '',
     };
 
-    if (this.raplaLinkValue) {
+    if (onboardingNeeded) {
+      window.addEventListener('keypress', this.handleOnboardingKeypress);
+    } else {
       console.log(getAppointments(
         this.raplaLinkValue,
         today, (response) => {
@@ -126,7 +129,7 @@ export default class Main extends Component {
         : [[], [], [], [], [], []],
       date,
     });
-  }
+  };
 
   /* Received new data from rapla */
   onAjaxSuccess = (response, reqDate) => {
@@ -198,16 +201,15 @@ export default class Main extends Component {
   };
 
   handleOnboardingDone = () => {
-    this.raplaTitleValue = this.raplaTitleInput.value;
     this.raplaLinkValue = this.raplaLinkInput.value;
     // If seems valid
-    if (this.raplaLinkValue.length > 10 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
+    if (this.raplaLinkValue.length > 20 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
       console.log('Url was valid, onboarding succeeded');
       const date = this.state.date;
-      localStorage.setItem('raplaTitle', this.raplaTitleValue);
       localStorage.setItem('raplaLink', this.raplaLinkValue);
       // Old data is invalid
       localStorage.setItem(`${date.getFullYear()} ${getWeekNumber(date)}`, '');
+      window.removeEventListener('keypress', this.handleOnboardingKeypress);
       console.log(getAppointments(
         this.raplaLinkValue,
         date, (response) => {
@@ -221,9 +223,22 @@ export default class Main extends Component {
     }
   };
 
+  handleLinkInputChange = () => {
+    console.log('LOL');
+    console.log(this.state.onboardingMsg);
+    console.log('LOOOL');
+    this.setState({ onboardingMsg: this.raplaLinkInput.value.length > 20
+      && this.raplaLinkInput.value.startsWith('https://rapla.dhbw') ? '' : 'Your link is not valid. Please check it again!' });
+  };
+
   handleOnboardingAbort = () => {
     this.setState({ onboardingOpen: false });
+    window.removeEventListener('keypress', this.handleOnboardingKeypress);
   };
+
+  handleOnboardingKeypress = (e) => {
+    if (e.keyCode === 13) this.handleOnboardingDone();
+  }
 
   componentDidMount() {
     const currDay = document.querySelector('.is-current');
@@ -236,11 +251,8 @@ export default class Main extends Component {
   raplaLinkInput = null;
   raplaLinkValue = null;
 
-  raplaTitleInput = null;
-  raplaTitleValue = null;
-
   render() {
-    const { chat, date, dailyEvents, extCalendarOpen, onboardingOpen } = this.state;
+    const { chat, date, dailyEvents, extCalendarOpen, onboardingOpen, onboardingMsg } = this.state;
     return (
     <MuiThemeProvider theme={theme}>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -272,6 +284,7 @@ export default class Main extends Component {
               text: 'Switch timetable',
               onClick: () => {
                 this.setState({ onboardingOpen: true });
+                window.addEventListener('keypress', this.handleOnboardingKeypress);
               },
             },
             {
@@ -349,29 +362,28 @@ export default class Main extends Component {
             </AppBar>
             <DialogContent style={{ textAlign: 'center' }}>
               <DialogTitle>
-                Enter your rapla link
+                Enter your timetable credentials
               </DialogTitle>
-              <DialogContentText>
-                To use this webapp, please enter your rapla link address here.
+              <Typography type="body2" color="secondary" style={{ fontWeight: 400 }}>
+                To use this webapp, please enter your rapla link address here. It should look like:
+              </Typography>
+              <br />
+              <Typography type="body2" color="secondary">
+                https://rapla.dhbw-stuttgart.de/rapla?key=aBcDeFgHiJkLmNoP...
+              </Typography>
+              <br />
+              <Typography type="body2" color="secondary" style={{ fontWeight: 400 }}>
                 We will connect our services with it and store it.
-                You also have to specify a course title.
-              </DialogContentText>
+              </Typography>
               <TextField
                 required
-                inputRef={el => this.raplaTitleInput = el}
-                margin="normal"
-                label="Enter your course title"
-                type="text"
                 style={{ width: '60%', minWidth: '250px' }}
-                inputProps={{ maxLength: 10 }}
-              />
-              <TextField
-                required
                 inputRef={el => this.raplaLinkInput = el}
+                onChange={this.handleLinkInputChange}
+                helperText={onboardingMsg}
                 margin="normal"
                 label="Enter your link"
                 type="text"
-                style={{ width: '60%', minWidth: '250px' }}
               />
             </DialogContent>
           </Dialog>
