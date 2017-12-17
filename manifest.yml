@@ -1,6 +1,6 @@
 applications:
 - path: target/Rablabla.war
-  memory: 1024M
+  memory: 512M
   instances: 1
   domain: mybluemix.net
   name: rablabla

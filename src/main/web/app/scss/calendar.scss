@@ -4,6 +4,7 @@ $font-stack: Roboto, Arial;
 
 body {
   background: $lightgray;
+  font-family: $font-stack;
 }
 
 container {
@@ -11,7 +12,6 @@ container {
   height: 100%;
   width: 100%;
   overflow-y: hidden;
-  font-family: $font-stack;
   flex-grow: 1;
 }
 

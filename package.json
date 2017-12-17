@@ -8,8 +8,10 @@
   },
   "scripts": {
     "start": "gulp",
-    "minify": "browserify ./src/main/webapp/app.js -g [ envify --NODE_ENV production ] -g uglifyify | uglifyjs --compress --mangle > ./src/main/webapp/app-production.js",
-    "deploy": "clear\ngulp build\nnpm run minify\nrm -f src/main/webapp/app.js\nmv src/main/webapp/app-production.js src/main/webapp/app.js\nmvn clean install\ncp target/Rablabla.war defaultServer/apps/\nbx cf push Rablabla -p defaultServer"
+    "minify": "browserify ./src/main/webapp/app.js -g [ envify --NODE_ENV production ] -g uglifyify | uglifyjs --compress --mangle > ./src/main/webapp/app-production.js\n",
+    "pack": "clear\ngulp build\nnpm run minify\nrm -f src/main/webapp/app.js\nmv src/main/webapp/app-production.js src/main/webapp/app.js\nmvn clean install\ncp target/Rablabla.war defaultServer/apps/\n",
+    "deploy-release": "npm run pack\nbx cf push Rablabla -p defaultServer\n",
+    "deploy-staging": "npm run pack\nbx cf push Rablabla-Staging -n rablabla-staging -p defaultServer\n"
   },
   "private": true,
   "devDependencies": {
@@ -49,13 +51,13 @@
     "jss": "^8.1.0",
     "material-ui": "^1.0.0-beta.19",
     "material-ui-icons": "^1.0.0-beta.15",
+    "material-ui-pickers": "^1.0.0-beta.7",
+    "moment": "^2.19.3",
     "pretty-hrtime": "^1.0.3",
     "prop-types": "^15.6.0",
     "react": "15.6.2",
     "react-addons-css-transition-group": "^15.6.2",
     "react-dom": "15.6.2",
-    "react-infinite-calendar": "^2.3.1",
-    "react-modal": "^3.1.0",
     "react-tap-event-plugin": "^2.0.1",
     "react-tiny-virtual-list": "^2.1.4",
     "recompose": "^0.26.0"
