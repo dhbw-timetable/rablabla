@@ -224,9 +224,6 @@ export default class Main extends Component {
   };
 
   handleLinkInputChange = () => {
-    console.log('LOL');
-    console.log(this.state.onboardingMsg);
-    console.log('LOOOL');
     this.setState({ onboardingMsg: this.raplaLinkInput.value.length > 20
       && this.raplaLinkInput.value.startsWith('https://rapla.dhbw') ? '' : 'Your link is not valid. Please check it again!' });
   };
