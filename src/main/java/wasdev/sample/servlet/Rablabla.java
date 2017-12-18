@@ -53,6 +53,7 @@ public class Rablabla extends HttpServlet {
 	private static final File TASKS_FILE = new File(ROOT_PATH, "tasks");
 	private static final long WORKER_FREQUENCY = 6 * 60 * 60 * 1000; // ms => toogle sync every 6h
 	private static final long MAX_TASK_CALLS = 3000; // Tasks are deleted from list after 3000 generations
+	private static final String ONLINE_PATH = "https://rablabla.mybluemix.net/"; // Release path only
 
 	private Timer worker;
 
