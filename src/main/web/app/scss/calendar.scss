@@ -1,4 +1,5 @@
 $primarylight: #ba3838;
+$secondarylight: #eaa515;
 $lightgray: #eaeaef;
 $font-stack: Roboto, Arial;
 
@@ -54,6 +55,42 @@ container {
   }
   .is-current &--name {
     color: $primarylight;
+  }
+  
+  // Not visible by default, only if is-current
+  &--line {
+    display: none;
+    
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    border-bottom: 2px solid $secondarylight;
+    border-top: 2px solid $secondarylight;
+    background: $secondarylight;
+    
+    box-shadow: 0px 4px 4px 0 darkgray;
+    box-shadow: 0px 8px 8px 0 darkgray;
+    
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      height: 20px;
+      width: 5px;
+      transform: translateY(-50%);
+      background: $secondarylight;
+    }
+    &::before {
+      left: 0;
+    }
+    &::after {
+      right: 0;
+    }
+  }
+  
+  .is-current &--line {
+    display: block;
   }
 
   & .schedule {
