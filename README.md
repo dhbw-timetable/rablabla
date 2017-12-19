@@ -23,7 +23,7 @@ Currently our project does not provide an option to run Rablabla locally on your
 $ npm run pack
 ```
 
-for building a compressed frontend without running. And use the [Bluemix CLI](https://console.bluemix.net/docs/cli/index.html) to push it online.
+for building the whole without running. And use the [Bluemix CLI](https://console.bluemix.net/docs/cli/index.html) to push it online:
 
 ```
 $ bx cf push Rablabla-Staging -n <your-test-route> -p defaultServer
