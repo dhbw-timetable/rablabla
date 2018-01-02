@@ -94,7 +94,7 @@ const slidingTransition = props => <Slide direction="up" {...props} />;
 export default class Main extends Component {
   constructor() {
     super();
-    this.raplaLinkValue = localStorage.getItem('raplaLink');
+    this.raplaLinkValue = localStorage.getItem('raplaLink') || window.location.href.split('#')[1];
     const today = new Date();
     const data = localStorage.getItem(`${today.getFullYear()} ${getWeekNumber(today)}`);
     const onboardingNeeded = !this.raplaLinkValue;
