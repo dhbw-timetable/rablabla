@@ -5,6 +5,9 @@ module.exports = {
       "browser": true
     },
   	"rules": {
+      "one-var-declaration-per-line": 0,
+      "one-var": 0,
+      "radix": 0,
   		"react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
   		"no-console": ["error", { "allow": ["log", "warn", "error"] }],
       "linebreak-style": ["error", "unix"],

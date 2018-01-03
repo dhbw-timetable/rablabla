@@ -131,12 +131,34 @@ export default class Main extends Component {
     });
   };
 
+  // Clear outdated storage entries
+  clearStorage = (date, currWeek) => {
+    const regex = /\d+ \d+/; // 2018 42
+    let i, key, value, year, week;
+    for (i = 0; i < localStorage.length; i++) {
+      key = localStorage.key(i);
+      if (regex.test(key)) {
+        value = key.split(' ');
+        year = parseInt(value[0]);
+        week = parseInt(value[1]);
+        if (date.getFullYear() !== year || !(week + 1 >= currWeek && currWeek >= week - 1)) {
+          console.log(`Removing item ${key} because (date || week)=(${date.getFullYear() !== year} || ${(week + 1 >= currWeek && currWeek >= week - 1)})`);
+          localStorage.removeItem(key);
+        }
+      }
+    }
+  }
+
   /* Received new data from rapla */
   onAjaxSuccess = (response, reqDate) => {
     const data = JSON.parse(response);
-    // TODO Implement also other weeks with proper GC
-    // Currently: Only if it's the current week (keeping storage clean)
-    if (getWeekNumber(reqDate) === getWeekNumber(new Date())) {
+    const today = new Date();
+    const currWeek = getWeekNumber(today);
+    const reqWeek = getWeekNumber(reqDate);
+
+    this.clearStorage(today, currWeek);
+    // Only if it's the the last, current or next week -> cache it
+    if (reqWeek === currWeek - 1 || reqWeek === currWeek || reqWeek === currWeek + 1) {
       localStorage.setItem(`${reqDate.getFullYear()} ${getWeekNumber(reqDate)}`, response);
       console.log('Saved received data in cache.');
     }
@@ -174,27 +196,53 @@ export default class Main extends Component {
     return dailyEvents;
   }
 
-  sendMessage = (msg) => {
+  clearListeners = () => {
+    window.applicationCache.removeEventListener('updateready', this.onAppCacheUpdate);
+    window.applicationCache.removeEventListener('noupdate', this.onAppCacheNoUpdate);
+  }
+
+  onAppCacheNoUpdate = () => {
+    this.clearListeners();
+    // Manifest didn't change. Nothing new to server.
+    this.appendMessage('I am already up to date.', true);
+  }
+
+  onAppCacheUpdate = () => {
+    this.clearListeners();
+    if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+      // Browser downloaded a new app cache.
+      if (confirm('Wuhu! A new version of our site is available and will be applied on next load. Do you want to reload now?')) {
+        window.location.reload();
+      }
+    }
+  }
+
+  appendMessage = (text, watson) => {
     const { chat } = this.state;
-    chat.push({ text: msg, watson: false });
+    chat.push({ text, watson });
     this.setState({ chat });
     document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  sendMessage = (msg) => {
+    this.appendMessage(msg, false);
     // ;)
     if (msg.toLowerCase().indexOf('give me pizza') !== -1) {
-      chat.push({ text: 'Enjoy!', watson: true });
-      this.setState({ chat });
-      document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+      this.appendMessage('Enjoy!', true);
       document.querySelectorAll('.calendar').forEach((el) => { el.classList.add('pizza'); });
+    } else if (msg.toLowerCase().indexOf('upd473') !== -1) {
+      this.appendMessage('Searching for update...', true);
+      // Trigger app cache update
+      // Inspired from https://www.html5rocks.com/en/tutorials/appcache/beginner/
+      window.applicationCache.addEventListener('updateready', this.onAppCacheUpdate, false);
+      window.applicationCache.addEventListener('noupdate', this.onAppCacheNoUpdate, false);
+      window.applicationCache.update();
     } else {
       // Send to backend and handle answer
       $.ajax({
         url: `ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
         type: 'POST',
-        success: (response) => {
-          chat.push({ text: response, watson: true });
-          this.setState({ chat });
-          document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
-        },
+        success: this.appendMessage,
         error: (err) => { console.error(err); },
       });
     }
