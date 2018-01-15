@@ -46,7 +46,7 @@ const getICSLink = (url, success, error) => {
   } else {
     console.error(`Yearly calendar not supported for url: ${url}`);
   }
-  return 'Reqeust denied.';
+  return 'Request denied.';
 };
 
 const getAppointments = (url, date, success, error, pre) => {
@@ -94,20 +94,23 @@ const slidingTransition = props => <Slide direction="up" {...props} />;
 export default class Main extends Component {
   constructor() {
     super();
-    this.raplaTitleValue = localStorage.getItem('raplaTitle');
-    this.raplaLinkValue = localStorage.getItem('raplaLink');
+    this.raplaLinkValue = localStorage.getItem('raplaLink') || window.location.href.split('#')[1];
     const today = new Date();
     const data = localStorage.getItem(`${today.getFullYear()} ${getWeekNumber(today)}`);
+    const onboardingNeeded = !this.raplaLinkValue;
     this.state = {
       dailyEvents: data ? this.makeDays(this.parseDates(JSON.parse(data)))
         : [[], [], [], [], [], []],
       date: today,
       chat: [],
       extCalendarOpen: false,
-      onboardingOpen: !this.raplaLinkValue,
+      onboardingOpen: onboardingNeeded,
+      onboardingMsg: '',
     };
 
-    if (this.raplaLinkValue) {
+    if (onboardingNeeded) {
+      window.addEventListener('keypress', this.handleOnboardingKeypress);
+    } else {
       console.log(getAppointments(
         this.raplaLinkValue,
         today, (response) => {
@@ -126,14 +129,36 @@ export default class Main extends Component {
         : [[], [], [], [], [], []],
       date,
     });
+  };
+
+  // Clear outdated storage entries
+  clearStorage = (date, currWeek) => {
+    const regex = /\d+ \d+/; // 2018 42
+    let i, key, value, year, week;
+    for (i = 0; i < localStorage.length; i++) {
+      key = localStorage.key(i);
+      if (regex.test(key)) {
+        value = key.split(' ');
+        year = parseInt(value[0]);
+        week = parseInt(value[1]);
+        if (date.getFullYear() !== year || !(week + 1 >= currWeek && currWeek >= week - 1)) {
+          console.log(`Removing item ${key} because (date || week)=(${date.getFullYear() !== year} || ${(week + 1 >= currWeek && currWeek >= week - 1)})`);
+          localStorage.removeItem(key);
+        }
+      }
+    }
   }
 
   /* Received new data from rapla */
   onAjaxSuccess = (response, reqDate) => {
     const data = JSON.parse(response);
-    // TODO Implement also other weeks with proper GC
-    // Currently: Only if it's the current week (keeping storage clean)
-    if (getWeekNumber(reqDate) === getWeekNumber(new Date())) {
+    const today = new Date();
+    const currWeek = getWeekNumber(today);
+    const reqWeek = getWeekNumber(reqDate);
+
+    this.clearStorage(today, currWeek);
+    // Only if it's the the last, current or next week -> cache it
+    if (reqWeek === currWeek - 1 || reqWeek === currWeek || reqWeek === currWeek + 1) {
       localStorage.setItem(`${reqDate.getFullYear()} ${getWeekNumber(reqDate)}`, response);
       console.log('Saved received data in cache.');
     }
@@ -171,43 +196,68 @@ export default class Main extends Component {
     return dailyEvents;
   }
 
-  sendMessage = (msg) => {
+  clearListeners = () => {
+    window.applicationCache.removeEventListener('updateready', this.onAppCacheUpdate);
+    window.applicationCache.removeEventListener('noupdate', this.onAppCacheNoUpdate);
+  }
+
+  onAppCacheNoUpdate = () => {
+    this.clearListeners();
+    // Manifest didn't change. Nothing new to server.
+    this.appendMessage('I am already up to date.', true);
+  }
+
+  onAppCacheUpdate = () => {
+    this.clearListeners();
+    if (window.applicationCache.status === window.applicationCache.UPDATEREADY) {
+      // Browser downloaded a new app cache.
+      if (confirm('Wuhu! A new version of our site is available and will be applied on next load. Do you want to reload now?')) {
+        window.location.reload();
+      }
+    }
+  }
+
+  appendMessage = (text, watson) => {
     const { chat } = this.state;
-    chat.push({ text: msg, watson: false });
+    chat.push({ text, watson });
     this.setState({ chat });
     document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  sendMessage = (msg) => {
+    this.appendMessage(msg, false);
     // ;)
     if (msg.toLowerCase().indexOf('give me pizza') !== -1) {
-      chat.push({ text: 'Enjoy!', watson: true });
-      this.setState({ chat });
-      document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+      this.appendMessage('Enjoy!', true);
       document.querySelectorAll('.calendar').forEach((el) => { el.classList.add('pizza'); });
+    } else if (msg.toLowerCase().indexOf('upd473') !== -1) {
+      this.appendMessage('Searching for update...', true);
+      // Trigger app cache update
+      // Inspired from https://www.html5rocks.com/en/tutorials/appcache/beginner/
+      window.applicationCache.addEventListener('updateready', this.onAppCacheUpdate, false);
+      window.applicationCache.addEventListener('noupdate', this.onAppCacheNoUpdate, false);
+      window.applicationCache.update();
     } else {
       // Send to backend and handle answer
       $.ajax({
         url: `ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
         type: 'POST',
-        success: (response) => {
-          chat.push({ text: response, watson: true });
-          this.setState({ chat });
-          document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
-        },
+        success: this.appendMessage,
         error: (err) => { console.error(err); },
       });
     }
   };
 
   handleOnboardingDone = () => {
-    this.raplaTitleValue = this.raplaTitleInput.value;
     this.raplaLinkValue = this.raplaLinkInput.value;
     // If seems valid
-    if (this.raplaLinkValue.length > 10 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
+    if (this.raplaLinkValue.length > 20 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
       console.log('Url was valid, onboarding succeeded');
       const date = this.state.date;
-      localStorage.setItem('raplaTitle', this.raplaTitleValue);
       localStorage.setItem('raplaLink', this.raplaLinkValue);
       // Old data is invalid
       localStorage.setItem(`${date.getFullYear()} ${getWeekNumber(date)}`, '');
+      window.removeEventListener('keypress', this.handleOnboardingKeypress);
       console.log(getAppointments(
         this.raplaLinkValue,
         date, (response) => {
@@ -221,9 +271,19 @@ export default class Main extends Component {
     }
   };
 
+  handleLinkInputChange = () => {
+    this.setState({ onboardingMsg: this.raplaLinkInput.value.length > 20
+      && this.raplaLinkInput.value.startsWith('https://rapla.dhbw') ? '' : 'Your link is not valid. Please check it again!' });
+  };
+
   handleOnboardingAbort = () => {
     this.setState({ onboardingOpen: false });
+    window.removeEventListener('keypress', this.handleOnboardingKeypress);
   };
+
+  handleOnboardingKeypress = (e) => {
+    if (e.keyCode === 13) this.handleOnboardingDone();
+  }
 
   componentDidMount() {
     const currDay = document.querySelector('.is-current');
@@ -236,16 +296,13 @@ export default class Main extends Component {
   raplaLinkInput = null;
   raplaLinkValue = null;
 
-  raplaTitleInput = null;
-  raplaTitleValue = null;
-
   render() {
-    const { chat, date, dailyEvents, extCalendarOpen, onboardingOpen } = this.state;
+    const { chat, date, dailyEvents, extCalendarOpen, onboardingOpen, onboardingMsg } = this.state;
     return (
     <MuiThemeProvider theme={theme}>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <NavigationBar
-          title={`${this.raplaTitleValue} ${dateFormat(date, 'dd.mm.yyyy')}`}
+          title={`${dateFormat(date, 'mmmm yyyy')}`}
           chat={chat}
           onMessageSent={this.sendMessage}
           menuItems={[
@@ -272,6 +329,7 @@ export default class Main extends Component {
               text: 'Switch timetable',
               onClick: () => {
                 this.setState({ onboardingOpen: true });
+                window.addEventListener('keypress', this.handleOnboardingKeypress);
               },
             },
             {
@@ -349,34 +407,33 @@ export default class Main extends Component {
             </AppBar>
             <DialogContent style={{ textAlign: 'center' }}>
               <DialogTitle>
-                Enter your rapla link
+                Enter your timetable credentials
               </DialogTitle>
-              <DialogContentText>
-                To use this webapp, please enter your rapla link address here.
+              <Typography type="body2" color="secondary" style={{ fontWeight: 400 }}>
+                To use this webapp, please enter your rapla link address here. It should look like:
+              </Typography>
+              <br />
+              <Typography type="body2" color="secondary">
+                https://rapla.dhbw-stuttgart.de/rapla?key=aBcDeFgHiJkLmNoP...
+              </Typography>
+              <br />
+              <Typography type="body2" color="secondary" style={{ fontWeight: 400 }}>
                 We will connect our services with it and store it.
-                You also have to specify a course title.
-              </DialogContentText>
+              </Typography>
               <TextField
                 required
-                inputRef={el => this.raplaTitleInput = el}
-                margin="normal"
-                label="Enter your course title"
-                type="text"
                 style={{ width: '60%', minWidth: '250px' }}
-                inputProps={{ maxLength: 10 }}
-              />
-              <TextField
-                required
                 inputRef={el => this.raplaLinkInput = el}
+                onChange={this.handleLinkInputChange}
+                helperText={onboardingMsg}
                 margin="normal"
                 label="Enter your link"
                 type="text"
-                style={{ width: '60%', minWidth: '250px' }}
               />
             </DialogContent>
           </Dialog>
         </NavigationBar>
-        <Calendar dailyEvents={dailyEvents} date={date} />
+        <Calendar weekEvents={dailyEvents} date={date} />
       </div>
     </MuiThemeProvider>
     );

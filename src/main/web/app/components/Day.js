@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import dateFormat from 'dateformat';
 import DayView from './DayView';
 
 export default function Day(props) {
-  const { eventData, start, end, name, isCurrent } = props;
+  const { eventData, start, end, isCurrent, date } = props;
   eventData.forEach((el) => {
     // Calculate dimensions
     const startTime = el.startTime.split(':');
@@ -23,7 +24,7 @@ export default function Day(props) {
   });
   return (
     <DayView
-      name={name}
+      name={dateFormat(date, 'ddd. dd.')}
       events={eventData}
       start={start}
       end={end}
@@ -36,7 +37,7 @@ Day.propTypes = {
   eventData: PropTypes.arrayOf(PropTypes.object).isRequired,
   start: PropTypes.number.isRequired,
   end: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
+  date: PropTypes.object.isRequired,
   isCurrent: PropTypes.bool,
 };
 
