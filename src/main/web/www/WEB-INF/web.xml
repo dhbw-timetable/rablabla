@@ -9,8 +9,7 @@
 	<security-constraint>
 		<display-name>HTTPS Redirect Security Constraint</display-name>
 		<web-resource-collection>
-				<!-- On bluemix always: myapp -->
-				<web-resource-name>myapp</web-resource-name>
+				<web-resource-name>Rablabla</web-resource-name>
 				<description>HTTPS redirect</description>
 				<url-pattern>/*</url-pattern>
 		</web-resource-collection>
@@ -19,13 +18,14 @@
 		</user-data-constraint>
 	</security-constraint>
 	<mime-mapping>
-    <extension>ics</extension>
-    <mime-type>text/calendar</mime-type>
+  	<extension>ics</extension>
+  	<mime-type>text/calendar</mime-type>
   </mime-mapping>
 	<mime-mapping>
-    <extension>appcache</extension>
-    <mime-type>text/cache-manifest</mime-type>
+  	<extension>appcache</extension>
+  	<mime-type>text/cache-manifest</mime-type>
   </mime-mapping>
+	<!-- GENERAL REQUEST FILTER -->
 	<filter>
 	  <filter-name>ResponseHeaderFilter</filter-name>
 	  <filter-class>wasdev.sample.servlet.GeneralRequestFilter</filter-class>
@@ -33,5 +33,14 @@
 	<filter-mapping>
 	  <filter-name>ResponseHeaderFilter</filter-name>
 	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- NO CACHE FILTER -->
+	<filter>
+		<filter-name>NoCacheFilter</filter-name>
+		<filter-class>wasdev.sample.servlet.NoCacheFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>NoCacheFilter</filter-name>
+		<url-pattern>/manifest.appcache</url-pattern>
 	</filter-mapping>
 </web-app>

@@ -49,7 +49,7 @@ public class Rablabla extends HttpServlet {
 
 	private static final long serialVersionUID = -8874059585924245331L;
 	private static final String ROOT_PATH = "/home/vcap/app/wlp/usr/servers/defaultServer/apps/Rablabla.war/"; // by Bluemix
-	private static final String ICS_FILENAME = "calendar.ics"; // calendar.ics has highest compatibility
+	private static final String ICS_FILENAME = "calendar.ics"; // calendar.ics filename has highest compatibility
 	private static final File TASKS_FILE = new File(ROOT_PATH, "tasks");
 	private static final long WORKER_FREQUENCY = 6 * 60 * 60 * 1000; // ms => toogle sync every 6h
 	private static final long MAX_TASK_CALLS = 3000; // Tasks are deleted from list after 3000 generations
