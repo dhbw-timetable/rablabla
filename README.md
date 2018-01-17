@@ -15,9 +15,11 @@ Then let the project build and start a web server:
 ```bash
 $ npm start
 ```
+You will see a local frontend using the staging backend API.
+
 ## Backend
 
-Currently our project does not provide an option to run Rablabla locally on your computer. But you can easily push Rablabla to a test route on your IBM Bluemix Account and let it run online. To do so you can just run:
+Currently our project does not provide an option to run your backend locally on your computer. But you can easily push Rablabla to a test route on your IBM Bluemix Account and let it run online. To do so you can just run:
 
 ```
 $ npm run pack
