@@ -254,7 +254,7 @@ export default class Main extends Component {
   handleOnboardingDone = () => {
     this.raplaLinkValue = this.raplaLinkInput.value;
     // If seems valid
-    if (this.raplaLinkValue.length > 20 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
+    if (/(https|HTTPS):\/\/rapla\.dhbw-(stuttgart|karlsruhe|mannheim)\.de\/rapla?(.+=.+)(&.+=.+)*$/.test(this.raplaLinkValue)) {
       console.log('Url was valid, onboarding succeeded');
       const date = this.state.date;
       localStorage.setItem('raplaLink', this.raplaLinkValue);
