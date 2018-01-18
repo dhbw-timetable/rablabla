@@ -28,13 +28,16 @@ const getParams = (args) => {
   return params;
 };
 
+// for local testing against staging backend
+const ajaxTarget = window.location.href.indexOf('localhost') !== -1 ? 'https://rablabla-staging.mybluemix.net' : '';
+
 const getICSLink = (url, success, error) => {
   const deSuffix = '.de/rapla?';
   const baseURL = url.substring(0, url.indexOf(deSuffix) + deSuffix.length);
   const params = getParams(url.substring(url.indexOf(deSuffix) + deSuffix.length));
   if (params.key) {
     $.ajax({
-      url: `Rablabla?url=${url}`,
+      url: `${ajaxTarget}/Rablabla?url=${url}`,
       type: 'POST',
       success,
       error,
@@ -52,7 +55,7 @@ const getICSLink = (url, success, error) => {
 const getAppointments = (url, date, success, error, pre) => {
   pre(date);
   $.ajax({
-    url: `Rablabla?url=${encodeURIComponent(url)}&day=${date.getDate()}&month=${date.getMonth() + 1}&year=${date.getFullYear()}`,
+    url: `${ajaxTarget}/Rablabla?url=${encodeURIComponent(url)}&day=${date.getDate()}&month=${date.getMonth() + 1}&year=${date.getFullYear()}`,
     type: 'GET',
     success,
     error,
@@ -240,7 +243,7 @@ export default class Main extends Component {
     } else {
       // Send to backend and handle answer
       $.ajax({
-        url: `ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
+        url: `${ajaxTarget}/ChatBot?url=${encodeURIComponent(this.raplaLinkValue)}&text=${msg}`,
         type: 'POST',
         success: this.appendMessage,
         error: (err) => { console.error(err); },
