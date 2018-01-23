@@ -29,7 +29,7 @@ const getParams = (args) => {
 };
 
 // for local testing against staging backend
-const ajaxTarget = window.location.href.indexOf('localhost') !== -1 ? 'https://rablabla-staging.mybluemix.net' : '';
+const ajaxTarget = window.location.href.indexOf('rablabla.mybluemix.net') !== -1 ? '' : 'https://rablabla-staging.mybluemix.net';
 
 const getICSLink = (url, success, error) => {
   const deSuffix = '.de/rapla?';
