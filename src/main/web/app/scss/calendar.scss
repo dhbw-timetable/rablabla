@@ -198,6 +198,28 @@ container {
       box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0);
       box-shadow: 0 0 200vw 200vw rgba(0, 0, 0, .5);
     }
+
+    // make all text visible when selected
+    &.selected {
+      padding-bottom: 0;
+      transition: height .3s ease-in-out;
+    }
+
+    &.selected .event--header,
+    &.selected .event--body,
+    &.selected .event--footer {
+      display: block;
+      max-height: none;
+    }
+
+    &.selected .event--footer {
+      position: relative;
+      max-height: 2em;
+    }
+    &.selected .event--footer:hover {
+      max-height: none;
+      cursor: help;
+    }
     
     &.get-crazy {
       animation: crazy 1s infinite;
