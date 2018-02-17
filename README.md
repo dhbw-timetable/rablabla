@@ -3,6 +3,9 @@ Rablabla
 
 A web application for the web based rapla timetable. It scans the DHBW timetable and offers it via a self-updating calendar server.
 
+- Release: https://rablabla.mybluemix.net/
+- Beta: https://rablabla-staging.mybluemix.net/
+
 ## Frontend
 
 We use npm and gulp to build our frontend with ReactJS and SCSS.
