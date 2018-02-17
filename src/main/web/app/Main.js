@@ -28,8 +28,8 @@ const getParams = (args) => {
   return params;
 };
 
-// for local testing against release backend
-const ajaxTarget = window.location.href.indexOf('localhost') !== -1 ? 'https://rablabla-staging.mybluemix.net' : '';
+// for local testing against staging backend
+const ajaxTarget = window.location.href.indexOf('rablabla.mybluemix.net') !== -1 ? '' : 'https://rablabla-staging.mybluemix.net';
 
 const getICSLink = (url, success, error) => {
   const deSuffix = '.de/rapla?';
@@ -254,7 +254,7 @@ export default class Main extends Component {
   handleOnboardingDone = () => {
     this.raplaLinkValue = this.raplaLinkInput.value;
     // If seems valid
-    if (this.raplaLinkValue.length > 20 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
+    if (/(https|HTTPS):\/\/rapla\.dhbw-(stuttgart|karlsruhe|mannheim)\.de\/rapla?(.+=.+)(&.+=.+)*$/.test(this.raplaLinkValue)) {
       console.log('Url was valid, onboarding succeeded');
       const date = this.state.date;
       localStorage.setItem('raplaLink', this.raplaLinkValue);

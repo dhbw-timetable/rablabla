@@ -19,7 +19,6 @@ public class GeneralRequestFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-		System.out.println("111111111111111111111111111111111111111");
 		HttpServletResponse resp = (HttpServletResponse) response;
 		if (request.isSecure()) {
 			resp.setHeader("Strict-Transport-Security", "max-age=31622400; includeSubDomains; preload");
