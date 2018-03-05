@@ -7,4 +7,4 @@ applications:
   host: rablabla
   disk_quota: 1024M
 services:
-  - rablabla-cloudantNoSQLDB
+  - rablabladb
