@@ -73,7 +73,7 @@ container {
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
 
-    z-index: 2000;
+    z-index: 2;
 
     &::before {
       content: '';
@@ -192,7 +192,7 @@ container {
       opacity: 0.7;
       font-size: 0.8em;
     }
-    
+
     &.selected {
       transition: top .3s ease-in-out, box-shadow .15s ease-in, height .3s ease-in-out, ;
       z-index: 3;
@@ -222,7 +222,7 @@ container {
       max-height: none;
       cursor: help;
     }
-    
+
     &.get-crazy {
       animation: crazy 1s infinite;
     }

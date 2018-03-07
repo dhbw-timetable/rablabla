@@ -6,10 +6,10 @@ export default class Event extends Component {
     super(props);
     this.state = { classList: 'normal not-selected', style: { height: props.data.height, top: props.data.top } }; // '' is large (default), other values: 'medium', 'small', 'tiny'
   }
-  
+
   update = () => {
     const height = this.liElement.clientHeight;
-    let classList = this.state.classList.split(' ');
+    const classList = this.state.classList.split(' ');
     let size = '';
     if (height < 70) {
       size = 'tiny';
@@ -23,11 +23,11 @@ export default class Event extends Component {
     classList[0] = size;
     this.setState({ classList: classList.join(' ') });
   }
-  
-  handleClick = (e) => {
-    let classList = this.state.classList.split(' ');
-    let style = this.state.style;
-    if(classList[1].indexOf('not-selected') !== -1) {
+
+  handleClick = () => {
+    const classList = this.state.classList.split(' ');
+    const style = this.state.style;
+    if (classList[1].indexOf('not-selected') !== -1) {
       classList[1] = 'selected';
       style.height = 'auto';
       style.top = 0;
@@ -35,8 +35,8 @@ export default class Event extends Component {
       classList[1] = 'not-selected';
       style.height = this.props.data.height;
       style.top = this.props.data.top;
-    }    
-    this.setState({ classList: classList.join(' '), style: style});
+    }
+    this.setState({ classList: classList.join(' '), style });
   }
 
   componentDidMount() {
@@ -45,7 +45,7 @@ export default class Event extends Component {
   }
 
   render() {
-    const { height, top, startTime, endTime, course, persons, resources }
+    const { startTime, endTime, course, persons, resources }
       = this.props.data;
     return (
       <li
