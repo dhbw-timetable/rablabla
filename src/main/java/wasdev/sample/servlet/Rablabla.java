@@ -123,7 +123,7 @@ public class Rablabla extends HttpServlet {
 				System.out.println("Fetching ICS data...");
 
 				final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportWeekRange(LocalDate.of(LocalDate.now().getYear(), 1, 1), LocalDate.of(LocalDate.now().getYear(), 12, 31), BaseURL.valueOf(baseURL), args);
-				System.out.println("Done fetching data!");
+				System.out.println("Done fetching data. Found " + data.size() + " elements.");
 				final File containerFile = new File(ROOT_PATH + fileLocation);
 				containerFile.mkdirs();
 				final File exportFile = new File(containerFile, ICS_FILENAME);

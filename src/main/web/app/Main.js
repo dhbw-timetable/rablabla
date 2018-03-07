@@ -359,7 +359,8 @@ export default class Main extends Component {
             <DialogTitle>Your calendar link</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Insert the link to your chosen calendar application and it will sync automatically.
+                Insert the link to your chosen calendar application and it will
+                sync automatically.
               </DialogContentText>
               <TextField
                 autoFocus
@@ -369,6 +370,11 @@ export default class Main extends Component {
                 margin="normal"
                 fullWidth
               />
+              <Typography type="caption" style={{ fontWeight: 600 }}>
+                Note: Currently you will have to request the
+                link every 5 weeks again here on the web UI. This will be fixed
+                within future versions.
+              </Typography>
             </DialogContent>
             <DialogActions>
               <Button

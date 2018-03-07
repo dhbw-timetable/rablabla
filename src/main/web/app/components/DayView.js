@@ -9,8 +9,8 @@ export default function DayView(props) {
       <h2 className="day--name">{name}</h2>
       <ul className="schedule" style={{ backgroundSize: `100% calc(100% / ${end - start + 0.5})` }}>
         {events.map((el, i) => <Event key={i} data={el} />)}
+        <li className="day--line" style={{ top: lineY ? `${lineY}%` : '' }} />
       </ul>
-      <div className="day--line" style={{ top: `${lineY}%` }}></div>
     </div>
   );
 }
@@ -20,7 +20,8 @@ DayView.propTypes = {
   start: PropTypes.number.isRequired,
   end: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
+  lineY: PropTypes.number,
   isCurrent: PropTypes.bool,
 };
 
-DayView.defaultProps = { isCurrent: false };
+DayView.defaultProps = { isCurrent: false, lineY: undefined };
