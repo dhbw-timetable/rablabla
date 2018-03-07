@@ -195,10 +195,9 @@ container {
 
     &.selected {
       transition: top .3s ease-in-out, box-shadow .15s ease-in, height .3s ease-in-out, ;
-      z-index: 3;
+      z-index: 4;
       box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0);
       box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0);
-      box-shadow: 0 0 200vw 200vw rgba(0, 0, 0, .5);
     }
 
     // make all text visible when selected

@@ -36,6 +36,7 @@ export default class Event extends Component {
       style.height = this.props.data.height;
       style.top = this.props.data.top;
     }
+    this.props.showBackdrop();
     this.setState({ classList: classList.join(' '), style });
   }
 
@@ -65,4 +66,5 @@ export default class Event extends Component {
 
 Event.propTypes = {
   data: PropTypes.object.isRequired,
+  showBackdrop: PropTypes.func.isRequired,
 };
