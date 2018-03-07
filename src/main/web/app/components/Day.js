@@ -5,7 +5,7 @@ import DayView from './DayView';
 
 export default function Day(props) {
   const { eventData, start, end, isCurrent, date } = props;
-  
+
   eventData.forEach((el) => {
     // Calculate dimensions
     const startTime = el.startTime.split(':');
@@ -23,10 +23,10 @@ export default function Day(props) {
     el.top = top;
     el.duration = duration;
   });
-  
+
   const lineY = ((date.getHours() - start) + (date.getMinutes() / 60))
     * (100 / (end - start + 0.5));
-  
+
   return (
     <DayView
       name={dateFormat(date, 'ddd. dd.')}
