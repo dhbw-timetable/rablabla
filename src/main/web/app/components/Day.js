@@ -4,7 +4,7 @@ import dateFormat from 'dateformat';
 import DayView from './DayView';
 
 export default function Day(props) {
-  const { eventData, start, end, isCurrent, date } = props;
+  const { eventData, start, end, isCurrent, date, showBackdrop } = props;
 
   eventData.forEach((el) => {
     // Calculate dimensions
@@ -34,6 +34,7 @@ export default function Day(props) {
       start={start}
       end={end}
       isCurrent={isCurrent}
+      showBackdrop={showBackdrop}
       lineY={lineY}
     />
   );
@@ -44,6 +45,7 @@ Day.propTypes = {
   start: PropTypes.number.isRequired,
   end: PropTypes.number.isRequired,
   date: PropTypes.object.isRequired,
+  showBackdrop: PropTypes.func.isRequired,
   isCurrent: PropTypes.bool,
 };
 

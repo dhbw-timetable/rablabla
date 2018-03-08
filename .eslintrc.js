@@ -5,6 +5,7 @@ module.exports = {
       "browser": true
     },
     "rules": {
+      "jsx-a11y/no-noninteractive-element-interactions": 0,
       "one-var-declaration-per-line": 0,
       "one-var": 0,
       "radix": 0,

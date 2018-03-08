@@ -3,6 +3,9 @@ Rablabla
 
 A web application for the web based rapla timetable. It scans the DHBW timetable and offers it via a self-updating calendar server.
 
+- Release: https://rablabla.mybluemix.net/
+- Beta: https://rablabla-staging.mybluemix.net/
+
 ## Frontend
 
 We use npm and gulp to build our frontend with ReactJS and SCSS.
@@ -33,6 +36,6 @@ $ bx cf push Rablabla-Staging -n <your-test-route> -p defaultServer
 
 ## Notice
 
-Malte Bartels, Dominik Lenz, Hendrik Ulbrich © 2017
+Malte Bartels, Dominik Lenz, Hendrik Ulbrich © 2017, 2018
 
 You can use and modify this software under the given license. This product uses [mangstadt/biweekly](https://github.com/mangstadt/biweekly) library for it's .ics file output, [callemall/material-ui](https://github.com/callemall/material-ui) and several other librarys mentioned via pom.xml and package.json.

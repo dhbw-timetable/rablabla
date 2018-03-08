@@ -17,6 +17,7 @@ container {
 }
 
 .calendar {
+  position: relative;
   width: inherit;
   min-width: 900px;
   height: inherit;
@@ -24,6 +25,25 @@ container {
 
   display: flex;
   justify-content: flex-start;
+
+  &--backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,.5);
+    visibility: hidden;
+    opacity: 0;
+
+    z-index: 10;
+
+    &.is-visible {
+      transition: .15s ease-in-out;
+      visibility: visible;
+      opacity: 1;
+    }
+  }
 }
 
 .day {
@@ -73,7 +93,7 @@ container {
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
 
-    z-index: 2000;
+    z-index: 2;
 
     &::before {
       content: '';
@@ -131,10 +151,13 @@ container {
     box-shadow: 0 2px 2px 0 lightgray;
     box-shadow: 0 4px 4px 0 gray;
 
+    transform: translateY(0);
+
     word-wrap: break-word;
     display: flex;
     flex-flow: column wrap;
     overflow: hidden;
+
 
     &--header,
     &--body,
@@ -165,15 +188,6 @@ container {
       text-overflow: ellipsis;
     }
 
-    &.medium .event--header,
-    &.small .event--header,
-    &.tiny .event--header {
-      max-height: 2.5em;
-      -webkit-line-clamp: 2;
-      margin-top: 15px;
-      margin-bottom: 5px;
-    }
-
     &--body,
     &--footer {
       width: 100%;
@@ -190,12 +204,6 @@ container {
       text-overflow: ellipsis;
     }
 
-    &.small .event--body,
-    &.tiny .event--body {
-      margin-top: 5px;
-      margin-bottom: 0;
-    }
-
     &--footer {
       position: absolute;
       width: 90%;
@@ -205,11 +213,39 @@ container {
       font-size: 0.8em;
     }
 
-    &.small, &.tiny {
-      padding-bottom: 5px; // no more footer, no more need to prevent glitching
-      .event--footer {
-        display: none;
-      }
+    &.is-current .schedule .event {
+      box-shadow: 0 4px 4px 0 lightgray;
+      box-shadow: 0 8px 8px 0 gray;
+      transform: translateY(-5px);
+      transform: scale(1.025);
+    }
+
+    &.selected {
+      z-index: 15;
+      top: 50% !important; // override calculated inline styles
+      transform: translateY(-50%);
+      height: auto !important;
+      max-width: 300px;
+      animation: slide-in .3s ease-in-out;
+      box-shadow: none;
+      // make all text visible when selected
+      max-height: 95%;
+      display: block;
+      padding-bottom: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    &.selected .event--header,
+    &.selected .event--body,
+    &.selected .event--footer {
+      display: block;
+      max-height: none;
+      min-height: 2.5em;
+    }
+
+    &.selected .event--footer {
+      position: relative;
     }
 
     &.get-crazy {
@@ -217,7 +253,52 @@ container {
     }
   }
 
-  .schedule .event.tiny {
+  @keyframes slide-in {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(-50%);
+      opacity: 1;
+    }
+  }
+
+  @keyframes crazy {
+    25% {
+      transform: translateY(50px);
+    }
+     75% {
+      transform: translateY(-50px);
+    }
+  }
+}
+
+// make events responsive (separated to avoid scss chaos)
+.day .schedule .event:not(.selected) {
+  &.medium .event--header,
+  &.small .event--header,
+  &.tiny .event--header {
+    max-height: 2.5em;
+    -webkit-line-clamp: 2;
+    margin-top: 15px;
+    margin-bottom: 5px;
+  }
+
+  &.small .event--body,
+  &.tiny .event--body {
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+
+  &.small, &.tiny {
+    padding-bottom: 5px; // no more footer, no more need to prevent glitching
+    .event--footer {
+      display: none;
+    }
+  }
+
+  &.tiny {
     padding: 3px 10px;
 
     .event--time {
@@ -230,22 +311,6 @@ container {
       margin-top: 3px;
       margin-bottom: 3px;
     }
-  }
-
-  @keyframes crazy {
-    25% {
-      transform: translateY(50px);
-    }
-     75% {
-      transform: translateY(-50px);
-    }
-  }
-
-  &.is-current .schedule .event {
-    box-shadow: 0 4px 4px 0 lightgray;
-    box-shadow: 0 8px 8px 0 gray;
-    transform: translateY(-5px);
-    transform: scale(1.025);
   }
 }
 
@@ -286,7 +351,7 @@ container {
       margin-bottom: 1em;
     }
 
-    .schedule .event {
+    .schedule .event:not(.selected) {
       padding-bottom: 0;
 
       &--body {

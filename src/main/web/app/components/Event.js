@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 export default class Event extends Component {
   constructor(props) {
     super(props);
-    this.state = { sizeClass: '' }; // '' is large (default), other values: 'medium', 'small', 'tiny'
+    this.state = { classList: 'normal', selected: false, style: { height: props.data.height, top: props.data.top } }; // '' is large (default), other values: 'medium', 'small', 'tiny'
   }
 
   update = () => {
     const height = this.liElement.clientHeight;
+    const classList = this.state.classList.split(' ');
     let size = '';
     if (height < 70) {
       size = 'tiny';
@@ -16,8 +17,17 @@ export default class Event extends Component {
       size = 'small';
     } else if (height < 190) {
       size = 'medium';
+    } else {
+      size = 'normal';
     }
-    this.setState({ sizeClass: size });
+    classList[0] = size;
+    this.setState({ classList: classList.join(' ') });
+  }
+
+  setSelection = (val) => { console.log('visibility set to ' + val); this.setState({selected: val})};
+
+  handleClick = () => {
+    this.props.showBackdrop(this.setSelection);
   }
 
   componentDidMount() {
@@ -26,13 +36,14 @@ export default class Event extends Component {
   }
 
   render() {
-    const { height, top, startTime, endTime, course, persons, resources }
+    const { startTime, endTime, course, persons, resources }
       = this.props.data;
     return (
       <li
-        style={{ height, top }}
-        className={`event ${this.state.sizeClass}`}
+        style={this.state.style}
+        className={`event ${this.state.classList} ${this.state.selected ? 'selected':''}`}
         ref={liElement => this.liElement = liElement}
+        onClick={this.handleClick}
       >
         <p className="event--time">{`${startTime} - ${endTime}`}</p>
         <h3 className="event--header">{course}</h3>
@@ -45,4 +56,5 @@ export default class Event extends Component {
 
 Event.propTypes = {
   data: PropTypes.object.isRequired,
+  showBackdrop: PropTypes.func.isRequired,
 };

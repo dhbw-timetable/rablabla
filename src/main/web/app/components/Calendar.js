@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TimeView from './TimeView';
 import Day from './Day';
@@ -17,32 +17,56 @@ function normalize(d) {
   return nd;
 }
 
-export default function Calendar(props) {
-  const currentDay = new Date();
-  const { weekEvents, date, start, end } = props;
-  const normDate = normalize(date);
-  return (
-    <container>
-      <div className="calendar">
-        <TimeView start={start} end={end} />
-        {new Array(6).fill().map((_, i) => {
-          const day = new Date(normDate.getTime());
-          day.setDate(day.getDate() + i); // shift
-          return (<Day
-            key={i}
-            eventData={weekEvents[i]}
-            name={name}
-            start={start}
-            end={end}
-            date={day}
-            isCurrent={i === (currentDay.getDay() - 1)
-              && getWeekNumber(currentDay) === getWeekNumber(date)
-              && currentDay.getFullYear() === date.getFullYear()}
-          />);
-        })}
-      </div>
-    </container>
-  );
+export default class Calendar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { backdrop: false, backdropTargetHandler: () => {} };
+  }
+
+  hideBackdrop = () => {
+    console.log('Clicked on backdrop');
+    this.state.backdropTargetHandler(false);
+    this.setState({ backdrop: false, backdropTargetHandler: () => {} });
+  };
+
+  showBackdrop = (selectionHandler) => {
+    console.log('Clicked on an event');
+    selectionHandler(true);
+    this.setState({ backdrop: true, backdropTargetHandler: selectionHandler });
+  }
+
+  render() {
+    const currentDay = new Date();
+    const { weekEvents, date, start, end } = this.props;
+    const normDate = normalize(date);
+    return (
+      <container>
+        <div className={`calendar ${ this.state.backdrop ? 'has-backdrop' : ''}`}>
+          <TimeView start={start} end={end} />
+          {new Array(6).fill().map((_, i) => {
+            const day = new Date(normDate.getTime());
+            day.setDate(day.getDate() + i); // shift
+            return (<Day
+              key={i}
+              eventData={weekEvents[i]}
+              name={name}
+              start={start}
+              end={end}
+              date={day}
+              showBackdrop={this.showBackdrop}
+              isCurrent={i === (currentDay.getDay() - 1)
+                && getWeekNumber(currentDay) === getWeekNumber(date)
+                && currentDay.getFullYear() === date.getFullYear()}
+            />);
+          })}
+          <div
+            className={`calendar--backdrop ${this.state.backdrop ? 'is-visible' : ''}`}
+            onClick={this.hideBackdrop}
+          />
+        </div>
+      </container>
+    );
+  }
 }
 
 Calendar.propTypes = {
