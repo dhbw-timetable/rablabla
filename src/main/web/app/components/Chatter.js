@@ -71,7 +71,7 @@ export default class Chatter extends Component {
         >
           <Paper classes={{ root: 'chat-window' }}>
             <Typography type="title" component="h3" align="left">
-            Watson Chat
+            Chat
             </Typography>
             <div
               className="message-container"

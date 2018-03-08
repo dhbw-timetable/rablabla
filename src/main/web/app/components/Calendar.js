@@ -41,7 +41,7 @@ export default class Calendar extends Component {
     const normDate = normalize(date);
     return (
       <container>
-        <div className={`calendar ${ this.state.backdrop ? 'has-backdrop' : ''}`}>
+        <div className={`calendar ${this.state.backdrop ? 'has-backdrop' : ''}`}>
           <TimeView start={start} end={end} />
           {new Array(6).fill().map((_, i) => {
             const day = new Date(normDate.getTime());

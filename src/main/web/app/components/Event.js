@@ -24,7 +24,10 @@ export default class Event extends Component {
     this.setState({ classList: classList.join(' ') });
   }
 
-  setSelection = (val) => { console.log('visibility set to ' + val); this.setState({selected: val})};
+  setSelection = (val) => {
+    console.log(`Visibility set to ' + ${val}`);
+    this.setState({ selected: val });
+  };
 
   handleClick = () => {
     this.props.showBackdrop(this.setSelection);
@@ -41,7 +44,7 @@ export default class Event extends Component {
     return (
       <li
         style={this.state.style}
-        className={`event ${this.state.classList} ${this.state.selected ? 'selected':''}`}
+        className={`event ${this.state.classList} ${this.state.selected ? 'selected' : ''}`}
         ref={liElement => this.liElement = liElement}
         onClick={this.handleClick}
       >
