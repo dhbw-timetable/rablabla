@@ -240,6 +240,15 @@ export default class Main extends Component {
       window.applicationCache.addEventListener('updateready', this.onAppCacheUpdate, false);
       window.applicationCache.addEventListener('noupdate', this.onAppCacheNoUpdate, false);
       window.applicationCache.update();
+    } else if (msg.toLowerCase().indexOf('get crazy') !== -1) {
+      document.querySelectorAll('li.event').forEach((event) => {
+        setTimeout(() => { event.classList.add('get-crazy'); }, Math.random() * 1.2 * 1000);
+      });
+      for (let i = 0; i < 200; i++) {
+        setTimeout(() => {
+          this.appendMessage(Math.random() > 0.5 ? 'Lululululu' : 'Trololo', Math.random() < 0.5);
+        }, Math.random() * 42 * 1000);
+      }
     } else {
       // Send to backend and handle answer
       $.ajax({
@@ -323,7 +332,7 @@ export default class Main extends Component {
               },
             },
             {
-              text: 'Get external calendar',
+              text: 'External Calendar ICS',
               onClick: () => {
                 getICSLink(this.raplaLinkValue, this.handleExtCalOpen, this.handleExtCalOpen);
               },
@@ -372,7 +381,7 @@ export default class Main extends Component {
               />
               <Typography type="caption" style={{ fontWeight: 600 }}>
                 Note: Currently you will have to request the
-                link every 5 weeks again here on the web UI. This will be fixed
+                link every few weeks again here on the web interface. This will be fixed
                 within future versions.
               </Typography>
             </DialogContent>
