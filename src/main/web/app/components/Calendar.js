@@ -20,17 +20,19 @@ function normalize(d) {
 export default class Calendar extends Component {
   constructor(props) {
     super(props);
-    this.state = { backdrop: false };
+    this.state = { backdrop: false, backdropTargetHandler: () => {} };
   }
 
   hideBackdrop = () => {
     console.log('Clicked on backdrop');
-    this.setState({ backdrop: false });
+    this.state.backdropTargetHandler(false);
+    this.setState({ backdrop: false, backdropTargetHandler: () => {} });
   };
 
-  showBackdrop = () => {
+  showBackdrop = (selectionHandler) => {
     console.log('Clicked on an event');
-    this.setState({ backdrop: true });
+    selectionHandler(true);
+    this.setState({ backdrop: true, backdropTargetHandler: selectionHandler });
   }
 
   render() {
@@ -39,7 +41,7 @@ export default class Calendar extends Component {
     const normDate = normalize(date);
     return (
       <container>
-        <div className="calendar">
+        <div className={`calendar ${ this.state.backdrop ? 'has-backdrop' : ''}`}>
           <TimeView start={start} end={end} />
           {new Array(6).fill().map((_, i) => {
             const day = new Date(normDate.getTime());
@@ -58,13 +60,7 @@ export default class Calendar extends Component {
             />);
           })}
           <div
-            style={{
-              width: '100%',
-              height: '100%',
-              position: 'absolute',
-              backgroundColor: this.state.backdrop ? 'grey' : 'black',
-              zIndex: this.state.backdrop ? 3 : -1,
-            }}
+            className={`calendar--backdrop ${this.state.backdrop ? 'is-visible' : ''}`}
             onClick={this.hideBackdrop}
           />
         </div>

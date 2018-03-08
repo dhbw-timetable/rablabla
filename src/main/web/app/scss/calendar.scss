@@ -17,6 +17,7 @@ container {
 }
 
 .calendar {
+  position: relative;
   width: inherit;
   min-width: 900px;
   height: inherit;
@@ -24,6 +25,25 @@ container {
 
   display: flex;
   justify-content: flex-start;
+
+  &--backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,.5);
+    visibility: hidden;
+    opacity: 0;
+
+    z-index: 10;
+
+    &.is-visible {
+      transition: .15s ease-in-out;
+      visibility: visible;
+      opacity: 1;
+    }
+  }
 }
 
 .day {
@@ -125,19 +145,19 @@ container {
     left: 5%;
     padding: 10px 10px 1.5em 10px; // prevent body from glitching under course info
 
-    transition: top .3s ease-in-out, box-shadow .15s ease-out, height .3s ease-in-out, z-index 0 0.3s;
-
     color: white;
     background-color: $primarylight;
     border-radius: 5px;
     box-shadow: 0 2px 2px 0 lightgray;
     box-shadow: 0 4px 4px 0 gray;
-    box-shadow: 0 0 200vw 200vw rgba(0, 0, 0, 0); // for the selected animation
+
+    transform: translateY(0);
 
     word-wrap: break-word;
     display: flex;
     flex-flow: column wrap;
     overflow: hidden;
+
 
     &--header,
     &--body,
@@ -193,17 +213,27 @@ container {
       font-size: 0.8em;
     }
 
-    &.selected {
-      transition: top .3s ease-in-out, box-shadow .15s ease-in, height .3s ease-in-out, ;
-      z-index: 4;
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0);
-      box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0);
+    &.is-current .schedule .event {
+      box-shadow: 0 4px 4px 0 lightgray;
+      box-shadow: 0 8px 8px 0 gray;
+      transform: translateY(-5px);
+      transform: scale(1.025);
     }
 
-    // make all text visible when selected
     &.selected {
+      z-index: 15;
+      top: 50% !important; // override calculated inline styles
+      transform: translateY(-50%);
+      height: auto !important;
+      max-width: 300px;
+      animation: slide-in .3s ease-in-out;
+      box-shadow: none;
+      // make all text visible when selected
+      max-height: 95%;
+      display: block;
       padding-bottom: 0;
-      transition: height .3s ease-in-out;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     &.selected .event--header,
@@ -211,19 +241,26 @@ container {
     &.selected .event--footer {
       display: block;
       max-height: none;
+      min-height: 2.5em;
     }
 
     &.selected .event--footer {
       position: relative;
-      max-height: 2em;
-    }
-    &.selected .event--footer:hover {
-      max-height: none;
-      cursor: help;
     }
 
     &.get-crazy {
       animation: crazy 1s infinite;
+    }
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(-50%);
+      opacity: 1;
     }
   }
 
@@ -234,15 +271,6 @@ container {
      75% {
       transform: translateY(-50px);
     }
-  }
-
-  &.is-current .schedule .event {
-    &:not(.selected) {
-      box-shadow: 0 4px 4px 0 lightgray;
-      box-shadow: 0 8px 8px 0 gray;
-    }
-    transform: translateY(-5px);
-    transform: scale(1.025);
   }
 }
 
