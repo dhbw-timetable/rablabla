@@ -22,9 +22,12 @@ $primarylight: #ba3838;
     margin: 10px 15px;
     padding: 10px;
     word-wrap: break-word;
+    width: auto;
+    max-width: 75%;
+    text-align: left;
 
     &--left {
-      margin-right: 40%;
+      align-self: flex-start;
       background: $primarylight;
       color: white;
 
@@ -40,7 +43,7 @@ $primarylight: #ba3838;
     }
 
     &--right {
-      margin-left: 40%;
+      align-self: flex-end;
 
       &::after {
         z-index: 1;
@@ -57,6 +60,11 @@ $primarylight: #ba3838;
   .message-container {
     overflow-y: auto;
     height: calc(100% - (48px + 15px));
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 
   .input-container {
