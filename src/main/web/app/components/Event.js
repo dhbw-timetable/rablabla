@@ -27,7 +27,6 @@ export default class Event extends Component {
   }
 
   setSelection = (val) => {
-    console.log(`Visibility set to ${val}`);
     this.setState({ selected: val });
   };
 
