@@ -224,7 +224,10 @@ export default class Main extends Component {
     const { chat } = this.state;
     chat.push({ text, watson });
     this.setState({ chat });
-    document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+    const bottomEl = document.querySelector('.messages-bottom');
+    if (bottomEl) {
+      bottomEl.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   sendMessage = (msg) => {
