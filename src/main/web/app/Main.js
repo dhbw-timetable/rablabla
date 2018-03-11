@@ -119,7 +119,7 @@ export default class Main extends Component {
         today, (response) => {
           this.onAjaxSuccess(response, today);
           this.setState({ onboardingOpen: false });
-        }, this.onAjaxError, this.onAjaxPre,
+        }, this.onAjaxError, () => {},
       ));
     }
   }
