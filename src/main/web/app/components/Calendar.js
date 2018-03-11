@@ -37,12 +37,6 @@ export default class Calendar extends Component {
     const currentDay = new Date();
     const { weekEvents, date, start, end } = this.props;
     const normDate = normalize(date);
-    console.warn('Before: ' + date.getDay());
-    console.warn(date);
-    console.warn('After:' + normDate.getDay());
-    console.warn(normDate);
-    console.warn(normDate.getDay());
-    console.warn();
     return (
       <container>
         <div className={`calendar ${this.state.backdrop ? 'has-backdrop' : ''}`}>
