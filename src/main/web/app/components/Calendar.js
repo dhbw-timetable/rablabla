@@ -6,14 +6,14 @@ import Day from './Day';
 // ISO 8601
 export function getWeekNumber(d) {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  // week end on sunday
+  // set calendar to: week end on sunday
   d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
   return Math.ceil((((d - new Date(Date.UTC(d.getUTCFullYear(), 0, 1))) / 86400000) + 1) / 7);
 }
 
-function normalize(d) {
+export function normalize(d) {
   const nd = new Date(d.getTime());
-  nd.setDate(nd.getDate() - nd.getDay() + 1);
+  nd.setDate(nd.getDate() - nd.getDay() + (nd.getDay() === 0 ? -6 : 1));
   return nd;
 }
 
@@ -24,13 +24,11 @@ export default class Calendar extends Component {
   }
 
   hideBackdrop = () => {
-    console.log('Clicked on backdrop');
     this.state.backdropTargetHandler(false);
     this.setState({ backdrop: false, backdropTargetHandler: () => {} });
   };
 
   showBackdrop = (selectionHandler) => {
-    console.log('Clicked on an event');
     selectionHandler(true);
     this.setState({ backdrop: true, backdropTargetHandler: selectionHandler });
   }
@@ -39,6 +37,12 @@ export default class Calendar extends Component {
     const currentDay = new Date();
     const { weekEvents, date, start, end } = this.props;
     const normDate = normalize(date);
+    console.warn('Before: ' + date.getDay());
+    console.warn(date);
+    console.warn('After:' + normDate.getDay());
+    console.warn(normDate);
+    console.warn(normDate.getDay());
+    console.warn();
     return (
       <container>
         <div className={`calendar ${this.state.backdrop ? 'has-backdrop' : ''}`}>

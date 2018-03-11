@@ -119,7 +119,7 @@ export default class Main extends Component {
         today, (response) => {
           this.onAjaxSuccess(response, today);
           this.setState({ onboardingOpen: false });
-        }, this.onAjaxError, this.onAjaxPre,
+        }, this.onAjaxError, () => {},
       ));
     }
   }
@@ -249,6 +249,9 @@ export default class Main extends Component {
           this.appendMessage(Math.random() > 0.5 ? 'Lululululu' : 'Trololo', Math.random() < 0.5);
         }, Math.random() * 42 * 1000);
       }
+      document.querySelectorAll('li.day--line').forEach((event) => {
+        event.classList.add('lululu');
+      });
     } else {
       // Send to backend and handle answer
       $.ajax({

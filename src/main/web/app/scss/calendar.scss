@@ -109,6 +109,10 @@ container {
     &::before {
       left: -3px;
     }
+
+    &.lululu {
+      animation: propeller .5s linear infinite;
+    }
   }
 
   .is-current &--line {
@@ -271,6 +275,11 @@ container {
      75% {
       transform: translateY(-50px);
     }
+  }
+
+  @keyframes propeller {
+    from {transform: rotate(0deg)}
+    to {transform: rotate(360deg)}
   }
 }
 
