@@ -8,24 +8,26 @@ export default class Event extends Component {
   }
 
   update = () => {
-    const height = this.liElement.clientHeight;
-    const classList = this.state.classList.split(' ');
-    let size = '';
-    if (height < 70) {
-      size = 'tiny';
-    } else if (height < 160) {
-      size = 'small';
-    } else if (height < 190) {
-      size = 'medium';
-    } else {
-      size = 'normal';
+    if (this.liElement) {
+      const height = this.liElement.clientHeight;
+      const classList = this.state.classList.split(' ');
+      let size = '';
+      if (height < 70) {
+        size = 'tiny';
+      } else if (height < 160) {
+        size = 'small';
+      } else if (height < 190) {
+        size = 'medium';
+      } else {
+        size = 'normal';
+      }
+      classList[0] = size;
+      this.setState({ classList: classList.join(' ') });
     }
-    classList[0] = size;
-    this.setState({ classList: classList.join(' ') });
   }
 
   setSelection = (val) => {
-    console.log(`Visibility set to ' + ${val}`);
+    console.log(`Visibility set to ${val}`);
     this.setState({ selected: val });
   };
 
