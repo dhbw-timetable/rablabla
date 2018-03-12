@@ -19,6 +19,8 @@ import {
   slidingTransition,
   theme,
   ajaxTarget,
+  parseDates,
+  makeDays,
   getAppointments,
   getICSLink,
 } from './utilities';
@@ -38,7 +40,7 @@ export default class Main extends Component {
     const data = localStorage.getItem(`${today.year()} ${today.isoWeek()}`);
     const onboardingNeeded = !this.raplaLinkValue;
     this.state = {
-      dailyEvents: data ? this.makeDays(this.parseDates(JSON.parse(data)))
+      dailyEvents: data ? makeDays(parseDates(JSON.parse(data)))
         : [[], [], [], [], [], [], []],
       date: today,
       chat: [],
@@ -64,7 +66,7 @@ export default class Main extends Component {
   onAjaxPre = (date) => {
     const localData = localStorage.getItem(`${date.year()} ${date.isoWeek()}`);
     this.setState({
-      dailyEvents: localData ? this.makeDays(this.parseDates(JSON.parse(localData)))
+      dailyEvents: localData ? makeDays(parseDates(JSON.parse(localData)))
         : [[], [], [], [], [], [], []],
       date,
     });
@@ -101,7 +103,7 @@ export default class Main extends Component {
       localStorage.setItem(`${reqDate.year()} ${reqDate.isoWeek()}`, response);
       console.log('Saved received data in cache.');
     }
-    this.setState({ dailyEvents: this.makeDays(this.parseDates(data)), date: reqDate });
+    this.setState({ dailyEvents: makeDays(parseDates(data)), date: reqDate });
     console.log(data);
   };
 
@@ -117,22 +119,6 @@ export default class Main extends Component {
     this.icsLink = response;
     this.setState({ extCalendarOpen: true });
   };
-
-  parseDates = (events) => {
-    events.forEach((el) => {
-      const dateElements = el.date.split('.');
-      el.Date = moment().date(dateElements[0]).month(dateElements[1] - 1).year(dateElements[2]);
-    });
-    return events;
-  }
-
-  makeDays = (events) => {
-    const dailyEvents = [[], [], [], [], [], [], []];
-    events.forEach((el) => {
-      dailyEvents[el.Date.day()].push(el);
-    });
-    return dailyEvents;
-  }
 
   clearListeners = () => {
     window.applicationCache.removeEventListener('updateready', this.onAppCacheUpdate);

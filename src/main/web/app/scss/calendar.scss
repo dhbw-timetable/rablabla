@@ -225,6 +225,7 @@ container {
 
     &.selected {
       z-index: 15;
+      width: 100% !important;
       top: 50% !important; // override calculated inline styles
       transform: translateY(-50%);
       height: auto !important;

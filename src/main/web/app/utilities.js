@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { createMuiTheme } from 'material-ui/styles';
 import yellow from 'material-ui/colors/yellow';
 import Slide from 'material-ui/transitions/Slide';
@@ -53,6 +54,59 @@ const getAppointments = (url, mmt, success, error, pre) => {
   return 'Accessing appointments...';
 };
 
+const parseDates = (events) => {
+  events.forEach((el) => {
+    const dateElements = el.date.split('.');
+    el.Date = moment().date(dateElements[0]).month(dateElements[1] - 1).year(dateElements[2]);
+  });
+  return events;
+};
+
+// check if there's a collision between the events a and b
+const intersects = (a, b) => {
+  const startTimeWrapperA = a.startTime.split(':');
+  const endTimeWrapperA = a.endTime.split(':');
+  const startMinA = startTimeWrapperA[0] * 60 + startTimeWrapperA[1];
+  const endMinA = endTimeWrapperA[0] * 60 + endTimeWrapperA[1];
+
+  const startTimeWrapperB = b.startTime.split(':');
+  const endTimeWrapperB = b.endTime.split(':');
+  const startMinB = startTimeWrapperB[0] * 60 + startTimeWrapperB[1];
+  const endMinB = endTimeWrapperB[0] * 60 + endTimeWrapperB[1];
+
+  return (startMinA <= startMinB && endMinA >= endMinB) // a contains(equals) b
+    || (startMinA >= startMinB && endMinA <= endMinB) // b contains(equals) a
+    || (startMinA < startMinB && endMinA < endMinB && endMinA > startMinB) // a intersects b
+    || (startMinA > startMinB && endMinA > endMinB && startMinA < endMinB) // b intersects a
+  ;
+};
+
+const makeDays = (events) => {
+  const dailyEvents = [[], [], [], [], [], [], []];
+
+  events.forEach((el) => {
+    dailyEvents[el.Date.day()].push(el);
+  });
+  // XXX MAKE THINGS RUN!!!
+  /* const resolveCollisions = (dayWrapper, el1) => {
+    const collisions = dayWrapper[dayWrapper.length - 1].filter(el2 => intersects(el1, el2));
+    if (collisions.length > 0) {
+      const newLevel = [];
+      collisions.forEach((elToShift) => {
+        newLevel.push(elToShift);
+      });
+      dayWrapper.push(newLevel);
+    }
+  };
+
+  dailyEvents.forEach((day) => {
+    const dayWrapper = [day];
+    day.forEach(el1 => resolveCollisions(dayWrapper, el1));
+  }); */
+
+  return dailyEvents;
+};
+
 // = = = = T H E M E = = = = =
 
 const dhbwtimetablepalette = {
@@ -92,6 +146,8 @@ module.exports = {
   getParams,
   slidingTransition,
   theme,
+  parseDates,
+  makeDays,
   getAppointments,
   getICSLink,
 };

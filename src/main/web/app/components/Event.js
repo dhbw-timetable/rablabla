@@ -43,11 +43,12 @@ export default class Event extends Component {
   }
 
   render() {
-    const { startTime, endTime, course, persons, resources, height, top } = this.props.data;
+    const { startTime, endTime, course, persons, resources, height, width, top, left }
+      = this.props.data;
     const { selected, classList } = this.state;
     return (
       <li
-        style={{ height, top }}
+        style={{ height, width, top, left }}
         className={`event ${classList} ${selected ? 'selected' : ''}`}
         ref={liElement => this.liElement = liElement}
         onClick={this.handleClick}
