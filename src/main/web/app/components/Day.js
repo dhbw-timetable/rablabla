@@ -19,9 +19,6 @@ export default function Day(props) {
     el.top = `${startY}%`;
   });
 
-  const lineY = ((date.hour() - start) + (date.minute() / 60))
-    * (100 / (end - start + 0.5));
-
   return (
     <DayView
       name={date.format('dd. D.')}
@@ -30,7 +27,6 @@ export default function Day(props) {
       end={end}
       isCurrent={isCurrent}
       showBackdrop={showBackdrop}
-      lineY={lineY}
     />
   );
 }

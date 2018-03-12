@@ -39,7 +39,7 @@ export default class Main extends Component {
     const onboardingNeeded = !this.raplaLinkValue;
     this.state = {
       dailyEvents: data ? this.makeDays(this.parseDates(JSON.parse(data)))
-        : [[], [], [], [], [], []],
+        : [[], [], [], [], [], [], []],
       date: today,
       chat: [],
       extCalendarOpen: false,
@@ -65,7 +65,7 @@ export default class Main extends Component {
     const localData = localStorage.getItem(`${date.year()} ${date.isoWeek()}`);
     this.setState({
       dailyEvents: localData ? this.makeDays(this.parseDates(JSON.parse(localData)))
-        : [[], [], [], [], [], []],
+        : [[], [], [], [], [], [], []],
       date,
     });
   };
@@ -127,9 +127,9 @@ export default class Main extends Component {
   }
 
   makeDays = (events) => {
-    const dailyEvents = [[], [], [], [], [], []];
+    const dailyEvents = [[], [], [], [], [], [], []];
     events.forEach((el) => {
-      dailyEvents[el.Date.day() - 1].push(el);
+      dailyEvents[el.Date.day()].push(el);
     });
     return dailyEvents;
   }
@@ -278,6 +278,10 @@ export default class Main extends Component {
                 this.setState({ onboardingOpen: true });
                 window.addEventListener('keypress', this.handleOnboardingKeypress);
               },
+            },
+            {
+              text: 'Help to <develop />',
+              href: 'https://github.com/dhbw-timetable/rablabla',
             },
             {
               text: 'More',

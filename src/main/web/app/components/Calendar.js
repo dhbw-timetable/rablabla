@@ -23,21 +23,20 @@ export default class Calendar extends Component {
   render() {
     const today = moment();
     const { weekEvents, date, start, end } = this.props;
-    console.log(weekEvents);
     return (
       <container>
         <div className={`calendar ${this.state.backdrop ? 'has-backdrop' : ''}`}>
           <TimeView start={start} end={end} />
-          {new Array(6).fill().map((_, i) => {
+          {new Array(weekEvents.length).fill().map((_, i) => {
             return (<Day
               key={i}
               eventData={weekEvents[i]}
               name={name}
               start={start}
               end={end}
-              date={moment(date).day(1).add(i, 'days')}
+              date={moment(date).day(0).add(i, 'days')}
               showBackdrop={this.showBackdrop}
-              isCurrent={i === (today.date() - 1)
+              isCurrent={i === today.day()
                 && today.week() === date.week()
                 && today.year() === date.year()}
             />);
