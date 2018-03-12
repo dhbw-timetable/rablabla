@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 export default class Event extends Component {
   constructor(props) {
     super(props);
-    this.state = { classList: 'normal', selected: false, style: { height: props.data.height, top: props.data.top } }; // '' is large (default), other values: 'medium', 'small', 'tiny'
+    this.state = {
+      classList: 'normal',
+      selected: false,
+      style: { height: props.data.height, top: props.data.top },
+    }; // '' is large (default), other values: 'medium', 'small', 'tiny'
   }
 
   update = () => {
@@ -40,12 +44,12 @@ export default class Event extends Component {
   }
 
   render() {
-    const { startTime, endTime, course, persons, resources }
-      = this.props.data;
+    const { startTime, endTime, course, persons, resources } = this.props.data;
+    const { style, selected, classList } = this.state;
     return (
       <li
-        style={this.state.style}
-        className={`event ${this.state.classList} ${this.state.selected ? 'selected' : ''}`}
+        style={style}
+        className={`event ${classList} ${selected ? 'selected' : ''}`}
         ref={liElement => this.liElement = liElement}
         onClick={this.handleClick}
       >
