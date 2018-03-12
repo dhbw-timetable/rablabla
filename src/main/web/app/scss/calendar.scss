@@ -19,7 +19,7 @@ container {
 .calendar {
   position: relative;
   width: inherit;
-  min-width: 900px;
+  min-width: 1200px;
   height: inherit;
   box-sizing: border-box;
 
@@ -200,7 +200,7 @@ container {
       margin-bottom: calc(1em + 5px);
       // Multiline ellipsis, based on https://codepen.io/martinwolf/pen/qlFdp by Martin Wolf
       display: block; /* Fallback for non-webkit */
-      max-height: 2em;
+      max-height: 1.8em;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;

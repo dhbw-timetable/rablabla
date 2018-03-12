@@ -24,7 +24,10 @@ export default class Chatter extends Component {
   }
 
   handleOpenChat = () => {
-    this.setState({ open: true, anchorEl: findDOMNode(this.chatButton) });
+    this.setState({
+      open: true,
+      anchorEl: findDOMNode(this.chatButton),
+    });
   }
 
   handleCloseChat = () => {
