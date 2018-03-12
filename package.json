@@ -51,7 +51,7 @@
     "jss": "8.1.0",
     "material-ui": "1.0.0-beta.19",
     "material-ui-icons": "1.0.0-beta.15",
-    "material-ui-pickers": "^1.0.0-rc.2",
+    "material-ui-pickers": "1.0.0-beta.7",
     "moment": "2.19.3",
     "pretty-hrtime": "1.0.3",
     "prop-types": "15.6.0",

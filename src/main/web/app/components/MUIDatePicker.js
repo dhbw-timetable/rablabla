@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { DatePicker } from 'material-ui-pickers';
 import IconButton from 'material-ui/IconButton';
-import MomentUtils from 'material-ui-pickers/utils/moment-utils';
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 
 export default class MUIDatePicker extends Component {
 
@@ -29,15 +27,13 @@ export default class MUIDatePicker extends Component {
         >
           date_range
         </IconButton>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
-          <DatePicker
-            style={{ display: 'none' }}
-            value={this.state.selectedDate}
-            inputRef={el => this.dateInput = el}
-            onChange={(momentDate) => { onDateSelected(momentDate); }}
-            {...pickerProps}
-          />
-        </MuiPickersUtilsProvider>
+        <DatePicker
+          style={{ display: 'none' }}
+          value={this.state.selectedDate}
+          inputRef={el => this.dateInput = el}
+          onChange={(momentDate) => { onDateSelected(momentDate); }}
+          {...pickerProps}
+        />
       </div>
     );
   }
