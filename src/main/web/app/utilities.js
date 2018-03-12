@@ -42,8 +42,10 @@ const getICSLink = (url, success, error) => {
 
 const getAppointments = (url, mmt, success, error, pre) => {
   pre(mmt);
+  // backend uses monday as first day of the week
+  // we use en locale so we make an exception for sundays
   $.ajax({
-    url: `${ajaxTarget}/Rablabla?url=${encodeURIComponent(url)}&day=${mmt.date()}&month=${mmt.month() + 1}&year=${mmt.year()}`,
+    url: `${ajaxTarget}/Rablabla?url=${encodeURIComponent(url)}&day=${mmt.day() > 0 ? mmt.date() : mmt.day(1).date()}&month=${mmt.month() + 1}&year=${mmt.year()}`,
     type: 'GET',
     success,
     error,
