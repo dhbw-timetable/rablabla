@@ -7,8 +7,7 @@ export default class Event extends Component {
     this.state = {
       classList: 'normal',
       selected: false,
-      style: { height: props.data.height, top: props.data.top },
-    }; // '' is large (default), other values: 'medium', 'small', 'tiny'
+    }; // 'normal' is default, other values: 'medium', 'small', 'tiny'
   }
 
   update = () => {
@@ -44,11 +43,11 @@ export default class Event extends Component {
   }
 
   render() {
-    const { startTime, endTime, course, persons, resources } = this.props.data;
-    const { style, selected, classList } = this.state;
+    const { startTime, endTime, course, persons, resources, height, top } = this.props.data;
+    const { selected, classList } = this.state;
     return (
       <li
-        style={style}
+        style={{ height, top }}
         className={`event ${classList} ${selected ? 'selected' : ''}`}
         ref={liElement => this.liElement = liElement}
         onClick={this.handleClick}
