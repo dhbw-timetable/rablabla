@@ -295,7 +295,7 @@ export default class Main extends Component {
                 this.onAjaxSuccess(resp, d);
               },
               this.onAjaxError, this.onAjaxPre,
-              ));
+            ));
           }}
         >
           <Dialog
