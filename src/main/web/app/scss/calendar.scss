@@ -17,9 +17,8 @@ container {
 }
 
 .calendar {
-  position: relative;
-  width: inherit;
-  min-width: 1200px;
+  position: absolute;
+  min-width: 900px;
   height: inherit;
   box-sizing: border-box;
 
