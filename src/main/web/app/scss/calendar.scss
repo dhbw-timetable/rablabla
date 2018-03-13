@@ -199,7 +199,7 @@ container {
       margin-bottom: calc(1em + 5px);
       // Multiline ellipsis, based on https://codepen.io/martinwolf/pen/qlFdp by Martin Wolf
       display: block; /* Fallback for non-webkit */
-      max-height: calc(2em - 2px); /* fix strange 3rd line bug */
+      max-height: 2em;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
