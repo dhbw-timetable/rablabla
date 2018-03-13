@@ -182,7 +182,7 @@ const makeDays = (events) => {
       resources: 'STG-INF42X',
     },
     {
-      date: '16.03.2018',
+      date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
       startTime: '08:00',
       endTime: '14:00',
@@ -190,7 +190,7 @@ const makeDays = (events) => {
       resources: 'STG-INF42X',
     },
     {
-      date: '16.03.2018',
+      date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
       startTime: '16:00',
       endTime: '18:00',
@@ -208,7 +208,7 @@ const makeDays = (events) => {
       resources: 'STG-INF42X',
     },
     {
-      date: '16.03.2018',
+      date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
       startTime: '08:00',
       endTime: '14:00',
@@ -216,7 +216,7 @@ const makeDays = (events) => {
       resources: 'STG-INF42X',
     },
     {
-      date: '16.03.2018',
+      date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
       startTime: '16:00',
       endTime: '18:00',
