@@ -81,28 +81,114 @@ const intersects = (a, b) => {
   ;
 };
 
+// divides a list of events into the maximum-non-colliding list of events and the rest
+const splitGreedy = (eventStack) => {
+  const filterFalse = [];
+  let done = false;
+  do {
+    // count the intersections of each event
+    eventStack.forEach((ev) => {
+      ev.intersectionCount = 0;
+      eventStack.filter(otherEvent => ev !== otherEvent).forEach((otherEvent) => {
+        if (intersects(ev, otherEvent)) {
+          ev.intersectionCount++;
+        }
+      });
+    });
+
+    // sort for intersection count
+    eventStack.sort((a, b) => a.intersectionCount - b.intersectionCount);
+
+    // if collisions remaining -> repeat without the max intersects element
+    if (eventStack.filter(ev => ev.intersectionCount > 0).length > 0) {
+      filterFalse.push(eventStack.pop());
+    } else {
+      done = true;
+    }
+  } while (!done);
+
+  return { filterTrue: eventStack, filterFalse };
+};
+
+const splitterSearch = (possibleSolutions, todo, current) => {
+  // get every event without collision to current
+  todo.filter((testEv) => {
+    return current.filter(safeEv => intersects(safeEv, testEv)).length === 0;
+  }).forEach((semiSafeEv) => {
+    const newSolution = current.concat([semiSafeEv]);
+    const remaining = todo.filter(el => el !== semiSafeEv);
+    splitterSearch(possibleSolutions, remaining, newSolution);
+  });
+};
+
+// same as splitGreedy() but more intelligent
+const splitter = (eventStack) => {
+  const safe = [], todo = [];
+  // count the intersections of each event
+  eventStack.forEach((ev) => {
+    ev.intersectionCount = 0;
+    eventStack.filter(otherEvent => ev !== otherEvent).forEach((otherEvent) => {
+      if (intersects(ev, otherEvent)) {
+        ev.intersectionCount++;
+      }
+    });
+  });
+
+  // divide into safe and colliding
+  eventStack.forEach((ev) => {
+    (ev.intersectionCount > 0 ? todo : safe).push(ev);
+  });
+
+  const possibleSolutions = [];
+  // if there are colliding elements
+  if (todo.length > 0) {
+    splitterSearch(possibleSolutions, todo, []);
+    // search for biggest solution
+    possibleSolutions.sort((arr1, arr2) => arr2.length - arr1.length);
+    safe.concat(possibleSolutions[0]);
+  }
+  // merge with safe ones
+  return {
+    filterTrue: safe,
+    filterFalse: eventStack.filter(ev => safe.indexOf(ev) === -1),
+  };
+};
+
 const makeDays = (events) => {
   const dailyEvents = [[], [], [], [], [], [], []];
 
+  // structure related to days
   events.forEach((el) => {
     dailyEvents[el.Date.day()].push(el);
   });
-  // XXX MAKE THINGS RUN!!!
-  /* const resolveCollisions = (dayWrapper, el1) => {
-    const collisions = dayWrapper[dayWrapper.length - 1].filter(el2 => intersects(el1, el2));
-    if (collisions.length > 0) {
-      const newLevel = [];
-      collisions.forEach((elToShift) => {
-        newLevel.push(elToShift);
-      });
-      dayWrapper.push(newLevel);
-    }
-  };
 
   dailyEvents.forEach((day) => {
-    const dayWrapper = [day];
-    day.forEach(el1 => resolveCollisions(dayWrapper, el1));
-  }); */
+    // init
+    day.forEach((el) => {
+      el.col = 0;
+    });
+    const todoStack = [day];
+    const doneStack = [];
+
+    // execute algorithm until no collisions remaining
+    while (todoStack.length > 0) {
+      const divison = splitter(todoStack.pop());
+      // divison.filterFalse.forEach((collidingEvent) => {
+      //   collidingEvent.col++;
+      // });
+      if (divison.filterFalse.length > 0) todoStack.push(divison.filterFalse);
+      doneStack.push(divison.filterTrue);
+    }
+
+    // assign the col values
+    doneStack.forEach((colLevel, i) => {
+      colLevel.forEach((el) => {
+        el.col = i;
+      });
+    });
+  });
+
+  console.log(dailyEvents);
 
   return dailyEvents;
 };
