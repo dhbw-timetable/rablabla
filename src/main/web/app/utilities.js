@@ -66,13 +66,13 @@ const parseDates = (events) => {
 const intersects = (a, b) => {
   const startTimeWrapperA = a.startTime.split(':');
   const endTimeWrapperA = a.endTime.split(':');
-  const startMinA = startTimeWrapperA[0] * 60 + startTimeWrapperA[1];
-  const endMinA = endTimeWrapperA[0] * 60 + endTimeWrapperA[1];
+  const startMinA = parseInt(startTimeWrapperA[0] * 60 + startTimeWrapperA[1]);
+  const endMinA = parseInt(endTimeWrapperA[0] * 60 + endTimeWrapperA[1]);
 
   const startTimeWrapperB = b.startTime.split(':');
   const endTimeWrapperB = b.endTime.split(':');
-  const startMinB = startTimeWrapperB[0] * 60 + startTimeWrapperB[1];
-  const endMinB = endTimeWrapperB[0] * 60 + endTimeWrapperB[1];
+  const startMinB = parseInt(startTimeWrapperB[0] * 60 + startTimeWrapperB[1]);
+  const endMinB = parseInt(endTimeWrapperB[0] * 60 + endTimeWrapperB[1]);
 
   return (startMinA <= startMinB && endMinA >= endMinB) // a contains(equals) b
     || (startMinA >= startMinB && endMinA <= endMinB) // b contains(equals) a
@@ -81,7 +81,7 @@ const intersects = (a, b) => {
   ;
 };
 
-// divides a list of events into the maximum-non-colliding list of events and the rest
+/* divides a list of events into the maximum-non-colliding list of events and the rest
 const splitGreedy = (eventStack) => {
   const filterFalse = [];
   let done = false;
@@ -108,7 +108,7 @@ const splitGreedy = (eventStack) => {
   } while (!done);
 
   return { filterTrue: eventStack, filterFalse };
-};
+}; */
 
 const splitterSearch = (possibleSolutions, todo, current) => {
   // get every event without collision to current
@@ -116,6 +116,7 @@ const splitterSearch = (possibleSolutions, todo, current) => {
     return current.filter(safeEv => intersects(safeEv, testEv)).length === 0;
   }).forEach((semiSafeEv) => {
     const newSolution = current.concat([semiSafeEv]);
+    possibleSolutions.push(newSolution);
     const remaining = todo.filter(el => el !== semiSafeEv);
     splitterSearch(possibleSolutions, remaining, newSolution);
   });
@@ -140,24 +141,89 @@ const splitter = (eventStack) => {
   });
 
   const possibleSolutions = [];
+  let filterTrue = safe;
   // if there are colliding elements
   if (todo.length > 0) {
     splitterSearch(possibleSolutions, todo, []);
     // search for biggest solution
     possibleSolutions.sort((arr1, arr2) => arr2.length - arr1.length);
-    safe.concat(possibleSolutions[0]);
+    filterTrue = safe.concat(possibleSolutions[0]);
   }
   // merge with safe ones
   return {
-    filterTrue: safe,
-    filterFalse: eventStack.filter(ev => safe.indexOf(ev) === -1),
+    filterTrue,
+    filterFalse: eventStack.filter(ev => filterTrue.indexOf(ev) === -1),
   };
 };
 
 const makeDays = (events) => {
-  const dailyEvents = [[], [], [], [], [], [], []];
-
-  // structure related to days
+  /* console.log(intersects({
+    date: '11.03.2018',
+    Date: moment().date(11).month(3).year(2018),
+    startTime: '08:00',
+    endTime: '14:00',
+    persons: 'Daisy Duck',
+    resources: 'STG-INF42X',
+  }, {
+    date: '11.03.2018',
+    Date: moment().date(11).month(3).year(2018),
+    startTime: '16:00',
+    endTime: '18:00',
+    persons: 'Donald Duck',
+    resources: 'STG-INF42X',
+  }));
+  console.log(splitter([
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '08:00',
+      endTime: '14:00',
+      persons: 'Daisy Duck',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '16.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '08:00',
+      endTime: '14:00',
+      persons: 'Donald Duck',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '16.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '16:00',
+      endTime: '18:00',
+      persons: 'Micky Mouse',
+      resources: 'STG-INF42X',
+    },
+  ])); */
+  const dailyEvents = [[
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '08:00',
+      endTime: '14:00',
+      persons: 'Daisy Duck',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '16.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '08:00',
+      endTime: '14:00',
+      persons: 'Donald Duck',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '16.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '16:00',
+      endTime: '18:00',
+      persons: 'Micky Mouse',
+      resources: 'STG-INF42X',
+    },
+  ], [], [], [], [], [], []];
   events.forEach((el) => {
     dailyEvents[el.Date.day()].push(el);
   });
@@ -173,9 +239,6 @@ const makeDays = (events) => {
     // execute algorithm until no collisions remaining
     while (todoStack.length > 0) {
       const divison = splitter(todoStack.pop());
-      // divison.filterFalse.forEach((collidingEvent) => {
-      //   collidingEvent.col++;
-      // });
       if (divison.filterFalse.length > 0) todoStack.push(divison.filterFalse);
       doneStack.push(divison.filterTrue);
     }
