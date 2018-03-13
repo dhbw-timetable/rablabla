@@ -157,27 +157,13 @@ const splitter = (eventStack) => {
 };
 
 const makeDays = (events) => {
-  /* console.log(intersects({
-    date: '11.03.2018',
-    Date: moment().date(11).month(3).year(2018),
-    startTime: '08:00',
-    endTime: '14:00',
-    persons: 'Daisy Duck',
-    resources: 'STG-INF42X',
-  }, {
-    date: '11.03.2018',
-    Date: moment().date(11).month(3).year(2018),
-    startTime: '16:00',
-    endTime: '18:00',
-    persons: 'Donald Duck',
-    resources: 'STG-INF42X',
-  }));
-  console.log(splitter([
+  /* console.log(splitter([
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
       startTime: '08:00',
       endTime: '14:00',
+      course: 'Webducksign',
       persons: 'Daisy Duck',
       resources: 'STG-INF42X',
     },
@@ -186,6 +172,7 @@ const makeDays = (events) => {
       Date: moment().date(11).month(3).year(2018),
       startTime: '08:00',
       endTime: '14:00',
+      course: 'Ducktales Introduction',
       persons: 'Donald Duck',
       resources: 'STG-INF42X',
     },
@@ -194,6 +181,7 @@ const makeDays = (events) => {
       Date: moment().date(11).month(3).year(2018),
       startTime: '16:00',
       endTime: '18:00',
+      course: 'Mousorithms',
       persons: 'Micky Mouse',
       resources: 'STG-INF42X',
     },
@@ -204,6 +192,7 @@ const makeDays = (events) => {
       Date: moment().date(11).month(3).year(2018),
       startTime: '08:00',
       endTime: '14:00',
+      course: 'Webducksign',
       persons: 'Daisy Duck',
       resources: 'STG-INF42X',
     },
@@ -212,6 +201,7 @@ const makeDays = (events) => {
       Date: moment().date(11).month(3).year(2018),
       startTime: '08:00',
       endTime: '14:00',
+      course: 'Ducktales Introduction',
       persons: 'Donald Duck',
       resources: 'STG-INF42X',
     },
@@ -220,6 +210,7 @@ const makeDays = (events) => {
       Date: moment().date(11).month(3).year(2018),
       startTime: '16:00',
       endTime: '18:00',
+      course: 'Mousorithms',
       persons: 'Micky Mouse',
       resources: 'STG-INF42X',
     },
