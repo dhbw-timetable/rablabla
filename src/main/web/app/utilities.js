@@ -187,12 +187,12 @@ const makeDays = (events) => {
     },
   ])); */
   const dailyEvents = [[
-    // block 0
+    /* block 0
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '06:00',
-      endTime: '06:30',
+      startTime: '08:00',
+      endTime: '08:30',
       course: 'Financing',
       persons: 'Dagobert Duck',
       resources: 'STG-INF42X',
@@ -200,8 +200,8 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '06:30',
-      endTime: '07:30',
+      startTime: '08:30',
+      endTime: '09:30',
       course: 'Webducksign',
       persons: 'Daisy Duck',
       resources: 'STG-INF42X',
@@ -209,18 +209,18 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '06:30',
-      endTime: '07:30',
+      startTime: '08:30',
+      endTime: '09:30',
       course: 'Ducktales Introduction',
       persons: 'Donald Duck',
       resources: 'STG-INF42X',
-    },
-    // block 1
+    },*/
+    /* block 1
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '08:00',
-      endTime: '08:30',
+      startTime: '10:00',
+      endTime: '10:30',
       course: 'Mousorithms',
       persons: 'Micky Mouse',
       resources: 'STG-INF42X',
@@ -228,8 +228,8 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '08:30',
-      endTime: '09:00',
+      startTime: '10:30',
+      endTime: '11:00',
       course: 'Dark Things',
       persons: 'Severus Snape',
       resources: 'STG-INF42X',
@@ -237,8 +237,8 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '08:00',
-      endTime: '09:00',
+      startTime: '10:00',
+      endTime: '11:00',
       course: 'Appearance Changing',
       persons: 'Donald Mouse',
       resources: 'STG-INF42X',
@@ -247,8 +247,8 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '09:15',
-      endTime: '10:15',
+      startTime: '11:15',
+      endTime: '12:15',
       course: 'Entry Maps',
       persons: 'Dumbledoor',
       resources: 'STG-INF42X',
@@ -256,8 +256,8 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '09:15',
-      endTime: '09:45',
+      startTime: '11:15',
+      endTime: '11:45',
       course: 'Health Care',
       persons: 'Harry Potter',
       resources: 'STG-INF42X',
@@ -265,18 +265,18 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '09:45',
-      endTime: '10:15',
+      startTime: '11:45',
+      endTime: '12:15',
       course: 'Muggle Tech',
       persons: 'Ron Weasly',
       resources: 'STG-INF42X',
     },
-    // block 3
+    */// block 3
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '10:30',
-      endTime: '11:00',
+      startTime: '12:30',
+      endTime: '13:00',
       course: 'Business 1',
       persons: 'Max Mustermann',
       resources: 'STG-INF42X',
@@ -284,8 +284,8 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '10:45',
-      endTime: '11:15',
+      startTime: '12:45',
+      endTime: '13:15',
       course: 'Business 2',
       persons: 'Maxime Musterfrau',
       resources: 'STG-INF42X',
@@ -293,8 +293,8 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '11:00',
-      endTime: '11:30',
+      startTime: '13:00',
+      endTime: '13:30',
       course: 'Storages',
       persons: 'Neville Longbottom',
       resources: 'STG-INF42X',
@@ -302,8 +302,8 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '11:15',
-      endTime: '11:45',
+      startTime: '13:15',
+      endTime: '13:45',
       course: 'Hat Language',
       persons: 'McGonagle',
       resources: 'STG-INF42X',
@@ -311,8 +311,8 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '11:40',
-      endTime: '12:00',
+      startTime: '13:40',
+      endTime: '14:00',
       course: 'Cognitive Bio Tech',
       persons: 'Sproud',
       resources: 'STG-INF42X',
@@ -320,13 +320,17 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '11:45',
-      endTime: '12:15',
+      startTime: '13:45',
+      endTime: '14:15',
       course: 'Augmented Reality',
       persons: 'McAlister',
       resources: 'STG-INF42X',
     },
   ], [], [], [], [], [], []];
+
+  console.log(splitter(dailyEvents[0]));
+  console.log(splitter(splitter(dailyEvents[0]).filterFalse));
+
   events.forEach((el) => {
     dailyEvents[el.Date.day()].push(el);
   });
@@ -350,7 +354,15 @@ const makeDays = (events) => {
     });
   });
 
-  console.log(dailyEvents);
+  // DEBUG
+  console.log(dailyEvents.map(day => day.map((ev) => {
+    return {
+      _col: ev.col,
+      name: ev.course,
+      beginTime: ev.startTime,
+      endTime: ev.endTime,
+    };
+  })));
 
   return dailyEvents;
 };
