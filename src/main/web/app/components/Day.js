@@ -17,6 +17,8 @@ export default function Day(props) {
     el.duration = endY - startY;
     el.height = `${el.duration}%`;
     el.top = `${startY}%`;
+    el.width = `${95 / el.maxCol}%`;
+    el.left = `calc(${95 / el.maxCol * el.col}% + 5%)`;
   });
 
   return (

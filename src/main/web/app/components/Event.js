@@ -45,6 +45,7 @@ export default class Event extends Component {
   render() {
     const { startTime, endTime, course, persons, resources, height, width, top, left }
       = this.props.data;
+    console.log(this.props.data);
     const { selected, classList } = this.state;
     return (
       <li
