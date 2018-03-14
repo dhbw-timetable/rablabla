@@ -176,6 +176,104 @@ export default class Main extends Component {
       document.querySelectorAll('li.day--line').forEach((event) => {
         event.classList.add('lululu');
       });
+    } else if (msg.toLowerCase().indexOf('demo') !== -1) {
+      this.setState({
+        dailyEvents: makeDays(parseDates([
+          // block 0
+          {
+            date: '11.03.2018',
+            Date: moment().date(11).month(3).year(2018),
+            startTime: '07:30',
+            endTime: '09:20',
+            course: 'Financing',
+            persons: 'Dagobert Duck',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment().date(11).month(3).year(2018),
+            startTime: '09:30',
+            endTime: '11:45',
+            course: 'Webducksign',
+            persons: 'Daisy Duck',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment().date(11).month(3).year(2018),
+            startTime: '09:30',
+            endTime: '11:45',
+            course: 'Ducktales Introduction',
+            persons: 'Donald Duck',
+            resources: 'STG-INF42X',
+          },
+          // block 1
+          {
+            date: '11.03.2018',
+            Date: moment().date(11).month(3).year(2018),
+            startTime: '11:48',
+            endTime: '14:42',
+            course: 'Mousorithms',
+            persons: 'Micky Mouse',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment().date(11).month(3).year(2018),
+            startTime: '12:00',
+            endTime: '13:30',
+            course: 'Entry Maps',
+            persons: 'Dumbledoor',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment().date(11).month(3).year(2018),
+            startTime: '13:30',
+            endTime: '14:30',
+            course: 'Appearance Changing',
+            persons: 'Donald Mouse',
+            resources: 'STG-INF42X',
+          },
+          // block 3
+          {
+            date: '11.03.2018',
+            Date: moment().date(11).month(3).year(2018),
+            startTime: '15:00',
+            endTime: '17:30',
+            course: 'Storages',
+            persons: 'Neville Longbottom',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment().date(11).month(3).year(2018),
+            startTime: '16:15',
+            endTime: '17:45',
+            course: 'Hat Language',
+            persons: 'McGonagle',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment().date(11).month(3).year(2018),
+            startTime: '18:00',
+            endTime: '19:30',
+            course: 'Cognitive Bio Tech',
+            persons: 'Sproud',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment().date(11).month(3).year(2018),
+            startTime: '14:45',
+            endTime: '16:10',
+            course: 'Augmented Reality - One eyed smart glasses',
+            persons: 'McAlister',
+            resources: 'STG-INF42X',
+          },
+        ])),
+      });
     } else {
       // Send to backend and handle answer
       $.ajax({

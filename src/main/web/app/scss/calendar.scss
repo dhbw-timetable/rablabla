@@ -169,6 +169,7 @@ container {
     }
 
     &--time {
+      white-space: nowrap;
       position: absolute;
       font-size: 0.75em;
       border-radius: 5px;
@@ -227,7 +228,7 @@ container {
       z-index: 15;
       // override calculated inline styles
       width: 100% !important;
-      left: 0 !important;
+      left: 2.5% !important;
       top: 50% !important;
       transform: translateY(-50%);
       height: auto !important;
