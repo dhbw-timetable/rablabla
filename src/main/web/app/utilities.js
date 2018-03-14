@@ -66,13 +66,13 @@ const parseDates = (events) => {
 const intersects = (a, b) => {
   const startTimeWrapperA = a.startTime.split(':');
   const endTimeWrapperA = a.endTime.split(':');
-  const startMinA = parseInt(startTimeWrapperA[0] * 60 + startTimeWrapperA[1]);
-  const endMinA = parseInt(endTimeWrapperA[0] * 60 + endTimeWrapperA[1]);
+  const startMinA = parseInt(startTimeWrapperA[0]) * 60 + parseInt(startTimeWrapperA[1]);
+  const endMinA = parseInt(endTimeWrapperA[0]) * 60 + parseInt(endTimeWrapperA[1]);
 
   const startTimeWrapperB = b.startTime.split(':');
   const endTimeWrapperB = b.endTime.split(':');
-  const startMinB = parseInt(startTimeWrapperB[0] * 60 + startTimeWrapperB[1]);
-  const endMinB = parseInt(endTimeWrapperB[0] * 60 + endTimeWrapperB[1]);
+  const startMinB = parseInt(startTimeWrapperB[0]) * 60 + parseInt(startTimeWrapperB[1]);
+  const endMinB = parseInt(endTimeWrapperB[0]) * 60 + parseInt(endTimeWrapperB[1]);
 
   return (startMinA <= startMinB && endMinA >= endMinB) // a contains(equals) b
     || (startMinA >= startMinB && endMinA <= endMinB) // b contains(equals) a
@@ -190,8 +190,17 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '08:00',
-      endTime: '14:00',
+      startTime: '06:00',
+      endTime: '06:30',
+      course: 'Financing',
+      persons: 'Dagobert Duck',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '06:30',
+      endTime: '07:30',
       course: 'Webducksign',
       persons: 'Daisy Duck',
       resources: 'STG-INF42X',
@@ -199,19 +208,121 @@ const makeDays = (events) => {
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '08:00',
-      endTime: '14:00',
+      startTime: '06:30',
+      endTime: '07:30',
       course: 'Ducktales Introduction',
       persons: 'Donald Duck',
+      resources: 'STG-INF42X',
+    },
+    // block 1
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '08:00',
+      endTime: '08:30',
+      course: 'Mousorithms',
+      persons: 'Micky Mouse',
       resources: 'STG-INF42X',
     },
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
-      startTime: '16:00',
-      endTime: '18:00',
-      course: 'Mousorithms',
-      persons: 'Micky Mouse',
+      startTime: '08:30',
+      endTime: '09:00',
+      course: 'Dark Things',
+      persons: 'Severus Snape',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '08:00',
+      endTime: '09:00',
+      course: 'Appearance Changing',
+      persons: 'Donald Mouse',
+      resources: 'STG-INF42X',
+    },
+    // block 2
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '09:15',
+      endTime: '10:15',
+      course: 'Entry Maps',
+      persons: 'Dumbledoor',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '09:15',
+      endTime: '09:45',
+      course: 'Health Care',
+      persons: 'Harry Potter',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '09:45',
+      endTime: '10:15',
+      course: 'Muggle Tech',
+      persons: 'Ron Weasly',
+      resources: 'STG-INF42X',
+    },
+    // block 3
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '10:30',
+      endTime: '11:00',
+      course: 'Business 1',
+      persons: 'Max Mustermann',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '10:45',
+      endTime: '11:15',
+      course: 'Business 2',
+      persons: 'Maxime Musterfrau',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '11:00',
+      endTime: '11:30',
+      course: 'Storages',
+      persons: 'Neville Longbottom',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '11:15',
+      endTime: '11:45',
+      course: 'Hair Hashing',
+      persons: 'McGonagle',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '11:40',
+      endTime: '12:00',
+      course: 'Bio Tech',
+      persons: 'Sproud',
+      resources: 'STG-INF42X',
+    },
+    {
+      date: '11.03.2018',
+      Date: moment().date(11).month(3).year(2018),
+      startTime: '11:45',
+      endTime: '12:15',
+      course: 'Half of the Truth',
+      persons: 'McAlister',
       resources: 'STG-INF42X',
     },
   ], [], [], [], [], [], []];
@@ -220,10 +331,6 @@ const makeDays = (events) => {
   });
 
   dailyEvents.forEach((day) => {
-    // init
-    day.forEach((el) => {
-      el.col = 0;
-    });
     const todoStack = [day];
     const doneStack = [];
 
@@ -280,8 +387,6 @@ const theme = createMuiTheme({
   },
 });
 
-// = = = = = = D A T E - U T I L S = = = = = = =
-
 module.exports = {
   getParams,
   slidingTransition,
@@ -290,4 +395,5 @@ module.exports = {
   makeDays,
   getAppointments,
   getICSLink,
+  ajaxTarget,
 };
