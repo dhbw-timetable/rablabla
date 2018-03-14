@@ -178,11 +178,11 @@ export default class Main extends Component {
       });
     } else if (msg.toLowerCase().indexOf('demo') !== -1) {
       this.setState({
-        dailyEvents: makeDays(parseDates([
+        dailyEvents: makeDays([
           // block 0
           {
             date: '11.03.2018',
-            Date: moment().date(11).month(3).year(2018),
+            Date: moment(),
             startTime: '07:30',
             endTime: '09:20',
             course: 'Financing',
@@ -191,7 +191,7 @@ export default class Main extends Component {
           },
           {
             date: '11.03.2018',
-            Date: moment().date(11).month(3).year(2018),
+            Date: moment(),
             startTime: '09:30',
             endTime: '11:45',
             course: 'Webducksign',
@@ -200,7 +200,7 @@ export default class Main extends Component {
           },
           {
             date: '11.03.2018',
-            Date: moment().date(11).month(3).year(2018),
+            Date: moment(),
             startTime: '09:30',
             endTime: '11:45',
             course: 'Ducktales Introduction',
@@ -210,7 +210,7 @@ export default class Main extends Component {
           // block 1
           {
             date: '11.03.2018',
-            Date: moment().date(11).month(3).year(2018),
+            Date: moment(),
             startTime: '11:48',
             endTime: '14:42',
             course: 'Mousorithms',
@@ -219,7 +219,7 @@ export default class Main extends Component {
           },
           {
             date: '11.03.2018',
-            Date: moment().date(11).month(3).year(2018),
+            Date: moment(),
             startTime: '12:00',
             endTime: '13:30',
             course: 'Entry Maps',
@@ -228,7 +228,7 @@ export default class Main extends Component {
           },
           {
             date: '11.03.2018',
-            Date: moment().date(11).month(3).year(2018),
+            Date: moment(),
             startTime: '13:30',
             endTime: '14:30',
             course: 'Appearance Changing',
@@ -238,7 +238,7 @@ export default class Main extends Component {
           // block 3
           {
             date: '11.03.2018',
-            Date: moment().date(11).month(3).year(2018),
+            Date: moment(),
             startTime: '15:00',
             endTime: '17:30',
             course: 'Storages',
@@ -247,7 +247,7 @@ export default class Main extends Component {
           },
           {
             date: '11.03.2018',
-            Date: moment().date(11).month(3).year(2018),
+            Date: moment(),
             startTime: '16:15',
             endTime: '17:45',
             course: 'Hat Language',
@@ -256,7 +256,7 @@ export default class Main extends Component {
           },
           {
             date: '11.03.2018',
-            Date: moment().date(11).month(3).year(2018),
+            Date: moment(),
             startTime: '18:00',
             endTime: '19:30',
             course: 'Cognitive Bio Tech',
@@ -265,15 +265,16 @@ export default class Main extends Component {
           },
           {
             date: '11.03.2018',
-            Date: moment().date(11).month(3).year(2018),
+            Date: moment(),
             startTime: '14:45',
             endTime: '16:10',
             course: 'Augmented Reality - One eyed smart glasses',
             persons: 'McAlister',
             resources: 'STG-INF42X',
           },
-        ])),
+        ]),
       });
+      this.appendMessage('Okay providing demo lessons for today...', true);
     } else {
       // Send to backend and handle answer
       $.ajax({
