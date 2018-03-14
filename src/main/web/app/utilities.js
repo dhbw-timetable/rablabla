@@ -108,7 +108,7 @@ const splitGreedy = (eventStack) => {
   } while (!done);
 
   return { filterTrue: eventStack, filterFalse };
-}; */
+};
 
 const splitterSearch = (possibleSolutions, todo, current) => {
   // get every event without collision to current
@@ -154,6 +154,11 @@ const splitter = (eventStack) => {
     filterTrue,
     filterFalse: eventStack.filter(ev => filterTrue.indexOf(ev) === -1),
   };
+}; */
+
+// checks if the target event intersects any of the dayAgenda (except itself)
+const intersectsAny = (targetEvent, dayAgenda) => {
+  return dayAgenda.filter(evnt => evnt !== targetEvent && intersects(targetEvent, evnt)).length > 0;
 };
 
 const makeDays = (events) => {
@@ -187,7 +192,7 @@ const makeDays = (events) => {
     },
   ])); */
   const dailyEvents = [[
-    /* block 0
+    // block 0
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
@@ -214,8 +219,8 @@ const makeDays = (events) => {
       course: 'Ducktales Introduction',
       persons: 'Donald Duck',
       resources: 'STG-INF42X',
-    },*/
-    /* block 1
+    },
+    // block 1
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
@@ -271,7 +276,7 @@ const makeDays = (events) => {
       persons: 'Ron Weasly',
       resources: 'STG-INF42X',
     },
-    */// block 3
+    // block 3
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
@@ -328,28 +333,39 @@ const makeDays = (events) => {
     },
   ], [], [], [], [], [], []];
 
-  console.log(splitter(dailyEvents[0]));
-  console.log(splitter(splitter(dailyEvents[0]).filterFalse));
-
   events.forEach((el) => {
     dailyEvents[el.Date.day()].push(el);
   });
 
-  dailyEvents.forEach((day) => {
-    const todoStack = [day];
-    const doneStack = [];
+  // for each day in week
+  dailyEvents.forEach((dayAgenda) => {
+    // a stack of columns
+    const stacks = [[]];
 
-    // execute algorithm until no collisions remaining
-    while (todoStack.length > 0) {
-      const divison = splitter(todoStack.pop());
-      if (divison.filterFalse.length > 0) todoStack.push(divison.filterFalse);
-      doneStack.push(divison.filterTrue);
-    }
+    // for each event of this day
+    dayAgenda.forEach((evnt) => {
+      let i = 0, finish = false;
+      while (!finish) {
+        // if there'd be an intersection on this stack
+        if (!intersectsAny(evnt, stacks[i])) {
+          stacks[i].push(evnt);
+          finish = true;
+        } else {
+          i++;
+          // open up a new column
+          if (stacks.length === i) {
+            stacks.push([evnt]);
+            finish = true;
+          }
+        }
+      }
+    });
 
-    // assign the col values
-    doneStack.forEach((colLevel, i) => {
+    // assign the column values
+    stacks.forEach((colLevel, i) => {
       colLevel.forEach((el) => {
         el.col = i;
+        el.maxCol = stacks.length;
       });
     });
   });
