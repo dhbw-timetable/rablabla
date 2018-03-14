@@ -187,6 +187,7 @@ const makeDays = (events) => {
     },
   ])); */
   const dailyEvents = [[
+    // block 0
     {
       date: '11.03.2018',
       Date: moment().date(11).month(3).year(2018),
@@ -303,7 +304,7 @@ const makeDays = (events) => {
       Date: moment().date(11).month(3).year(2018),
       startTime: '11:15',
       endTime: '11:45',
-      course: 'Hair Hashing',
+      course: 'Hat Language',
       persons: 'McGonagle',
       resources: 'STG-INF42X',
     },
@@ -312,7 +313,7 @@ const makeDays = (events) => {
       Date: moment().date(11).month(3).year(2018),
       startTime: '11:40',
       endTime: '12:00',
-      course: 'Bio Tech',
+      course: 'Cognitive Bio Tech',
       persons: 'Sproud',
       resources: 'STG-INF42X',
     },
@@ -321,7 +322,7 @@ const makeDays = (events) => {
       Date: moment().date(11).month(3).year(2018),
       startTime: '11:45',
       endTime: '12:15',
-      course: 'Half of the Truth',
+      course: 'Augmented Reality',
       persons: 'McAlister',
       resources: 'STG-INF42X',
     },
