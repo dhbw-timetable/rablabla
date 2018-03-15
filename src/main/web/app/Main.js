@@ -19,6 +19,8 @@ import {
   slidingTransition,
   theme,
   ajaxTarget,
+  parseDates,
+  makeDays,
   getAppointments,
   getICSLink,
 } from './utilities';
@@ -38,7 +40,7 @@ export default class Main extends Component {
     const data = localStorage.getItem(`${today.year()} ${today.isoWeek()}`);
     const onboardingNeeded = !this.raplaLinkValue;
     this.state = {
-      dailyEvents: data ? this.makeDays(this.parseDates(JSON.parse(data)))
+      dailyEvents: data ? makeDays(parseDates(JSON.parse(data)))
         : [[], [], [], [], [], [], []],
       date: today,
       chat: [],
@@ -64,7 +66,7 @@ export default class Main extends Component {
   onAjaxPre = (date) => {
     const localData = localStorage.getItem(`${date.year()} ${date.isoWeek()}`);
     this.setState({
-      dailyEvents: localData ? this.makeDays(this.parseDates(JSON.parse(localData)))
+      dailyEvents: localData ? makeDays(parseDates(JSON.parse(localData)))
         : [[], [], [], [], [], [], []],
       date,
     });
@@ -101,7 +103,7 @@ export default class Main extends Component {
       localStorage.setItem(`${reqDate.year()} ${reqDate.isoWeek()}`, response);
       console.log('Saved received data in cache.');
     }
-    this.setState({ dailyEvents: this.makeDays(this.parseDates(data)), date: reqDate });
+    this.setState({ dailyEvents: makeDays(parseDates(data)), date: reqDate });
     console.log(data);
   };
 
@@ -117,22 +119,6 @@ export default class Main extends Component {
     this.icsLink = response;
     this.setState({ extCalendarOpen: true });
   };
-
-  parseDates = (events) => {
-    events.forEach((el) => {
-      const dateElements = el.date.split('.');
-      el.Date = moment().date(dateElements[0]).month(dateElements[1] - 1).year(dateElements[2]);
-    });
-    return events;
-  }
-
-  makeDays = (events) => {
-    const dailyEvents = [[], [], [], [], [], [], []];
-    events.forEach((el) => {
-      dailyEvents[el.Date.day()].push(el);
-    });
-    return dailyEvents;
-  }
 
   clearListeners = () => {
     window.applicationCache.removeEventListener('updateready', this.onAppCacheUpdate);
@@ -190,6 +176,105 @@ export default class Main extends Component {
       document.querySelectorAll('li.day--line').forEach((event) => {
         event.classList.add('lululu');
       });
+    } else if (msg.toLowerCase().indexOf('demo') !== -1) {
+      this.setState({
+        dailyEvents: makeDays([
+          // block 0
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '07:30',
+            endTime: '09:20',
+            course: 'Financing',
+            persons: 'Dagobert Duck',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '09:30',
+            endTime: '11:45',
+            course: 'Webducksign',
+            persons: 'Daisy Duck',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '09:30',
+            endTime: '11:45',
+            course: 'Ducktales Introduction',
+            persons: 'Donald Duck',
+            resources: 'STG-INF42X',
+          },
+          // block 1
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '11:48',
+            endTime: '14:42',
+            course: 'Mousorithms',
+            persons: 'Micky Mouse',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '12:00',
+            endTime: '13:30',
+            course: 'Entry Maps',
+            persons: 'Dumbledoor',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '13:30',
+            endTime: '14:30',
+            course: 'Appearance Changing',
+            persons: 'Donald Mouse',
+            resources: 'STG-INF42X',
+          },
+          // block 3
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '15:00',
+            endTime: '17:30',
+            course: 'Storages',
+            persons: 'Neville Longbottom',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '16:15',
+            endTime: '17:45',
+            course: 'Hat Language',
+            persons: 'McGonagle',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '18:00',
+            endTime: '19:30',
+            course: 'Cognitive Bio Tech',
+            persons: 'Sproud',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '14:45',
+            endTime: '16:10',
+            course: 'Augmented Reality - One eyed smart glasses',
+            persons: 'McAlister',
+            resources: 'STG-INF42X',
+          },
+        ]),
+      });
+      this.appendMessage('Okay providing demo lessons for today...', true);
     } else {
       // Send to backend and handle answer
       $.ajax({

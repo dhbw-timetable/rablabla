@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { createMuiTheme } from 'material-ui/styles';
 import yellow from 'material-ui/colors/yellow';
 import Slide from 'material-ui/transitions/Slide';
@@ -53,6 +54,84 @@ const getAppointments = (url, mmt, success, error, pre) => {
   return 'Accessing appointments...';
 };
 
+const parseDates = (events) => {
+  events.forEach((el) => {
+    const dateElements = el.date.split('.');
+    el.Date = moment().date(dateElements[0]).month(dateElements[1] - 1).year(dateElements[2]);
+  });
+  return events;
+};
+
+// check if there's a collision between the events a and b
+const intersects = (a, b) => {
+  const startTimeWrapperA = a.startTime.split(':');
+  const endTimeWrapperA = a.endTime.split(':');
+  const startMinA = parseInt(startTimeWrapperA[0]) * 60 + parseInt(startTimeWrapperA[1]);
+  const endMinA = parseInt(endTimeWrapperA[0]) * 60 + parseInt(endTimeWrapperA[1]);
+
+  const startTimeWrapperB = b.startTime.split(':');
+  const endTimeWrapperB = b.endTime.split(':');
+  const startMinB = parseInt(startTimeWrapperB[0]) * 60 + parseInt(startTimeWrapperB[1]);
+  const endMinB = parseInt(endTimeWrapperB[0]) * 60 + parseInt(endTimeWrapperB[1]);
+
+  return (startMinA <= startMinB && endMinA >= endMinB) // a contains(equals) b
+    || (startMinA >= startMinB && endMinA <= endMinB) // b contains(equals) a
+    || (startMinA < startMinB && endMinA < endMinB && endMinA > startMinB) // a intersects b
+    || (startMinA > startMinB && endMinA > endMinB && startMinA < endMinB) // b intersects a
+  ;
+};
+
+// checks if the target event intersects any of the dayAgenda (except itself)
+const intersectsAny = (targetEvent, dayAgenda) => {
+  return dayAgenda.filter(evnt => evnt !== targetEvent && intersects(targetEvent, evnt)).length > 0;
+};
+
+const makeDays = (events) => {
+  const dailyEvents = [[], [], [], [], [], [], []];
+
+  events.forEach((el) => {
+    dailyEvents[el.Date.day()].push(el);
+  });
+
+  // for each day in week
+  dailyEvents.forEach((dayAgenda) => {
+    // a stack of columns
+    const stacks = [[]];
+
+    // for each event of this day
+    dayAgenda.forEach((evnt) => {
+      let i = 0, finish = false;
+      while (!finish) {
+        // if there'd be an intersection on this stack
+        if (!intersectsAny(evnt, stacks[i])) {
+          stacks[i].push(evnt);
+          finish = true;
+        } else {
+          i++;
+          // open up a new column
+          if (stacks.length === i) {
+            stacks.push([evnt]);
+            finish = true;
+          }
+        }
+      }
+    });
+
+    // assign the column values
+    stacks.forEach((colLevel, i) => {
+      colLevel.forEach((el) => {
+        el.col = i;
+        el.maxCol = stacks.length;
+        el.intersections = dayAgenda.filter(evnt => evnt !== el && intersects(el, evnt)).length;
+      });
+    });
+  });
+
+  console.log(dailyEvents);
+
+  return dailyEvents;
+};
+
 // = = = = T H E M E = = = = =
 
 const dhbwtimetablepalette = {
@@ -86,12 +165,13 @@ const theme = createMuiTheme({
   },
 });
 
-// = = = = = = D A T E - U T I L S = = = = = = =
-
 module.exports = {
   getParams,
   slidingTransition,
   theme,
+  parseDates,
+  makeDays,
   getAppointments,
   getICSLink,
+  ajaxTarget,
 };
