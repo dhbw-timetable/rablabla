@@ -7,7 +7,8 @@ import Day from './Day';
 export default class Calendar extends Component {
   constructor(props) {
     super(props);
-    this.state = { backdrop: false, backdropTargetHandler: () => {} };
+    this.state = { backdrop: false, backdropTargetHandler: () => {}, timeline: 0 };
+    setInterval(() => { this.setState({ timeline: moment().seconds() }); }, 2 * 60 * 1000);
   }
 
   hideBackdrop = () => {
