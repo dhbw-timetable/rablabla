@@ -24,7 +24,10 @@ export default class Chatter extends Component {
   }
 
   handleOpenChat = () => {
-    this.setState({ open: true, anchorEl: findDOMNode(this.chatButton) });
+    this.setState({
+      open: true,
+      anchorEl: findDOMNode(this.chatButton),
+    });
   }
 
   handleCloseChat = () => {
@@ -71,7 +74,7 @@ export default class Chatter extends Component {
         >
           <Paper classes={{ root: 'chat-window' }}>
             <Typography type="title" component="h3" align="left">
-            Watson Chat
+            Chat
             </Typography>
             <div
               className="message-container"

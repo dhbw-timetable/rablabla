@@ -69,7 +69,7 @@ public class Rablabla extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		assert ForceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
-		response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+		response.setHeader("Access-Control-Allow-Origin", "*");
 
 		// Get request parameters
 		final int day = Integer.parseInt(request.getParameter("day"));
@@ -104,7 +104,7 @@ public class Rablabla extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		assert ForceSSL(request, response) : "SSL/HTTPS Connection error";
 		response.setContentType("text/html; charset=UTF-8");
-		response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+		response.setHeader("Access-Control-Allow-Origin", "*");
 		// Get request parameters
 		final String url = URLDecoder.decode(request.getParameter("url").replace("+", "%2B"), "UTF-8").replace("%2B", "+");
 
@@ -123,7 +123,7 @@ public class Rablabla extends HttpServlet {
 				System.out.println("Fetching ICS data...");
 
 				final Map<LocalDate, ArrayList<Appointment>> data = DataImporter.ImportWeekRange(LocalDate.of(LocalDate.now().getYear(), 1, 1), LocalDate.of(LocalDate.now().getYear(), 12, 31), BaseURL.valueOf(baseURL), args);
-				System.out.println("Done fetching data!");
+				System.out.println("Done fetching data. Found " + data.size() + " elements.");
 				final File containerFile = new File(ROOT_PATH + fileLocation);
 				containerFile.mkdirs();
 				final File exportFile = new File(containerFile, ICS_FILENAME);

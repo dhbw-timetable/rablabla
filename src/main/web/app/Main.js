@@ -1,109 +1,47 @@
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import { MuiThemeProvider } from 'material-ui/styles';
 import React, { Component } from 'react';
-import yellow from 'material-ui/colors/yellow';
 import $ from 'jquery';
+import moment from 'moment';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
 import Toolbar from 'material-ui/Toolbar';
 import AppBar from 'material-ui/AppBar';
-import dateFormat from 'dateformat';
 import Dialog, {
   DialogActions,
   DialogContent,
   DialogTitle,
   DialogContentText,
 } from 'material-ui/Dialog';
-import Slide from 'material-ui/transitions/Slide';
 import NavigationBar from './components/NavigationBar';
-import Calendar, { getWeekNumber } from './components/Calendar';
-
-const getParams = (args) => {
-  const params = {};
-  const pStrings = args.split('&');
-  Object.keys(pStrings).forEach((param) => {
-    const kvStrings = pStrings[param].split('=');
-    params[kvStrings[0]] = kvStrings[1];
-  });
-  return params;
-};
-
-// for local testing against release backend
-const ajaxTarget = window.location.href.indexOf('localhost') !== -1 ? 'https://rablabla-staging.mybluemix.net' : '';
-
-const getICSLink = (url, success, error) => {
-  const deSuffix = '.de/rapla?';
-  const baseURL = url.substring(0, url.indexOf(deSuffix) + deSuffix.length);
-  const params = getParams(url.substring(url.indexOf(deSuffix) + deSuffix.length));
-  if (params.key) {
-    $.ajax({
-      url: `${ajaxTarget}/Rablabla?url=${url}`,
-      type: 'POST',
-      success,
-      error,
-    });
-    return 'Accessing calendar file...';
-  } else if (params.user && params.file) {
-    console.log(baseURL);
-    success(`${baseURL}page=ical&user=${params.user}&file=${params.file}`);
-  } else {
-    console.error(`Yearly calendar not supported for url: ${url}`);
-  }
-  return 'Request denied.';
-};
-
-const getAppointments = (url, date, success, error, pre) => {
-  pre(date);
-  $.ajax({
-    url: `${ajaxTarget}/Rablabla?url=${encodeURIComponent(url)}&day=${date.getDate()}&month=${date.getMonth() + 1}&year=${date.getFullYear()}`,
-    type: 'GET',
-    success,
-    error,
-  });
-  return 'Accessing appointments...';
-};
-
-const dhbwtimetablepalette = {
-  50: '#f7e7e7',
-  100: '#eac3c3',
-  200: '#dd9c9c',
-  300: '#cf7474',
-  400: '#c45656',
-  500: '#ba3838',
-  600: '#b33232',
-  700: '#ab2b2b',
-  800: '#a32424',
-  900: '#941717',
-  A100: '#ffc9c9',
-  A200: '#ff9696',
-  A400: '#ff6363',
-  A700: '#ff4a4a',
-  contrastDefaultColor: 'light',
-};
-
-const theme = createMuiTheme({
-  palette: {
-    primary: dhbwtimetablepalette,
-    secondary: {
-      ...dhbwtimetablepalette,
-      A400: 'white', // Accent color
-    },
-    error: yellow,
-  },
-});
-
-const slidingTransition = props => <Slide direction="up" {...props} />;
+import Calendar from './components/Calendar';
+import {
+  slidingTransition,
+  theme,
+  ajaxTarget,
+  parseDates,
+  makeDays,
+  getAppointments,
+  getICSLink,
+} from './utilities';
 
 export default class Main extends Component {
-  constructor() {
-    super();
+
+  icsLink = null;
+  icsInput = null;
+
+  raplaLinkInput = null;
+  raplaLinkValue = null;
+
+  constructor(props) {
+    super(props);
     this.raplaLinkValue = localStorage.getItem('raplaLink') || window.location.href.split('#')[1];
-    const today = new Date();
-    const data = localStorage.getItem(`${today.getFullYear()} ${getWeekNumber(today)}`);
+    const today = moment();
+    const data = localStorage.getItem(`${today.year()} ${today.isoWeek()}`);
     const onboardingNeeded = !this.raplaLinkValue;
     this.state = {
-      dailyEvents: data ? this.makeDays(this.parseDates(JSON.parse(data)))
-        : [[], [], [], [], [], []],
+      dailyEvents: data ? makeDays(parseDates(JSON.parse(data)))
+        : [[], [], [], [], [], [], []],
       date: today,
       chat: [],
       extCalendarOpen: false,
@@ -119,17 +57,17 @@ export default class Main extends Component {
         today, (response) => {
           this.onAjaxSuccess(response, today);
           this.setState({ onboardingOpen: false });
-        }, this.onAjaxError, this.onAjaxPre,
+        }, this.onAjaxError, () => {},
       ));
     }
   }
 
   /* Preload event data before ajax */
   onAjaxPre = (date) => {
-    const localData = localStorage.getItem(`${date.getFullYear()} ${getWeekNumber(date)}`);
+    const localData = localStorage.getItem(`${date.year()} ${date.isoWeek()}`);
     this.setState({
-      dailyEvents: localData ? this.makeDays(this.parseDates(JSON.parse(localData)))
-        : [[], [], [], [], [], []],
+      dailyEvents: localData ? makeDays(parseDates(JSON.parse(localData)))
+        : [[], [], [], [], [], [], []],
       date,
     });
   };
@@ -144,8 +82,8 @@ export default class Main extends Component {
         value = key.split(' ');
         year = parseInt(value[0]);
         week = parseInt(value[1]);
-        if (date.getFullYear() !== year || !(week + 1 >= currWeek && currWeek >= week - 1)) {
-          console.log(`Removing item ${key} because (date || week)=(${date.getFullYear() !== year} || ${(week + 1 >= currWeek && currWeek >= week - 1)})`);
+        if (date.year() !== year || !(week + 1 >= currWeek && currWeek >= week - 1)) {
+          console.log(`Removing item ${key} because (date || week)=(${date.year() !== year} || ${(week + 1 >= currWeek && currWeek >= week - 1)})`);
           localStorage.removeItem(key);
         }
       }
@@ -155,17 +93,17 @@ export default class Main extends Component {
   /* Received new data from rapla */
   onAjaxSuccess = (response, reqDate) => {
     const data = JSON.parse(response);
-    const today = new Date();
-    const currWeek = getWeekNumber(today);
-    const reqWeek = getWeekNumber(reqDate);
+    const today = moment();
+    const currWeek = today.isoWeek();
+    const reqWeek = reqDate.isoWeek();
 
     this.clearStorage(today, currWeek);
     // Only if it's the the last, current or next week -> cache it
     if (reqWeek === currWeek - 1 || reqWeek === currWeek || reqWeek === currWeek + 1) {
-      localStorage.setItem(`${reqDate.getFullYear()} ${getWeekNumber(reqDate)}`, response);
+      localStorage.setItem(`${reqDate.year()} ${reqDate.isoWeek()}`, response);
       console.log('Saved received data in cache.');
     }
-    this.setState({ dailyEvents: this.makeDays(this.parseDates(data)), date: reqDate });
+    this.setState({ dailyEvents: makeDays(parseDates(data)), date: reqDate });
     console.log(data);
   };
 
@@ -181,23 +119,6 @@ export default class Main extends Component {
     this.icsLink = response;
     this.setState({ extCalendarOpen: true });
   };
-
-  parseDates = (events) => {
-    events.forEach((el) => {
-      const curDate = el.date.split('.');
-      const startTime = el.startTime.split(':');
-      el.Date = new Date(curDate[2], curDate[1] - 1, curDate[0], startTime[0], startTime[1]);
-    });
-    return events;
-  }
-
-  makeDays = (events) => {
-    const dailyEvents = [[], [], [], [], [], []];
-    events.forEach((el) => {
-      dailyEvents[el.Date.getDay() - 1].push(el);
-    });
-    return dailyEvents;
-  }
 
   clearListeners = () => {
     window.applicationCache.removeEventListener('updateready', this.onAppCacheUpdate);
@@ -224,7 +145,10 @@ export default class Main extends Component {
     const { chat } = this.state;
     chat.push({ text, watson });
     this.setState({ chat });
-    document.querySelector('.messages-bottom').scrollIntoView({ behavior: 'smooth' });
+    const bottomEl = document.querySelector('.messages-bottom');
+    if (bottomEl) {
+      bottomEl.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   sendMessage = (msg) => {
@@ -240,6 +164,117 @@ export default class Main extends Component {
       window.applicationCache.addEventListener('updateready', this.onAppCacheUpdate, false);
       window.applicationCache.addEventListener('noupdate', this.onAppCacheNoUpdate, false);
       window.applicationCache.update();
+    } else if (msg.toLowerCase().indexOf('get crazy') !== -1) {
+      document.querySelectorAll('li.event').forEach((event) => {
+        setTimeout(() => { event.classList.add('get-crazy'); }, Math.random() * 1.2 * 1000);
+      });
+      for (let i = 0; i < 200; i++) {
+        setTimeout(() => {
+          this.appendMessage(Math.random() > 0.5 ? 'Lululululu' : 'Trololo', Math.random() < 0.5);
+        }, Math.random() * 42 * 1000);
+      }
+      document.querySelectorAll('li.day--line').forEach((event) => {
+        event.classList.add('lululu');
+      });
+    } else if (msg.toLowerCase().indexOf('demo') !== -1) {
+      this.setState({
+        dailyEvents: makeDays([
+          // block 0
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '07:30',
+            endTime: '09:20',
+            course: 'Financing',
+            persons: 'Dagobert Duck',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '09:30',
+            endTime: '11:45',
+            course: 'Webducksign',
+            persons: 'Daisy Duck',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '09:30',
+            endTime: '11:45',
+            course: 'Ducktales Introduction',
+            persons: 'Donald Duck',
+            resources: 'STG-INF42X',
+          },
+          // block 1
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '11:48',
+            endTime: '14:42',
+            course: 'Mousorithms',
+            persons: 'Micky Mouse',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '12:00',
+            endTime: '13:30',
+            course: 'Entry Maps',
+            persons: 'Dumbledoor',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '13:30',
+            endTime: '14:30',
+            course: 'Appearance Changing',
+            persons: 'Donald Mouse',
+            resources: 'STG-INF42X',
+          },
+          // block 3
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '15:00',
+            endTime: '17:30',
+            course: 'Storages',
+            persons: 'Neville Longbottom',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '16:15',
+            endTime: '17:45',
+            course: 'Hat Language',
+            persons: 'McGonagle',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '18:00',
+            endTime: '19:30',
+            course: 'Cognitive Bio Tech',
+            persons: 'Sproud',
+            resources: 'STG-INF42X',
+          },
+          {
+            date: '11.03.2018',
+            Date: moment(),
+            startTime: '14:45',
+            endTime: '16:10',
+            course: 'Augmented Reality - One eyed smart glasses',
+            persons: 'McAlister',
+            resources: 'STG-INF42X',
+          },
+        ]),
+      });
+      this.appendMessage('Okay providing demo lessons for today...', true);
     } else {
       // Send to backend and handle answer
       $.ajax({
@@ -254,12 +289,12 @@ export default class Main extends Component {
   handleOnboardingDone = () => {
     this.raplaLinkValue = this.raplaLinkInput.value;
     // If seems valid
-    if (this.raplaLinkValue.length > 20 && this.raplaLinkValue.startsWith('https://rapla.dhbw')) {
+    if (/(https|HTTPS):\/\/rapla\.dhbw-(stuttgart|karlsruhe|mannheim)\.de\/rapla?(.+=.+)(&.+=.+)*$/.test(this.raplaLinkValue)) {
       console.log('Url was valid, onboarding succeeded');
       const date = this.state.date;
       localStorage.setItem('raplaLink', this.raplaLinkValue);
       // Old data is invalid
-      localStorage.setItem(`${date.getFullYear()} ${getWeekNumber(date)}`, '');
+      localStorage.setItem(`${date.year()} ${date.isoWeek()}`, '');
       window.removeEventListener('keypress', this.handleOnboardingKeypress);
       console.log(getAppointments(
         this.raplaLinkValue,
@@ -293,19 +328,13 @@ export default class Main extends Component {
     if (currDay) currDay.scrollIntoView({ behavior: 'smooth' });
   }
 
-  icsLink = null;
-  icsInput = null;
-
-  raplaLinkInput = null;
-  raplaLinkValue = null;
-
   render() {
     const { chat, date, dailyEvents, extCalendarOpen, onboardingOpen, onboardingMsg } = this.state;
     return (
     <MuiThemeProvider theme={theme}>
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <NavigationBar
-          title={`${dateFormat(date, 'mmmm yyyy')}`}
+          title={`${date.format('MMMM YYYY')}`}
           chat={chat}
           onMessageSent={this.sendMessage}
           menuItems={[
@@ -323,7 +352,7 @@ export default class Main extends Component {
               },
             },
             {
-              text: 'Get external calendar',
+              text: 'External Calendar ICS',
               onClick: () => {
                 getICSLink(this.raplaLinkValue, this.handleExtCalOpen, this.handleExtCalOpen);
               },
@@ -334,6 +363,10 @@ export default class Main extends Component {
                 this.setState({ onboardingOpen: true });
                 window.addEventListener('keypress', this.handleOnboardingKeypress);
               },
+            },
+            {
+              text: 'Help to <develop />',
+              href: 'https://github.com/dhbw-timetable/rablabla',
             },
             {
               text: 'More',
@@ -347,7 +380,7 @@ export default class Main extends Component {
                 this.onAjaxSuccess(resp, d);
               },
               this.onAjaxError, this.onAjaxPre,
-              ));
+            ));
           }}
         >
           <Dialog
@@ -359,7 +392,8 @@ export default class Main extends Component {
             <DialogTitle>Your calendar link</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Insert the link to your chosen calendar application and it will sync automatically.
+                Insert the link to your chosen calendar application and it will
+                sync automatically.
               </DialogContentText>
               <TextField
                 autoFocus
@@ -369,6 +403,11 @@ export default class Main extends Component {
                 margin="normal"
                 fullWidth
               />
+              <Typography type="caption" style={{ fontWeight: 600 }}>
+                Note: Currently you will have to request the
+                link every few weeks again here on the web interface. This will be fixed
+                within future versions.
+              </Typography>
             </DialogContent>
             <DialogActions>
               <Button

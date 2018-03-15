@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import dateFormat from 'dateformat';
 import DayView from './DayView';
 
 export default function Day(props) {
-  const { eventData, start, end, isCurrent, date } = props;
+  const { eventData, start, end, isCurrent, date, showBackdrop } = props;
+
   eventData.forEach((el) => {
     // Calculate dimensions
     const startTime = el.startTime.split(':');
@@ -13,22 +13,22 @@ export default function Day(props) {
       * (100 / (end - start + 0.5));
     const endY = ((endTime[0] - start) + (endTime[1] / 60))
       * (100 / (end - start + 0.5));
-    const duration = endY - startY;
 
-    const height = `${duration}%`;
-    const top = `${startY}%`;
-
-    el.height = height;
-    el.top = top;
-    el.duration = duration;
+    el.duration = endY - startY;
+    el.height = `${el.duration}%`;
+    el.top = `${startY}%`;
+    el.width = el.intersections > 0 ? `${95 / el.maxCol}%` : '95%';
+    el.left = `${95 / el.maxCol * el.col + 5}%`;
   });
+
   return (
     <DayView
-      name={dateFormat(date, 'ddd. dd.')}
+      name={date.format('dd. D.')}
       events={eventData}
       start={start}
       end={end}
       isCurrent={isCurrent}
+      showBackdrop={showBackdrop}
     />
   );
 }
@@ -38,6 +38,7 @@ Day.propTypes = {
   start: PropTypes.number.isRequired,
   end: PropTypes.number.isRequired,
   date: PropTypes.object.isRequired,
+  showBackdrop: PropTypes.func.isRequired,
   isCurrent: PropTypes.bool,
 };
 
