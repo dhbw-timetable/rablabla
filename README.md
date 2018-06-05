@@ -1,6 +1,8 @@
 Rablabla
 ==============
 
+### Notice: This project is outdated as we are moving this projects vision to dedicated servers. We will update the project accordingly and until we haven't finished construction of the new server apps Rablabla has to stay offline. So sorry for any inconvenience. Stay tuned at dhbw-timetable organization.
+
 A web application for the web based rapla timetable. It scans the DHBW timetable and offers it via a self-updating calendar server.
 
 - Release: https://rablabla.mybluemix.net/
