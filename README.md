@@ -1,7 +1,7 @@
 Rablabla - OUTDATED
 ==============
 
-### Notice: This project is outdated as we are moving this projects vision to dedicated servers. We will update the project accordingly and add new features rightaway. You can access the latest version of Rablabla at https://rablabla.m320trololol.com
+### Notice: This project is outdated as we are moving this projects vision to dedicated servers. We will update the project accordingly and add new features rightaway. You can access the latest version of Rablabla at https://rablabla.hobbytes.de
 
 A web application for the web based rapla timetable. It scans the DHBW timetable and offers it via a self-updating calendar server.
 
